@@ -8,10 +8,13 @@
   "binary": "compiler/razc/bin/razc",
   "checksum": "compiler/razc/bin/razc.sha256",
   "build_dir": "compiler/razc/build/",
-  "milestone": "G2-018: dual call syntax, parenthesized includes, Raz JSON parser, synchronous process execution, Raz-native test runner",
+  "milestone": "G2-021: structural function signatures and compile-only review tests",
   "operational_role": "Active Gen2 compiler and C++17 transpiler; tests are implemented in Raz and compiled by tests/run-tests",
   "bootstrap_contract": "The current active Gen2 binary compiles the modular compiler source; the build no longer depends on archived generation tools or snapshots.",
-  "active_binary_version": "0.4.0-g2-018",
-  "build_command": "./compiler/razc/bin/razc compiler/razc/compiler.raz --emit-cpp compiler/razc/build/compiler.cpp && g++ -std=c++17 -O0 compiler/razc/build/compiler.cpp -Ilibrary/raz -o compiler/razc/build/razc-candidate",
-  "active_binary_sha256": "290ff49e1032ab40d8f61e2662626eedab9ca1f673a72a49c6bcfd999c473e91"
+  "active_binary_version": "0.4.0-g2-021",
+  "build_command": ". ./options && ./compiler/razc/bin/razc compiler/razc/compiler.raz --emit-cpp compiler/razc/build/compiler.cpp && $CXX -std=c++17 $CXXFLAGS -I library/raz compiler/razc/build/compiler.cpp -o compiler/razc/build/razc-candidate",
+  "options_file": "options",
+  "default_native_compiler": "g++",
+  "default_cxxflags": "-O2 -pipe -static -s -DNDEBUG -ffunction-sections -fdata-sections -Wl,--gc-sections",
+  "active_binary_sha256": "26ac22e83329b1b555b2c8eefbe0cdf0887f8512ba8e32949a5676694a4968ab"
 }

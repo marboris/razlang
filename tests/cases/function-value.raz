@@ -1,0 +1,6 @@
+function addOne(value: i64) -> i64 {
+    return value + 1;
+}
+
+let callback = addOne;
+return callback(41);

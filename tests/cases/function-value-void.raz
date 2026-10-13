@@ -1,0 +1,11 @@
+function work() -> void {
+    return;
+}
+
+function invoke(callback: Fn() -> void) -> i64 {
+    callback();
+    return 0;
+}
+
+let workCallback: Fn() -> void = work;
+return invoke(workCallback);

@@ -1,0 +1,20 @@
+function increment(value: i64) -> i64 {
+    return value + 1;
+}
+
+function addTwo(value: i64) -> i64 {
+    return value + 2;
+}
+
+function apply(callback: Fn(i64) -> i64, value: i64) -> i64 {
+    return callback(value);
+}
+
+function invoke(operation: Fn(Fn(i64) -> i64, i64) -> i64, callback: Fn(i64) -> i64, value: i64) -> i64 {
+    return operation(callback, value);
+}
+
+let selected: Fn(i64) -> i64 = increment;
+selected = addTwo;
+let runOperation: Fn(Fn(i64) -> i64, i64) -> i64 = apply;
+return invoke(runOperation, selected, 40);

@@ -1,0 +1,13 @@
+function callback(value: i64) -> f64 {
+    return value;
+}
+
+function increment(value: i64) -> i64 {
+    return value + 1;
+}
+
+function invoke(callback: Fn(i64) -> i64, value: i64) -> i64 {
+    return callback(value);
+}
+
+return invoke(increment, 40);

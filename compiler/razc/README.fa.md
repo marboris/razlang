@@ -1,6 +1,6 @@
 # کامپایلر Raz — Gen2
 
-نسخهٔ فعال: `0.4.0-g2-018`
+نسخهٔ فعال: `0.4.0-g2-020`
 
 Raz یک زبان اسکریپتی است که فعلاً به C++17 تبدیل می‌شود. فایل ورودی می‌تواند کد سطح فایل داشته باشد و به تعریف `main` احتیاج ندارد. کامپایلر فعال در `compiler/razc/bin/razc` است؛ سورس اصلی نیز به ماژول‌های کوچک‌تر در `compiler/razc/src/` تقسیم شده است.
 
@@ -35,8 +35,9 @@ library/raz/std/              # کتابخانهٔ استاندارد Raz
 ./compiler/razc/bin/razc compiler/razc/compiler.raz \
   --emit-cpp compiler/razc/build/compiler.cpp
 
-g++ -std=c++17 -O0 compiler/razc/build/compiler.cpp \
-  -Ilibrary/raz -o compiler/razc/build/razc-candidate
+. ./options
+g++ -std=c++17 $CXXFLAGS -I library/raz \
+  compiler/razc/build/compiler.cpp -o compiler/razc/build/razc-candidate
 
 ./compiler/razc/build/razc-candidate --version
 ```
@@ -52,7 +53,7 @@ g++ -std=c++17 -O0 compiler/razc/build/compiler.cpp \
 ./tests/run-tests.out         # اجرای تست‌ها
 ```
 
-Runner فایل JSON را با `std.json` می‌خواند، هر ورودی Raz را با کامپایلر فعال تبدیل می‌کند، الگوهای مورد انتظار و ممنوع را در C++ کنترل می‌کند، سپس C++ را با `CXX` می‌سازد و exit code برنامه را با manifest مقایسه می‌کند. سناریوهای منفی نیز انتظار دارند کامپایلر خطا بدهد و پیام مشخصی تولید کند.
+Runner فایل JSON را با `std.json` می‌خواند و همهٔ سناریوها را تا حد تولید C++ ادامه می‌دهد. فایل‌های `.cpp` کنار سورس‌های `.raz` باقی می‌مانند تا خروجی‌ها دستی بررسی شوند. Runner کد C++ را نمی‌سازد یا اجرا نمی‌کند؛ سناریوهای منفی فقط ردشدن سورس نامعتبر را کنترل می‌کنند. گزینه‌های پیش‌فرض GNU C++ در فایل `options` هستند و بیلدهای تولیدی به‌صورت static و stripped ساخته می‌شوند.
 
 `raz.env` با syntax سادهٔ assignment نوشته شده است و launcherهای Shell و درایور native آن را می‌خوانند. مقدارهای فعلی:
 
@@ -72,14 +73,21 @@ print("hello");
 let result = add(20, 22);
 ```
 
-برای توابع دارای آرگومان، روش فرمانی هم پشتیبانی می‌شود:
+فراخوانی کوتاه بدون پرانتز فقط یک آرگومان می‌پذیرد:
 
 ```raz
 print "hello";
-let result = add 20, 22;
+let result = calculate 40; // TODO()
+let total = add(20, 22);
 ```
 
-تابع بدون آرگومان را می‌توان با `meaning()` یا به شکل bare identifier در موقعیت expression نوشت: `let answer = meaning;`. وجود یک متغیر هم‌نام بر تابع اولویت دارد. برای آرگومان‌های unary مبهم از پرانتز استفاده کن؛ مثلاً `subtract (-value), 2`.
+فراخوانی چندآرگومانی باید پرانتز داشته باشد. نام تابع به‌تنهایی آن را اجرا نمی‌کند؛ می‌توان آن را به‌عنوان function value ذخیره کرد و بعد فراخواند:
+
+```raz
+let callback = meaning;
+let answer = callback();
+let other = meaning();
+```
 
 `include` در مرحلهٔ پیش‌پردازش انجام می‌شود و هر دو شکل را می‌پذیرد:
 

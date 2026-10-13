@@ -1,0 +1,10 @@
+function plusOne(value: i64) -> i64 {
+    return value + 1;
+}
+
+function factory() -> Fn(i64) -> i64 {
+    return plusOne;
+}
+
+let callback = factory();
+return callback(41);

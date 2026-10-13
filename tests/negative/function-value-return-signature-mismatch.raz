@@ -1,0 +1,10 @@
+function returnInteger(value: i64) -> i64 {
+    return value;
+}
+
+function returnFloat(value: i64) -> f64 {
+    return value;
+}
+
+let callback: Fn(i64) -> i64 = returnFloat;
+return 0;

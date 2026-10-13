@@ -1,0 +1,11 @@
+function intCallback(value: i64) -> i64 {
+    return value;
+}
+
+function floatCallback(value: f64) -> f64 {
+    return value;
+}
+
+let callback: Fn(i64) -> i64 = intCallback;
+callback = floatCallback;
+return 0;

@@ -99,6 +99,9 @@ function normalizeExprNames(program: Ref<Program>, names: Ref<List<Binding>>, id
         normalizeExprNames(program, names, x.right);
     } else if (x.kind == 7 || x.kind == 9) {
         normalizeExprNames(program, names, x.left);
+    } else if (x.kind == 8) {
+        let callee: Expr = program.exprs[x.left];
+        if (callee.kind == 5 || callee.kind == 9 || callee.kind == 10) normalizeExprNames(program, names, x.left);
     } else if (x.kind == 10) {
         normalizeExprNames(program, names, x.left);
         normalizeExprNames(program, names, x.right);
@@ -158,6 +161,100 @@ function normalizeStatementNames(program: Ref<Program>, ids: List<i64>, names: R
     }
 }
 
+function isFunctionType(type: string) -> bool {
+    return startsWithType(type, "Fn(");
+}
+
+function functionTypeClose(type: string) -> i64 {
+    if (!isFunctionType(type)) return -1;
+    let depth: i64 = 0;
+    let i: i64 = 2;
+    while (i < length(type)) {
+        let c: i64 = charCodeAt(type, i);
+        if (c == 40) depth = depth + 1;
+        else if (c == 41) {
+            depth = depth - 1;
+            if (depth == 0) return i;
+        }
+        i = i + 1;
+    }
+    return -1;
+}
+
+function functionTypeParams(type: string) -> string {
+    let close: i64 = functionTypeClose(type);
+    if (close < 0) return "";
+    return slice(type, 3, close);
+}
+
+function functionTypeReturn(type: string) -> string {
+    let close: i64 = functionTypeClose(type);
+    if (close < 0 || close + 3 > length(type)) return "";
+    if (slice(type, close + 1, close + 3) != "->") return "";
+    return slice(type, close + 3, length(type));
+}
+
+function typeTopLevelComma(value: string, from: i64) -> i64 {
+    let angleDepth: i64 = 0;
+    let parenDepth: i64 = 0;
+    let i: i64 = from;
+    while (i < length(value)) {
+        let c: i64 = charCodeAt(value, i);
+        if (c == 60) angleDepth = angleDepth + 1;
+        else if (c == 62) {
+            if (!(i > 0 && charCodeAt(value, i - 1) == 45) && angleDepth > 0) angleDepth = angleDepth - 1;
+        } else if (c == 40) parenDepth = parenDepth + 1;
+        else if (c == 41 && parenDepth > 0) parenDepth = parenDepth - 1;
+        else if (c == 44 && angleDepth == 0 && parenDepth == 0) return i;
+        i = i + 1;
+    }
+    return -1;
+}
+
+function functionTypeParamCount(type: string) -> i64 {
+    let params: string = functionTypeParams(type);
+    if (params == "") return 0;
+    let count: i64 = 1;
+    let start: i64 = 0;
+    let comma: i64 = typeTopLevelComma(params, start);
+    while (comma >= 0) {
+        count = count + 1;
+        start = comma + 1;
+        comma = typeTopLevelComma(params, start);
+    }
+    return count;
+}
+
+function functionTypeParamAt(type: string, wanted: i64) -> string {
+    let params: string = functionTypeParams(type);
+    if (params == "") return "";
+    let start: i64 = 0;
+    let index: i64 = 0;
+    let comma: i64 = typeTopLevelComma(params, start);
+    while (comma >= 0) {
+        if (index == wanted) return slice(params, start, comma);
+        index = index + 1;
+        start = comma + 1;
+        comma = typeTopLevelComma(params, start);
+    }
+    if (index == wanted) return slice(params, start, length(params));
+    return "";
+}
+
+function functionSignature(program: Ref<Program>, name: string) -> string {
+    let fi: i64 = functionIndex(program, name);
+    if (fi < 0) return "";
+    let f: FunctionDef = program.functions[fi];
+    let out: string = "Fn(";
+    let i: i64 = 0;
+    while (i < listLength(f.params)) {
+        if (i > 0) out = out + ",";
+        out = out + f.params[i].type;
+        i = i + 1;
+    }
+    return out + ")->" + f.returnType;
+}
+
 function validateType(program: Ref<Program>, state: Ref<SemanticState>, type: string, allowVoid: bool) -> bool {
     if (!state.ok) return false;
     if (type == "void") {
@@ -166,6 +263,20 @@ function validateType(program: Ref<Program>, state: Ref<SemanticState>, type: st
         return false;
     }
     if (type == "i64" || type == "f64" || type == "bool" || type == "char" || type == "string") return true;
+    if (isFunctionType(type)) {
+        let close: i64 = functionTypeClose(type);
+        let returnType: string = functionTypeReturn(type);
+        if (close < 0 || returnType == "") {
+            semanticFail(state, "invalid function type " + type);
+            return false;
+        }
+        let i: i64 = 0;
+        while (i < functionTypeParamCount(type)) {
+            if (!validateType(program, state, functionTypeParamAt(type, i), false)) return false;
+            i = i + 1;
+        }
+        return validateType(program, state, returnType, true);
+    }
     if (endsWith(type, "*")) {
         if (state.unsafeDepth <= 0) { semanticFail(state, "pointer type " + type + " requires unsafe"); return false; }
         let base: string = slice(type, 0, length(type) - 1);
@@ -237,18 +348,11 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
     if (x.kind == 5) {
         let t: string = bindingType(scope, x.text);
         if (t != "") return t;
-        // A bare zero-argument function name is a call in expression position.
-        // A same-named local/global binding always wins, so variables remain readable.
         let fi: i64 = functionIndex(program, x.text);
-        if (fi >= 0 && listLength(program.functions[fi].params) == 0) {
-            let callee: Expr = emptyExpr(5);
-            callee.text = x.text;
-            let calleeId: i64 = listLength(program.exprs);
-            push(program.exprs, callee);
-            program.exprs[id].kind = 8;
-            program.exprs[id].left = calleeId;
-            program.exprs[id].args = [];
-            return program.functions[fi].returnType;
+        if (fi >= 0) {
+            program.exprs[id].kind = 15;
+            program.exprs[id].valueText = x.text;
+            return functionSignature(program, x.text);
         }
         return semanticFail(state, "unknown name " + x.text);
     }
@@ -291,9 +395,26 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
     if (x.kind == 8) {
         let calleeExpr: Expr = program.exprs[x.left];
         let name: string = calleeExpr.text;
-        let builtin: string = builtinReturnType(name, x.args, program, state, scope);
+        let boundType: string = bindingType(scope, name);
+        let builtin: string = "";
+        let fi: i64 = -1;
+        if (isFunctionType(boundType)) {
+            program.exprs[id].valueText = boundType;
+            if (listLength(x.args) != functionTypeParamCount(boundType)) return semanticFail(state, "wrong argument count for function value " + name);
+            let i: i64 = 0;
+            while (i < listLength(x.args)) {
+                let actual: string = checkExpr(program, state, scope, x.args[i]);
+                let rawExpected: string = functionTypeParamAt(boundType, i);
+                if (isRefType(rawExpected) && !isLValue(program, x.args[i])) return semanticFail(state, "argument must be an lvalue in function value " + name);
+                let expected: string = valueTypeForParam(rawExpected);
+                if (!assignableType(expected, actual)) return semanticFail(state, "argument type mismatch in function value " + name);
+                i = i + 1;
+            }
+            return functionTypeReturn(boundType);
+        }
+        builtin = builtinReturnType(name, x.args, program, state, scope);
         if (builtin != "") return builtin;
-        let fi: i64 = functionIndex(program, name);
+        fi = functionIndex(program, name);
         if (fi < 0) return semanticFail(state, "unknown function " + name);
         let fnDef: FunctionDef = program.functions[fi];
         if (listLength(x.args) != listLength(fnDef.params)) return semanticFail(state, "wrong argument count for " + name);
@@ -301,9 +422,6 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
         while (i < listLength(x.args)) {
             let actual: string = checkExpr(program, state, scope, x.args[i]);
             let rawExpected: string = fnDef.params[i].type;
-            // Read-only text helpers accept literals and computed strings too: the
-            // backend materializes those rvalues in a temp before binding the Ref.
-            // Other Ref<T> parameters remain strict lvalue/inout parameters.
             if (isRefType(rawExpected) && !isLValue(program, x.args[i]) && name != "length" && name != "slice") return semanticFail(state, "argument must be an lvalue in " + name);
             let expected: string = valueTypeForParam(rawExpected);
             if (!assignableType(expected, actual)) return semanticFail(state, "argument type mismatch in " + name);

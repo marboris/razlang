@@ -1,0 +1,5 @@
+function add(left: i64, right: i64) -> i64 {
+    return left + right;
+}
+
+return add 20, 22;

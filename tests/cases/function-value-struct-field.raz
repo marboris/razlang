@@ -1,0 +1,16 @@
+struct Handler {
+    run: Fn(i64) -> i64;
+}
+
+function plusOne(value: i64) -> i64 {
+    return value + 1;
+}
+
+function invoke() -> i64 {
+    let handler: Handler = new Handler();
+    handler.run = plusOne;
+    let callback = handler.run;
+    return callback(41);
+}
+
+return invoke();

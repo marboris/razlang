@@ -89,9 +89,10 @@ function emitPlace(state: Ref<EmitState>, program: Ref<Program>, id: i64) -> str
     return "%invalid";
 }
 
-function callNeedsRef(program: Ref<Program>, callee: string, index: i64) -> bool {
+function callNeedsRef(program: Ref<Program>, callee: string, index: i64, functionType: string) -> bool {
     if ((callee == "length" || callee == "listLength") && index == 0) return true;
     if (callee == "push" && index == 0) return true;
+    if (isFunctionType(functionType)) return isRefType(functionTypeParamAt(functionType, index));
     let fi: i64 = functionIndex(program, callee);
     if (fi < 0) return false;
     let fn: FunctionDef = program.functions[fi];
@@ -102,7 +103,7 @@ function callNeedsRef(program: Ref<Program>, callee: string, index: i64) -> bool
 function isPureExpr(program: Ref<Program>, id: i64) -> bool {
     if (id < 0 || id >= listLength(program.exprs)) return false;
     let x: Expr = program.exprs[id];
-    if (x.kind == 1 || x.kind == 2 || x.kind == 3 || x.kind == 4 || x.kind == 5) return true;
+    if (x.kind == 1 || x.kind == 2 || x.kind == 3 || x.kind == 4 || x.kind == 5 || x.kind == 15) return true;
     if (x.kind == 7) return isPureExpr(program, x.left);
     if (x.kind == 6) return isPureExpr(program, x.left) && isPureExpr(program, x.right);
     if (x.kind == 9) return isPureExpr(program, x.left);
@@ -137,6 +138,11 @@ function emitExpr(state: Ref<EmitState>, program: Ref<Program>, id: i64) -> stri
     if (x.kind == 5) {
         let t: string = newTemp(state);
         emitLine(state, "    " + t + " = load " + x.text);
+        return t;
+    }
+    if (x.kind == 15) {
+        let t: string = newTemp(state);
+        emitLine(state, "    " + t + " = function-ref " + x.valueText);
         return t;
     }
     if (x.kind == 7) {
@@ -194,7 +200,7 @@ function emitExpr(state: Ref<EmitState>, program: Ref<Program>, id: i64) -> stri
         let i: i64 = 0;
         while (i < listLength(x.args)) {
             if (i > 0) args = args + ", ";
-            if (callNeedsRef(program, callee, i) && isLValue(program, x.args[i])) {
+            if (callNeedsRef(program, callee, i, x.valueText) && isLValue(program, x.args[i])) {
                 args = args + emitPlace(state, program, x.args[i]);
             } else {
                 args = args + emitExpr(state, program, x.args[i]);
@@ -203,14 +209,18 @@ function emitExpr(state: Ref<EmitState>, program: Ref<Program>, id: i64) -> stri
         }
         let fi: i64 = functionIndex(program, callee);
         let returnType: string = "";
-        if (callee == "push") returnType = "void";
+        let opcode: string = "call";
+        if (isFunctionType(x.valueText)) {
+            returnType = functionTypeReturn(x.valueText);
+            opcode = "call-value";
+        } else if (callee == "push") returnType = "void";
         else if (fi >= 0) returnType = program.functions[fi].returnType;
         if (returnType == "void") {
-            emitLine(state, "    call " + callee + "(" + args + ")");
+            emitLine(state, "    " + opcode + " " + callee + "(" + args + ")");
             return "";
         }
         let t: string = newTemp(state);
-        emitLine(state, "    " + t + " = call " + callee + "(" + args + ")");
+        emitLine(state, "    " + t + " = " + opcode + " " + callee + "(" + args + ")");
         return t;
     }
     if (x.kind == 9) {

@@ -21,7 +21,7 @@ function validateCpp17Lowering(program: Ref<Program>) -> string {
         if (e.kind == 7 && !gen2SupportsUnaryOperator(e.op)) {
             return "C++17 lowering does not support unary operator '" + e.op + "'";
         }
-        if (e.kind < 1 || e.kind > 14) {
+        if (e.kind < 1 || e.kind > 15) {
             return "C++17 lowering does not support expression kind " + int_to_string(e.kind);
         }
         i = i + 1;

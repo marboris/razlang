@@ -1,0 +1,7 @@
+function ratio() -> f64 {
+    return 3.5;
+}
+
+let readRatio = ratio;
+if (readRatio() < 3.0) return 1;
+return 0;

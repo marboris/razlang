@@ -78,7 +78,28 @@ function precedence(kind: i64) -> i64 {
 function parseType(state: Ref<ParserState>) -> string {
     let t: Token = take(state, 1);
     let out: string = t.text;
-    if (currentKind(state) == 39) {
+    if (t.text == "Fn" && currentKind(state) == 20) { // TODO()
+        consume(state, 20);
+        out = "Fn(";
+        if (currentKind(state) != 21) {
+            out = out + parseType(state);
+            while (currentKind(state) == 26) {
+                consume(state, 26);
+                out = out + "," + parseType(state);
+            }
+        }
+        if (!maybe(state, 21)) {
+            state.parseError = true;
+            state.parseErrorText = "function type requires ')'";
+            return out;
+        }
+        if (!maybe(state, 45)) {
+            state.parseError = true;
+            state.parseErrorText = "function type requires '-> return-type'";
+            return out;
+        }
+        out = out + ")->" + parseType(state);
+    } else if (currentKind(state) == 39) {
         consume(state, 39);
         let inner: string = parseType(state);
         out = out + "<" + inner;
@@ -267,9 +288,7 @@ function parsePostfix(state: Ref<ParserState>, id: i64) -> i64 {
             e.right = idx;
             out = addExpr(state, e);
         } else {
-            // Also accept command-style calls: `print "hello"` and
-            // `sumValues first, second`. Newlines terminate the call; commas
-            // separate arguments. Parenthesized calls remain the unambiguous form.
+            // Bare calls accept one argument; multiple arguments require parentheses.
             let canBareCall: bool = false;
             if (out >= 0 && out < listLength(state.exprs) && canStartBareCallArgument(currentKind(state))) {
                 let callee: Expr = state.exprs[out];
@@ -282,9 +301,9 @@ function parsePostfix(state: Ref<ParserState>, id: i64) -> i64 {
             if (canBareCall) {
                 let args: List<i64> = [];
                 push(args, parseExpression(state, 0));
-                while (currentKind(state) == 26) {
-                    consume(state, 26);
-                    push(args, parseExpression(state, 0));
+                if (currentKind(state) == 26) {
+                    state.parseError = true;
+                    state.parseErrorText = "bare calls accept one argument; use parentheses for multiple arguments";
                 }
                 let e: Expr = emptyExpr(8);
                 e.left = out;

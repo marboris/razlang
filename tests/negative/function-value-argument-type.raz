@@ -1,0 +1,6 @@
+function intCallback(value: i64) -> i64 {
+    return value;
+}
+
+let callback = intCallback;
+return callback("wrong");

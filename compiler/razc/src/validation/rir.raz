@@ -63,10 +63,10 @@ function gen2RirKnownRhs(rhs: string) -> bool {
         gen2RirStarts(rhs, "const char ") || gen2RirStarts(rhs, "const bool ") ||
         gen2RirStarts(rhs, "const char* ")) return true;
     if (gen2RirStarts(rhs, "load ") || gen2RirStarts(rhs, "copy ") ||
-        gen2RirStarts(rhs, "ref ") || gen2RirStarts(rhs, "ref_field ") ||
+        gen2RirStarts(rhs, "function-ref ") || gen2RirStarts(rhs, "ref ") || gen2RirStarts(rhs, "ref_field ") ||
         gen2RirStarts(rhs, "ref_index ") || gen2RirStarts(rhs, "new ") ||
         gen2RirStarts(rhs, "field ") || gen2RirStarts(rhs, "index ") ||
-        gen2RirStarts(rhs, "call ") || gen2RirStarts(rhs, "list(")) return true;
+        gen2RirStarts(rhs, "call ") || gen2RirStarts(rhs, "call-value ") || gen2RirStarts(rhs, "list(")) return true;
     if (gen2RirStarts(rhs, "add ") || gen2RirStarts(rhs, "sub ") ||
         gen2RirStarts(rhs, "mul ") || gen2RirStarts(rhs, "div ") ||
         gen2RirStarts(rhs, "mod ") || gen2RirStarts(rhs, "eq ") ||
@@ -83,7 +83,7 @@ function gen2RirKnownFunctionLine(line: string) -> bool {
         gen2RirStarts(line, "local ") || gen2RirStarts(line, "local-auto ") ||
         gen2RirStarts(line, "store ") || gen2RirStarts(line, "store_ref ") ||
         gen2RirStarts(line, "jump ") || gen2RirStarts(line, "branch ") ||
-        gen2RirStarts(line, "native-call ") || gen2RirStarts(line, "call ")) return true;
+        gen2RirStarts(line, "native-call ") || gen2RirStarts(line, "call ") || gen2RirStarts(line, "call-value ")) return true;
     if (length(line) > 1 && charCodeAt(line, length(line) - 1) == 58) return true;
     let assignment: i64 = gen2RirFind(line, " = ");
     if (gen2RirStarts(line, "%t") && assignment > 2) {

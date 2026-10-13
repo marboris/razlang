@@ -1,12 +1,11 @@
 use std.io;
-use std.text;
 
 function add(left: i64, right: i64) -> i64 {
     return left + right;
 }
 
 function calculate(value: i64) -> i64 {
-    let next = add value, 1;
+    let next = add(value, 1);
     return add(next, 1);
 }
 

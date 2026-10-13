@@ -20,6 +20,15 @@ function cppLiteral(rest: string, type: string) -> string {
 // normal `call` instruction. Parse their argument list structurally so every
 // temp is resolved through cppArgs/cppValue (including Ref<T> aliases) instead
 // of leaking a raw `%tN` token into the generated C++.
+function cppCalleeName(module: Ref<BackendModule>, f: Ref<FunctionMeta>, name: string) -> string {
+    let i: i64 = 0;
+    while (i < listLength(f.params)) {
+        if (f.params[i] == name) return cppVariableName(name);
+        i = i + 1;
+    }
+    return cppCallName(module, name);
+}
+
 function cppInlineCall(module: Ref<BackendModule>, state: Ref<BackendState>, expression: string) -> string {
     let call: string = trim(expression);
     let open: i64 = cpp17_findText(call, "(", 0);
@@ -183,18 +192,18 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
     let i: i64 = 0;
     while (i < listLength(f.params)) {
         if (i > 0) params = params + ", ";
-        params = params + cppType(f.paramTypes[i]) + " " + cppVariableName(f.params[i]);
+        params = params + cppTypeForModule(module, f.paramTypes[i]) + " " + cppVariableName(f.params[i]);
         i = i + 1;
     }
 
-    cpp17_emitLine(state, cppType(f.returnType) + " " + cppFunctionName(f.name) + "(" + params + ") {");
+    cpp17_emitLine(state, cppTypeForModule(module, f.returnType) + " " + cppFunctionName(f.name) + "(" + params + ") {");
     // Temps are declared before local-auto storage so decltype(ttN) is always
     // available. Runtime initialization remains at the original store site.
     i = 0;
     while (i < listLength(state.temps)) {
         let temp: string = state.temps[i];
         if (state.tempTypes[i] != "" && !cpp17_starts(state.tempTypes[i], "Ref<") && !hasAlias(state, temp)) {
-            cpp17_emitLine(state, "    " + cppType(state.tempTypes[i]) + " " + temp + "{};");
+            cpp17_emitLine(state, "    " + cppTypeForModule(module, state.tempTypes[i]) + " " + temp + "{};");
         }
         i = i + 1;
     }
@@ -205,9 +214,9 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
         if (state.localAutos[i] && state.localInitValues[i] != "") {
             let initializerName: string = valueName(state.localInitValues[i]);
             let initializerType: string = tempType(state, initializerName);
-            if (!cpp17_starts(initializerType, "Ref<")) declaration = "auto " + variable + " = " + cppType(initializerType) + "{};";
-            else declaration = cppType(state.localTypes[i]) + " " + variable + "{};";
-        } else declaration = cppType(state.localTypes[i]) + " " + variable + "{};";
+            if (!cpp17_starts(initializerType, "Ref<")) declaration = "auto " + variable + " = " + cppTypeForModule(module, initializerType) + "{};";
+            else declaration = cppTypeForModule(module, state.localTypes[i]) + " " + variable + "{};";
+        } else declaration = cppTypeForModule(module, state.localTypes[i]) + " " + variable + "{};";
         cpp17_emitLine(state, "    " + declaration);
         i = i + 1;
     }
@@ -246,8 +255,8 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
             else cpp17_emitLine(state, "    return " + cppInlineCall(module, state, ins.operands[0]) + ";");
         } else if (ins.opcode == "native-call") {
             cpp17_emitLine(state, "    " + cppInlineCall(module, state, ins.operands[0]) + ";");
-        } else if (ins.opcode == "call-statement") {
-            cpp17_emitLine(state, "    " + cppCallName(module, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
+        } else if (ins.opcode == "call-statement" || ins.opcode == "call-value-statement") {
+            cpp17_emitLine(state, "    " + cppCalleeName(module, f, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
         } else if (ins.opcode == "field_set") {
             let target: string = ins.operands[0];
             let dot: i64 = cpp17_findText(target, ".", 0);
@@ -262,6 +271,8 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
                 let name: string = ins.operands[0];
                 if (cpp17_starts(tempType(state, lhs), "Ref<")) setAlias(state, lhs, cppVariableName(name));
                 else cpp17_emitLine(state, "    " + lhs + " = " + cppValue(state, name) + ";");
+            } else if (ins.opcode == "function-ref") {
+                cpp17_emitLine(state, "    " + lhs + " = &" + cppFunctionName(ins.operands[0]) + ";");
             } else if (ins.opcode == "copy") {
                 cpp17_emitLine(state, "    " + lhs + " = " + cppValue(state, ins.operands[0]) + ";");
             } else if (ins.opcode == "ref") {
@@ -271,15 +282,15 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
             } else if (ins.opcode == "ref_index") {
                 setAlias(state, lhs, cppValue(state, ins.operands[0]) + "[" + cppValue(state, ins.operands[1]) + "]");
             } else if (ins.opcode == "new") {
-                cpp17_emitLine(state, "    " + lhs + " = " + cppType(ins.type) + "{};");
+                cpp17_emitLine(state, "    " + lhs + " = " + cppTypeForModule(module, ins.type) + "{};");
             } else if (ins.opcode == "field") {
                 cpp17_emitLine(state, "    " + lhs + " = " + cppValue(state, ins.operands[0]) + "." + cppFieldName(ins.operands[1]) + ";");
             } else if (ins.opcode == "index") {
                 cpp17_emitLine(state, "    " + lhs + " = " + cppValue(state, ins.operands[0]) + "[" + cppValue(state, ins.operands[1]) + "];" );
-            } else if (ins.opcode == "call-result") {
-                cpp17_emitLine(state, "    " + lhs + " = " + cppCallName(module, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
+            } else if (ins.opcode == "call-result" || ins.opcode == "call-value-result") {
+                cpp17_emitLine(state, "    " + lhs + " = " + cppCalleeName(module, f, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
             } else if (ins.opcode == "list") {
-                cpp17_emitLine(state, "    " + lhs + " = " + cppType(tempType(state, lhs)) + "{" + cppRirArgs(state, ins.operands) + "};");
+                cpp17_emitLine(state, "    " + lhs + " = " + cppTypeForModule(module, tempType(state, lhs)) + "{" + cppRirArgs(state, ins.operands) + "};");
             } else if (ins.opcode == "neg") {
                 cpp17_emitLine(state, "    " + lhs + " = -" + cppValue(state, ins.operands[0]) + ";");
             } else if (ins.opcode == "not") {
@@ -316,6 +327,7 @@ function generate(rir: string) -> string {
         print("razc: C++ backend rejected RIR: " + module.parseError);
         return "";
     }
+    collectFunctionTypes(module);
     let state: BackendState = new BackendState();
     state.lines = [];
 
@@ -343,11 +355,19 @@ function generate(rir: string) -> string {
 
     i = 0;
     while (i < listLength(module.structs)) {
+        cpp17_emitLine(state, "struct " + cppStructName(module.structs[i].name) + ";");
+        i = i + 1;
+    }
+    if (listLength(module.structs) > 0) cpp17_emitLine(state, "");
+    emitFunctionTypeAliases(module, state);
+
+    i = 0;
+    while (i < listLength(module.structs)) {
         let st: StructMeta = module.structs[i];
         cpp17_emitLine(state, "struct " + cppStructName(st.name) + " {");
         let j: i64 = 0;
         while (j < listLength(st.fields)) {
-            cpp17_emitLine(state, "    " + cppType(st.fieldTypes[j]) + " " + cppFieldName(st.fields[j]) + "{};");
+            cpp17_emitLine(state, "    " + cppTypeForModule(module, st.fieldTypes[j]) + " " + cppFieldName(st.fields[j]) + "{};");
             j = j + 1;
         }
         cpp17_emitLine(state, "};");
@@ -364,10 +384,10 @@ function generate(rir: string) -> string {
         let j: i64 = 0;
         while (j < listLength(f.params)) {
             if (j > 0) params = params + ", ";
-            params = params + cppType(f.paramTypes[j]) + " " + cppVariableName(f.params[j]);
+            params = params + cppTypeForModule(module, f.paramTypes[j]) + " " + cppVariableName(f.params[j]);
             j = j + 1;
         }
-        cpp17_emitLine(state, cppType(f.returnType) + " " + cppFunctionName(f.name) + "(" + params + ");");
+        cpp17_emitLine(state, cppTypeForModule(module, f.returnType) + " " + cppFunctionName(f.name) + "(" + params + ");");
         i = i + 1;
     }
     cpp17_emitLine(state, "");
@@ -377,9 +397,9 @@ function generate(rir: string) -> string {
         let g: GlobalMeta = module.globals[i];
         let variable: string = cppVariableName(g.name);
         if (g.isConst && g.isAuto) cpp17_emitLine(state, "const auto " + variable + " = " + cppFunctionName(g.initFunction) + "();");
-        else if (g.isConst) cpp17_emitLine(state, "const " + cppType(g.type) + " " + variable + " = " + cppFunctionName(g.initFunction) + "();");
+        else if (g.isConst) cpp17_emitLine(state, "const " + cppTypeForModule(module, g.type) + " " + variable + " = " + cppFunctionName(g.initFunction) + "();");
         else if (g.isAuto && g.initFunction != "") cpp17_emitLine(state, "auto " + variable + " = decltype(" + cppFunctionName(g.initFunction) + "()){};");
-        else cpp17_emitLine(state, cppType(g.type) + " " + variable + "{};");
+        else cpp17_emitLine(state, cppTypeForModule(module, g.type) + " " + variable + "{};");
         i = i + 1;
     }
     if (listLength(module.globals) > 0) cpp17_emitLine(state, "");

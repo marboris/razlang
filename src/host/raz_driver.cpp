@@ -152,8 +152,8 @@ std::string trimEnvValue(std::string value) {
     return value;
 }
 
-void loadProjectEnv(const fs::path& root) {
-    std::ifstream input(root / "raz.env");
+void loadConfigFile(const fs::path& path) {
+    std::ifstream input(path);
     if (!input) return;
     std::string line;
     while (std::getline(input, line)) {
@@ -174,6 +174,11 @@ void loadProjectEnv(const fs::path& root) {
         ::setenv(key.c_str(), value.c_str(), 0);
 #endif
     }
+}
+
+void loadProjectEnv(const fs::path& root) {
+    loadConfigFile(root / "raz.env");
+    loadConfigFile(root / "options");
 }
 
 fs::path findProjectRoot(const char* argv0) {
@@ -607,6 +612,8 @@ std::vector<std::string> makeNativeCommand(
     // The backend emits C++17. Place the default first so a later user-provided
     // -std=... takes precedence exactly as it does with GCC command lines.
     command.push_back("-std=c++17");
+    const auto cxxFlags = splitCommand(envOr("CXXFLAGS", "-O2 -pipe -static -s -DNDEBUG -ffunction-sections -fdata-sections -Wl,--gc-sections"));
+    command.insert(command.end(), cxxFlags.begin(), cxxFlags.end());
     command.push_back("-I");
     command.push_back(fs::path(options.input).parent_path().string());
     command.push_back("-I");
@@ -683,7 +690,7 @@ int main(int argc, char** argv) {
             return 0;
         }
         if (options.version) {
-            std::cout << "razc driver 0.4.0-g2-018 (GNU C++ toolchain)\n";
+            std::cout << "razc driver 0.4.0-g2-020 (GNU C++ toolchain)\n";
             return 0;
         }
         const fs::path root = findProjectRoot(argv[0]);

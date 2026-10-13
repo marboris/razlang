@@ -41,6 +41,12 @@ function cppCallName(module: Ref<BackendModule>, name: string) -> string {
         if (module.functions[i].name == name) return cppFunctionName(name);
         i = i + 1;
     }
+    if (cpp17_starts(name, "raz$local$")) return cppVariableName(name);
+    i = 0;
+    while (i < listLength(module.globals)) {
+        if (module.globals[i].name == name) return cppVariableName(name);
+        i = i + 1;
+    }
     return name;
 }
 
@@ -65,6 +71,118 @@ function cppType(t: string) -> string {
     }
     if (endsWith(t, "*")) return cppType(slice(t, 0, length(t) - 1)) + "*";
     return cppStructName(t);
+}
+
+function cppFunctionTypeAliasName(module: Ref<BackendModule>, type: string) -> string {
+    let i: i64 = 0;
+    while (i < listLength(module.functionTypes)) {
+        if (module.functionTypes[i] == type) return "rz_fn_sig_" + int_to_string(i);
+        i = i + 1;
+    }
+    return "rz_fn_sig_missing";
+}
+
+function cppTypeForModule(module: Ref<BackendModule>, type: string) -> string {
+    if (isFunctionType(type)) return cppFunctionTypeAliasName(module, type);
+    if (cpp17_starts(type, "List<")) return "std::vector<" + cppTypeForModule(module, slice(type, 5, length(type) - 1)) + ">";
+    if (cpp17_starts(type, "Ref<")) return cppTypeForModule(module, slice(type, 4, length(type) - 1)) + "&";
+    if (endsWith(type, "*")) return cppTypeForModule(module, slice(type, 0, length(type) - 1)) + "*";
+    return cppType(type);
+}
+
+function registerFunctionType(module: Ref<BackendModule>, type: string) {
+    if (isFunctionType(type)) {
+        let i: i64 = 0;
+        while (i < functionTypeParamCount(type)) {
+            registerFunctionType(module, functionTypeParamAt(type, i));
+            i = i + 1;
+        }
+        registerFunctionType(module, functionTypeReturn(type));
+        i = 0;
+        while (i < listLength(module.functionTypes)) {
+            if (module.functionTypes[i] == type) return;
+            i = i + 1;
+        }
+        push(module.functionTypes, type);
+        return;
+    }
+    let inner: string = innerGeneric(type, "List<");
+    if (inner != "") registerFunctionType(module, inner);
+    inner = innerGeneric(type, "Ref<");
+    if (inner != "") registerFunctionType(module, inner);
+    if (endsWith(type, "*") && length(type) > 1) registerFunctionType(module, slice(type, 0, length(type) - 1));
+}
+
+function moduleFunctionSignature(module: Ref<BackendModule>, name: string) -> string {
+    let i: i64 = 0;
+    while (i < listLength(module.functions)) {
+        let f: FunctionMeta = module.functions[i];
+        if (f.name == name) {
+            let out: string = "Fn(";
+            let j: i64 = 0;
+            while (j < listLength(f.paramTypes)) {
+                if (j > 0) out = out + ",";
+                out = out + f.paramTypes[j];
+                j = j + 1;
+            }
+            return out + ")->" + f.returnType;
+        }
+        i = i + 1;
+    }
+    return "";
+}
+
+function collectFunctionTypes(module: Ref<BackendModule>) {
+    module.functionTypes = [];
+    let i: i64 = 0;
+    while (i < listLength(module.structs)) {
+        let j: i64 = 0;
+        while (j < listLength(module.structs[i].fieldTypes)) {
+            registerFunctionType(module, module.structs[i].fieldTypes[j]);
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+    i = 0;
+    while (i < listLength(module.globals)) {
+        registerFunctionType(module, module.globals[i].type);
+        i = i + 1;
+    }
+    i = 0;
+    while (i < listLength(module.functions)) {
+        let f: FunctionMeta = module.functions[i];
+        registerFunctionType(module, f.returnType);
+        let j: i64 = 0;
+        while (j < listLength(f.paramTypes)) {
+            registerFunctionType(module, f.paramTypes[j]);
+            j = j + 1;
+        }
+        j = 0;
+        while (j < listLength(f.instructions)) {
+            let ins: RirInstruction = f.instructions[j];
+            if (ins.opcode == "local" || ins.opcode == "local-auto" || ins.opcode == "const" || ins.opcode == "new") registerFunctionType(module, ins.type);
+            if (ins.opcode == "function-ref" && listLength(ins.operands) > 0) registerFunctionType(module, moduleFunctionSignature(module, ins.operands[0]));
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+}
+
+function emitFunctionTypeAliases(module: Ref<BackendModule>, state: Ref<BackendState>) {
+    let i: i64 = 0;
+    while (i < listLength(module.functionTypes)) {
+        let type: string = module.functionTypes[i];
+        let params: string = "";
+        let j: i64 = 0;
+        while (j < functionTypeParamCount(type)) {
+            if (j > 0) params = params + ", ";
+            params = params + cppTypeForModule(module, functionTypeParamAt(type, j));
+            j = j + 1;
+        }
+        cpp17_emitLine(state, "using rz_fn_sig_" + int_to_string(i) + " = " + cppTypeForModule(module, functionTypeReturn(type)) + " (*) (" + params + ");");
+        i = i + 1;
+    }
+    if (listLength(module.functionTypes) > 0) cpp17_emitLine(state, "");
 }
 
 function valueName(v: string) -> string {
@@ -324,6 +442,7 @@ function globalType(module: Ref<BackendModule>, name: string) -> string {
 
 function inferInstructionType(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: Ref<BackendState>, ins: Ref<RirInstruction>) -> string {
     let op: string = ins.opcode;
+    if (op == "function-ref") return moduleFunctionSignature(module, ins.operands[0]);
     if (op == "copy") return valueType(module, f, state, ins.operands[0]);
     if (op == "load") {
         let name: string = ins.operands[0];
@@ -363,9 +482,27 @@ function inferInstructionType(module: Ref<BackendModule>, f: Ref<FunctionMeta>, 
         if (listLength(ins.operands) == 0) return "List<i64>";
         return "List<" + valueType(module, f, state, ins.operands[0]) + ">";
     }
+    if (op == "call-value-result") {
+        let calleeType: string = findVarType(f, state, ins.name);
+        if (calleeType == "i64") calleeType = globalType(module, ins.name);
+        if (isFunctionType(calleeType)) return functionTypeReturn(calleeType);
+        return "i64";
+    }
     if (op == "call-result") {
         if (ins.name == "append" && listLength(ins.operands) > 0) return valueType(module, f, state, ins.operands[0]);
-        return functionReturnType(module, ins.name);
+        let functionIndex: i64 = 0;
+        while (functionIndex < listLength(module.functions)) {
+            if (module.functions[functionIndex].name == ins.name) return module.functions[functionIndex].returnType;
+            functionIndex = functionIndex + 1;
+        }
+        let calleeType: string = "";
+        let localId: i64 = localIndex(state, ins.name);
+        if (localId >= 0) calleeType = findVarType(f, state, ins.name);
+        else calleeType = globalType(module, ins.name);
+        if (isFunctionType(calleeType)) return functionTypeReturn(calleeType);
+        if (ins.name == "listLength") return "i64";
+        if (ins.name == "push") return "void";
+        return "i64";
     }
     if (op == "eq" || op == "ne" || op == "lt" || op == "le" || op == "gt" || op == "ge" || op == "and" || op == "or" || op == "not") return "bool";
     if (op == "add" || op == "sub" || op == "mul" || op == "div" || op == "mod" || op == "neg" || op == "pos") {

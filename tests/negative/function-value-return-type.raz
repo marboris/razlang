@@ -1,0 +1,7 @@
+function intCallback(value: i64) -> i64 {
+    return value;
+}
+
+let callback = intCallback;
+let result: string = callback(1);
+return 0;

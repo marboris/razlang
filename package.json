@@ -1,8 +1,7 @@
 {
-  "name": "raz-compiler-bootstrap",
+  "name": "raz-compiler",
   "private": true,
   "type": "module",
-  "description": "Legacy bootstrap entry points only; native development and tests use CMake, Ninja, and CTest.",
   "scripts": {
     "build:gen0": "node scripts/build-native.mjs",
     "build:gen1": "node scripts/build-gen1.mjs",

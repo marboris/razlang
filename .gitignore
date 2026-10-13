@@ -11,7 +11,6 @@ yarn-error.log*
 *.swo
 
 # Compiler/build artifacts
-.bootstrap/
 .build/
 /build
 .cache/
@@ -46,5 +45,4 @@ legacy/*/build/*
 compiler/razc/build/*
 !compiler/razc/build/.gitkeep
 
-# Temporary flattened Gen2 bootstrap source lives under build/; frozen release snapshots are tracked.
 compiler/releases/*/build/

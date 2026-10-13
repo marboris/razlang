@@ -1,0 +1,50 @@
+# Node / editor
+node_modules/
+npm-debug.log*
+yarn-debug.log*
+yarn-error.log*
+.pnpm-debug.log*
+.DS_Store
+.idea/
+.vscode/
+*.swp
+*.swo
+
+# Compiler/build artifacts
+.bootstrap/
+.build/
+/build
+.cache/
+.tmp/
+**/.cache/
+**/.tmp/
+
+# Native binaries and objects
+*.o
+*.obj
+*.a
+*.so
+*.dylib
+*.dll
+*.exe
+*.out
+#core
+#core.*
+
+tests/.tmp/
+tests/test-output.txt
+tests/last-run.txt
+
+# Generated C/C++ outputs from ad-hoc runs
+*.cpp~
+
+*.zip
+
+# Legacy and active compiler build caches (frozen compiler binaries remain tracked)
+legacy/*/build/*
+!legacy/*/build/.gitkeep
+compiler/razc/build/*
+!compiler/razc/build/.gitkeep
+
+# Temporary flattened Gen2 bootstrap source lives under build/; frozen release snapshots are tracked.
+compiler/releases/*/build/

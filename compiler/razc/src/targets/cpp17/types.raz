@@ -82,6 +82,15 @@ function aliasValue(state: Ref<BackendState>, name: string) -> string {
     return name;
 }
 
+function hasAlias(state: Ref<BackendState>, name: string) -> bool {
+    let i: i64 = 0;
+    while (i < listLength(state.aliasNames)) {
+        if (state.aliasNames[i] == name) return true;
+        i = i + 1;
+    }
+    return false;
+}
+
 function simpleRazIdentifier(value: string) -> bool {
     if (value == "") return false;
     let first: i64 = charCodeAt(value, 0);

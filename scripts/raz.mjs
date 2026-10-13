@@ -6,11 +6,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolveGen2Binary } from './gen2-version.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const GEN2 = path.join(ROOT, 'compiler', 'razc');
 const STDLIB = path.join(ROOT, 'library', 'raz');
-const CANDIDATE = path.join(GEN2, 'build', process.platform === 'win32' ? 'razc-candidate.exe' : 'razc-candidate');
+const CANDIDATE = resolveGen2Binary(ROOT);
 
 function usage() {
   console.log(`Raz Gen2 preview launcher\n\nUsage:\n  raz emit-cpp <input.raz> -o <output.cpp> [-L <module-root> ...]\n  raz build <input.raz> -o <executable> [--emit-cpp <output.cpp>]\n      [-L <module-root> ...] [-I <native-include-root> ...] [--release] [--cpu <model>]\n\nModule resolution is performed by the Gen2 compiler in Raz.\nuse std.io resolves from the compiler's standard-library root; -L adds module roots.\nQuoted native headers, e.g. use "cstdint", are emitted as C++ includes.`);

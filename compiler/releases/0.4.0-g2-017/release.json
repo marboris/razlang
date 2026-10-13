@@ -1,0 +1,15 @@
+{
+  "version": "0.4.0-g2-017",
+  "generation": 2,
+  "status": "frozen",
+  "compiler_version_output": "razc Gen2 preview 0.4.0-g2-017",
+  "binary": "razc",
+  "sha256": "298b87a2718f0a4f8f88e2bf5e956ad53ab2a0df3826b0f65c026dd96fd1805e",
+  "canonical_entry": "compiler.raz",
+  "flattened_bootstrap_source": "compiler.bundle.raz",
+  "compiler_source_snapshot": "src/",
+  "standard_library_snapshot": "std/",
+  "created_at": "2026-10-13T15:08:53.947Z",
+  "build_kind": "gen2-selfhost",
+  "note": "Immutable release snapshot; preserve this directory after future compiler upgrades."
+}

@@ -5,11 +5,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { resolveGen2Binary } from './gen2-version.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const GEN2 = path.join(ROOT, 'compiler', 'razc');
 const STDLIB = path.join(ROOT, 'library', 'raz');
-const CANDIDATE = process.env.RAZC ?? path.join(GEN2, 'build', process.platform === 'win32' ? 'razc-candidate.exe' : 'razc-candidate');
+const CANDIDATE = resolveGen2Binary(ROOT);
 const WORK = path.join(GEN2, 'build', 'resolver-fast');
 const cppMangle = (prefix, name) => `${prefix}_${name}`;
 const cppFunction = (name) => cppMangle('rz_f', name);

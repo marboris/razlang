@@ -3,13 +3,14 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { assertGen2Version, expectedGen2Version, resolveGen2Binary } from '../../scripts/gen2-version.mjs';
 
 const TEST_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(TEST_DIR, '../..');
 const GEN2 = path.join(ROOT, 'compiler', 'razc');
 const LIBRARY = path.join(ROOT, 'library', 'raz');
 const MANIFEST = JSON.parse(fs.readFileSync(path.join(TEST_DIR, 'manifest.json'), 'utf8'));
-const CANDIDATE = path.resolve(process.env.RAZC ?? path.join(GEN2, 'build', process.platform === 'win32' ? 'razc-candidate.exe' : 'razc-candidate'));
+const CANDIDATE = resolveGen2Binary(ROOT);
 const WORK = path.join(GEN2, 'build', 'deep-test');
 const CXX = process.env.CXX ?? 'g++';
 const OPT = process.env.RAZ_TEST_OPT ?? '-O2';
@@ -43,6 +44,8 @@ function runPositive(spec) {
   ensure(!missing.length, `${spec.name}: C++ missing markers: ${missing.join(', ')}\n${generated.slice(0, 5000)}`);
   ensure(!unexpected.length, `${spec.name}: forbidden C++ markers: ${unexpected.join(', ')}`);
   ensure(!/\b(?:raz_fn|raz_v|raz_ty|raz_field)_n\d+(?:_\d+)+\b/.test(generated), `${spec.name}: old decimal-encoded names remain in generated C++`);
+  ensure(!/\breturn(?:\s+[^;]+)?;\s*goto\s+[A-Za-z_][A-Za-z0-9_]*;/.test(generated), `${spec.name}: unreachable jump remains immediately after return`);
+  ensure(!/\bgoto\s+([A-Za-z_][A-Za-z0-9_]*);\s*\1:;/.test(generated), `${spec.name}: redundant jump to the immediately following label remains`);
   const identifiers = generated.match(/[A-Za-z_][A-Za-z0-9_]*/g) ?? [];
   const tooLong = identifiers.filter((name) => name.length > 72);
   ensure(!tooLong.length, `${spec.name}: unexpectedly long generated identifiers: ${[...new Set(tooLong)].slice(0, 8).join(', ')}`);
@@ -74,7 +77,8 @@ fs.rmSync(WORK, { recursive: true, force: true });
 fs.mkdirSync(WORK, { recursive: true });
 
 const version = run(CANDIDATE, ['--version']);
-ensure(version.status === 0 && version.output.includes('0.4.0-g2-016'), `expected Gen2 0.4.0-g2-016 candidate\n${version.output}`);
+ensure(version.status === 0, `candidate --version failed\n${version.output}`);
+assertGen2Version(version.output, expectedGen2Version(ROOT), CANDIDATE);
 
 let passed = 0;
 let failed = 0;

@@ -3,11 +3,12 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
+import { assertGen2Version, expectedGen2Version, resolveGen2Binary } from './gen2-version.mjs';
 
 const ROOT = path.resolve(path.dirname(fileURLToPath(import.meta.url)), '..');
 const GEN2 = path.join(ROOT, 'compiler', 'razc');
 const WORK = path.join(GEN2, 'build', 'fast-check');
-const CANDIDATE = process.env.RAZC ?? path.join(GEN2, 'build', process.platform === 'win32' ? 'razc-candidate.exe' : 'razc-candidate');
+const CANDIDATE = resolveGen2Binary(ROOT);
 const STD_ROOT = path.join(ROOT, 'library', 'raz');
 const RAZ_DRIVER = path.join(ROOT, 'scripts', 'raz.mjs');
 const cppMangle = (prefix, name) => `${prefix}_${name}`;
@@ -55,7 +56,7 @@ fs.rmSync(WORK, { recursive: true, force: true });
 fs.mkdirSync(WORK, { recursive: true });
 
 const version = run(CANDIDATE, ['--version'], { status: 0 });
-if (!version.output.includes('razc Gen2 preview 0.4.0-g2-016')) throw new Error('CLI --version output mismatch');
+assertGen2Version(version.output, expectedGen2Version(ROOT), CANDIDATE);
 run(CANDIDATE, ['--help'], { status: 0 });
 run(CANDIDATE, [], { status: 2 });
 
@@ -100,8 +101,8 @@ if (!typeElisionText.includes(`const auto ${cppVariable('constantMessage')} = ${
   throw new Error('untyped const global must use C++ const auto');
 }
 const localName = cppVariable('raz$local$0$localMessage');
-if (!new RegExp(String.raw`auto ${localName} = decltype\(tt\d+\)\{\};`).test(typeElisionText)) {
-  throw new Error('untyped local must use auto-based storage without moving initializer side effects');
+if (!typeElisionText.includes(`auto ${localName} = std::string{};`) || !typeElisionText.includes(`${localName} = tt`)) {
+  throw new Error('untyped local must use its inferred C++ type while preserving initializer evaluation at the store site');
 }
 const typeElisionExe = path.join(WORK, 'type-elision');
 compileGenerated(typeElisionCpp, typeElisionExe);

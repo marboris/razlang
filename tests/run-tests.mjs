@@ -156,7 +156,9 @@ function getVerifier() {
 
 function testBackend() {
   if (BOOTSTRAP) console.log('[BOOTSTRAP] RIR backend chain');
+  console.log('[TRACE] legacy backend: verify native frontend build/cache');
   const built = buildFrontend();
+  console.log('[TRACE] legacy backend: frontend ready=' + built.ok);
   if (!built.ok) return built;
 
   const backendTmp = path.join(TMP, 'backend-build');
@@ -165,6 +167,7 @@ function testBackend() {
   const backendBin = path.join(backendTmp, process.platform === 'win32' ? 'cpp_backend.exe' : 'cpp_backend');
   fs.writeFileSync(path.join(backendTmp, 'raz_runtime.hpp'), legacyRuntimeHeader(), 'utf8');
 
+  console.log('[TRACE] legacy backend: compiling Gen0 C++ backend source');
   const backendBuild = run([
     'compile',
     path.join(ROOT, 'legacy', 'gen0', 'src', 'backend', 'cpp_backend.raz'),
@@ -176,7 +179,9 @@ function testBackend() {
     return { ok: false, details: `RIR backend source build failed:\n${backendBuild.stdout ?? ''}\n${backendBuild.stderr ?? ''}` };
   }
 
+  console.log('[TRACE] legacy backend: building native backend');
   const ccBackend = spawnSync('c++', ['-std=c++17', '-O0', backendCpp, '-o', backendBin], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
+  console.log('[TRACE] legacy backend: native backend build status=' + ccBackend.status);
   if (ccBackend.status !== 0) {
     return { ok: false, details: `native backend build failed:\n${ccBackend.stdout ?? ''}\n${ccBackend.stderr ?? ''}` };
   }
@@ -188,7 +193,9 @@ function testBackend() {
   const binPath = path.join(WORK, 'backend', process.platform === 'win32' ? 'output.exe' : 'output');
   fs.writeFileSync(path.join(WORK, 'backend', 'raz_runtime.hpp'), legacyRuntimeHeader(), 'utf8');
   fs.copyFileSync(source, input);
+  console.log('[TRACE] legacy backend: generating backend-test RIR');
   const frontend = spawnSync(built.bin, [], { cwd: WORK, encoding: 'utf8', timeout: 30000 });
+  console.log('[TRACE] legacy backend: frontend status=' + frontend.status);
   if (frontend.status !== 0 || !fs.existsSync(path.join(WORK, 'frontend', 'output.rir'))) {
     return { ok: false, details: `frontend could not produce RIR for backend input\n${frontend.stdout ?? ''}\n${frontend.stderr ?? ''}` };
   }
@@ -203,16 +210,22 @@ ${verification.report}
 ${verification.proc.stderr ?? ''}` };
   }
 
+  console.log('[TRACE] legacy backend: executing RIR backend');
   const backendRun = spawnSync(backendBin, [], { cwd: WORK, encoding: 'utf8', timeout: 30000 });
+  console.log('[TRACE] legacy backend: backend status=' + backendRun.status);
   if (backendRun.status !== 0 || !fs.existsSync(cppPath)) {
     return { ok: false, details: `backend execution failed with status ${backendRun.status}\n${backendRun.stdout ?? ''}\n${backendRun.stderr ?? ''}` };
   }
 
+  console.log('[TRACE] legacy backend: compiling generated C++');
   const native = spawnSync('c++', ['-std=c++17', '-O0', cppPath, '-o', binPath], { cwd: ROOT, encoding: 'utf8', timeout: 30000 });
+  console.log('[TRACE] legacy backend: generated C++ compile status=' + native.status);
   if (native.status !== 0) {
     return { ok: false, details: `generated C++ failed to compile:\n${native.stdout ?? ''}\n${native.stderr ?? ''}` };
   }
+  console.log('[TRACE] legacy backend: running generated executable');
   const program = spawnSync(binPath, [], { cwd: WORK, encoding: 'utf8', timeout: 30000 });
+  console.log('[TRACE] legacy backend: generated executable status=' + program.status);
   if (program.status !== MANIFEST.backend.exit) {
     return { ok: false, details: `backend program exit ${program.status}, expected ${MANIFEST.backend.exit}` };
   }
@@ -260,7 +273,9 @@ function runVerifier(bin, rir) {
 }
 
 function testVerifier() {
+  console.log('[TRACE] legacy RIR verifier: build/cache');
   const built = getVerifier();
+  console.log('[TRACE] legacy RIR verifier: ready=' + built.ok);
   if (!built.ok) return built;
 
   const valid = fs.readFileSync(path.join(HERE, 'cases/rir/valid.rir'), 'utf8');

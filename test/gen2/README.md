@@ -12,7 +12,7 @@ CXX=clang++ make test-gen2-deep
 RAZ_TEST_OPT=-O0 make test-gen2-deep
 ```
 
-The harness uses `compiler/razc/build/razc-candidate` by default. To test the promoted compiler:
+The harness prefers a current `compiler/razc/build/razc-candidate`; if it is missing or stale, it uses `compiler/razc/bin/razc` only when that binary matches the source version. Set `RAZC` to explicitly choose a binary. To test the promoted compiler:
 
 ```sh
 RAZC=compiler/razc/bin/razc make test-gen2-deep
@@ -24,8 +24,9 @@ For every `.raz` case the harness:
 
 1. asks Gen2 to emit C++ without running the Raz program itself;
 2. checks required C++ fragments and rejects old decimal-encoded identifiers or unexpectedly long names;
-3. compiles the emitted C++ with C++17 and the chosen optimization level;
-4. runs the native executable and checks its exit status as a semantic smoke check.
+3. rejects redundant control-flow jumps that survive RIR cleanup;
+4. compiles the emitted C++ with C++17 and the chosen optimization level;
+5. runs the native executable and checks its exit status as a semantic smoke check.
 
 The cases cover arithmetic/control flow, short-circuit evaluation, structs and references, module/library use, containers, globals, local scopes, native C++ calls, `define` macros, the currently supported `char*` subset, and primitive type lowering including character literals. Negative cases verify that type mismatches, unresolved modules and currently unsupported non-`char*` pointer types fail during Raz compilation rather than creating a fresh C++ output.
 

@@ -39,7 +39,7 @@ function copyTree(from, to) {
 
 const version = process.argv[2];
 if (!version || !/^\d+\.\d+\.\d+-g2-\d+$/.test(version)) {
-  fail('usage: node scripts/archive-gen2-version.mjs <semver-g2-NNN>, e.g. 0.4.0-g2-016');
+  fail('usage: node scripts/archive-gen2-version.mjs <semver-g2-NNN>, e.g. 0.4.0-g2-017');
 }
 const releaseDir = path.join(RELEASES, version);
 if (fs.existsSync(releaseDir)) fail(`release already exists and is immutable: ${releaseDir}`);
@@ -87,6 +87,12 @@ try {
   const metadata = JSON.parse(fs.readFileSync(path.join(GEN2, 'gen.json'), 'utf8'));
   metadata.status = 'frozen-release-snapshot';
   metadata.release_version = version;
+  metadata.active_binary_version = version;
+  metadata.active_binary_sha256 = sha;
+  metadata.release_history ??= [];
+  if (!metadata.release_history.some((entry) => entry.version === version)) {
+    metadata.release_history.push({ version, sha256: sha, release: `compiler/releases/${version}/` });
+  }
   metadata.compiled_by = process.env.RAZ_BUILD_KIND ?? 'candidate produced by the selected Gen2 build workflow';
   metadata.source = 'src/';
   metadata.final_file = 'compiler.raz';

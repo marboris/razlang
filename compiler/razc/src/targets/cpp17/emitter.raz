@@ -29,8 +29,156 @@ function cppInlineCall(module: Ref<BackendModule>, state: Ref<BackendState>, exp
     return cppCallName(module, callee) + "(" + cppArgs(state, args) + ")";
 }
 
+// Conservative control-flow cleanup over parsed RIR. Instructions following an
+// unconditional terminator are discarded until the next label (a possible branch
+// target). A jump directly to the next label is also redundant. This pass is
+// deliberately local: it does not reorder expressions or fold operations whose
+// overflow, calls, references, or short-circuit behavior could be observable.
+// Record `%tN` uses directly into arrays indexed by N. Doing one token scan per
+// operand makes scalar propagation linear in the RIR instruction/operand count.
+function recordRirTempUses(value: string, instructionIndex: i64, blockId: i64,
+    minTemp: i64, maxTemp: i64, defIndices: Ref<List<i64>>,
+    useCounts: Ref<List<i64>>, useBlocks: Ref<List<i64>>, invalidUses: Ref<List<bool>>) {
+    let i: i64 = 0;
+    while (i + 2 < length(value)) {
+        if (charCodeAt(value, i) == 37 && charCodeAt(value, i + 1) == 116 &&
+            charCodeAt(value, i + 2) >= 48 && charCodeAt(value, i + 2) <= 57) {
+            let end: i64 = i + 2;
+            let number: i64 = 0;
+            while (end < length(value) && charCodeAt(value, end) >= 48 && charCodeAt(value, end) <= 57) {
+                number = number * 10 + charCodeAt(value, end) - 48;
+                end = end + 1;
+            }
+            if (number >= minTemp && number <= maxTemp) {
+                let slot: i64 = number - minTemp;
+                useCounts[slot] = useCounts[slot] + 1;
+                if (useBlocks[slot] < 0) useBlocks[slot] = blockId;
+                else if (useBlocks[slot] != blockId) invalidUses[slot] = true;
+                if (defIndices[slot] >= 0 && instructionIndex <= defIndices[slot]) invalidUses[slot] = true;
+            }
+            i = end;
+        } else i = i + 1;
+    }
+}
+
+function prepareInlineScalarConstants(f: Ref<FunctionMeta>, state: Ref<BackendState>) {
+    let minTemp: i64 = 2147483647;
+    let maxTemp: i64 = -1;
+    let i: i64 = 0;
+    while (i < listLength(f.instructions)) {
+        let ins: RirInstruction = f.instructions[i];
+        if (ins.result != "") {
+            let number: i64 = tempNumber(valueName(ins.result));
+            if (number >= 0 && number < minTemp) minTemp = number;
+            if (number > maxTemp) maxTemp = number;
+        }
+        i = i + 1;
+    }
+    if (maxTemp < minTemp) return;
+
+    let count: i64 = maxTemp - minTemp + 1;
+    let defCounts: List<i64> = [];
+    let defIndices: List<i64> = [];
+    let defBlocks: List<i64> = [];
+    let useCounts: List<i64> = [];
+    let useBlocks: List<i64> = [];
+    let invalidUses: List<bool> = [];
+    let blockIds: List<i64> = [];
+    i = 0;
+    while (i < count) {
+        push(defCounts, 0);
+        push(defIndices, -1);
+        push(defBlocks, -1);
+        push(useCounts, 0);
+        push(useBlocks, -1);
+        push(invalidUses, false);
+        i = i + 1;
+    }
+
+    let blockId: i64 = 0;
+    i = 0;
+    while (i < listLength(f.instructions)) {
+        let ins: RirInstruction = f.instructions[i];
+        if (ins.opcode == "label") blockId = blockId + 1;
+        push(blockIds, blockId);
+        if (ins.result != "") {
+            let number: i64 = tempNumber(valueName(ins.result));
+            if (number >= minTemp && number <= maxTemp) {
+                let slot: i64 = number - minTemp;
+                defCounts[slot] = defCounts[slot] + 1;
+                defIndices[slot] = i;
+                defBlocks[slot] = blockId;
+            }
+        }
+        i = i + 1;
+    }
+
+    i = 0;
+    while (i < listLength(f.instructions)) {
+        let ins: RirInstruction = f.instructions[i];
+        let j: i64 = 0;
+        while (j < listLength(ins.operands)) {
+            recordRirTempUses(ins.operands[j], i, blockIds[i], minTemp, maxTemp,
+                defIndices, useCounts, useBlocks, invalidUses);
+            j = j + 1;
+        }
+        i = i + 1;
+    }
+
+    i = 0;
+    while (i < listLength(f.instructions)) {
+        let ins: RirInstruction = f.instructions[i];
+        if (ins.opcode == "const" && ins.result != "" && listLength(ins.operands) > 0 &&
+            (ins.type == "i64" || ins.type == "f64" || ins.type == "bool" || ins.type == "char")) {
+            let number: i64 = tempNumber(valueName(ins.result));
+            if (number >= minTemp && number <= maxTemp) {
+                let slot: i64 = number - minTemp;
+                if (defCounts[slot] == 1 && useCounts[slot] > 0 &&
+                    !invalidUses[slot] && useBlocks[slot] == defBlocks[slot] &&
+                    defIndices[slot] == i) {
+                    setAlias(state, valueName(ins.result), cppLiteral(ins.operands[0], ins.type));
+                }
+            }
+        }
+        i = i + 1;
+    }
+}
+
+function optimizeControlFlow(f: Ref<FunctionMeta>) {
+    let reachable: List<RirInstruction> = [];
+    let dead: bool = false;
+    let i: i64 = 0;
+    while (i < listLength(f.instructions)) {
+        let ins: RirInstruction = f.instructions[i];
+        if (ins.opcode == "label") {
+            dead = false;
+            push(reachable, ins);
+        } else if (!dead) {
+            push(reachable, ins);
+            if (ins.opcode == "return" || ins.opcode == "jump" || ins.opcode == "branch") dead = true;
+        }
+        i = i + 1;
+    }
+
+    let compact: List<RirInstruction> = [];
+    i = 0;
+    while (i < listLength(reachable)) {
+        let ins: RirInstruction = reachable[i];
+        let omit: bool = false;
+        if (ins.opcode == "jump" && i + 1 < listLength(reachable)) {
+            let next: RirInstruction = reachable[i + 1];
+            if (next.opcode == "label" && next.name == ins.name) omit = true;
+        }
+        if (!omit) push(compact, ins);
+        i = i + 1;
+    }
+    f.instructions = compact;
+}
+
 function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: Ref<BackendState>) {
+    optimizeControlFlow(f);
     collectDeclarations(module, f, state);
+    prepareInlineScalarConstants(f, state);
     let params: string = "";
     let i: i64 = 0;
     while (i < listLength(f.params)) {
@@ -44,7 +192,10 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
     // available. Runtime initialization remains at the original store site.
     i = 0;
     while (i < listLength(state.temps)) {
-        if (state.tempTypes[i] != "" && !cpp17_starts(state.tempTypes[i], "Ref<")) cpp17_emitLine(state, "    " + cppType(state.tempTypes[i]) + " " + state.temps[i] + "{};");
+        let temp: string = state.temps[i];
+        if (state.tempTypes[i] != "" && !cpp17_starts(state.tempTypes[i], "Ref<") && !hasAlias(state, temp)) {
+            cpp17_emitLine(state, "    " + cppType(state.tempTypes[i]) + " " + temp + "{};");
+        }
         i = i + 1;
     }
     i = 0;
@@ -54,7 +205,7 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
         if (state.localAutos[i] && state.localInitValues[i] != "") {
             let initializerName: string = valueName(state.localInitValues[i]);
             let initializerType: string = tempType(state, initializerName);
-            if (!cpp17_starts(initializerType, "Ref<")) declaration = "auto " + variable + " = decltype(" + initializerName + "){};";
+            if (!cpp17_starts(initializerType, "Ref<")) declaration = "auto " + variable + " = " + cppType(initializerType) + "{};";
             else declaration = cppType(state.localTypes[i]) + " " + variable + "{};";
         } else declaration = cppType(state.localTypes[i]) + " " + variable + "{};";
         cpp17_emitLine(state, "    " + declaration);
@@ -75,7 +226,21 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
         } else if (ins.opcode == "jump") {
             cpp17_emitLine(state, "    goto " + ins.name + ";");
         } else if (ins.opcode == "branch") {
-            cpp17_emitLine(state, "    if (" + cppValue(state, ins.operands[0]) + ") goto " + ins.operands[1] + "; else goto " + ins.operands[2] + ";");
+            let nextIsLabel: bool = false;
+            let nextLabel: string = "";
+            if (i + 1 < listLength(f.instructions) && f.instructions[i + 1].opcode == "label") {
+                nextIsLabel = true;
+                nextLabel = f.instructions[i + 1].name;
+            }
+            if (nextIsLabel && nextLabel == ins.operands[2]) {
+                // The false edge falls through to the next label.
+                cpp17_emitLine(state, "    if (" + cppValue(state, ins.operands[0]) + ") goto " + ins.operands[1] + ";");
+            } else if (nextIsLabel && nextLabel == ins.operands[1]) {
+                // The true edge falls through; only the false edge needs a jump.
+                cpp17_emitLine(state, "    if (! (" + cppValue(state, ins.operands[0]) + ")) goto " + ins.operands[2] + ";");
+            } else {
+                cpp17_emitLine(state, "    if (" + cppValue(state, ins.operands[0]) + ") goto " + ins.operands[1] + "; else goto " + ins.operands[2] + ";");
+            }
         } else if (ins.opcode == "return") {
             if (listLength(ins.operands) == 0) cpp17_emitLine(state, "    return;");
             else cpp17_emitLine(state, "    return " + cppInlineCall(module, state, ins.operands[0]) + ";");
@@ -92,7 +257,7 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
         } else {
             let lhs: string = valueName(ins.result);
             if (ins.opcode == "const") {
-                cpp17_emitLine(state, "    " + lhs + " = " + cppLiteral(ins.operands[0], ins.type) + ";");
+                if (!hasAlias(state, lhs)) cpp17_emitLine(state, "    " + lhs + " = " + cppLiteral(ins.operands[0], ins.type) + ";");
             } else if (ins.opcode == "load") {
                 let name: string = ins.operands[0];
                 if (cpp17_starts(tempType(state, lhs), "Ref<")) setAlias(state, lhs, cppVariableName(name));

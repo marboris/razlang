@@ -22,7 +22,7 @@ help:
 	  '  make test-all        Run CTest, every Gen2 suite, and legacy frontend/backend regression tests' \
 	  '  make build-gen2      Build a Gen2 candidate with the frozen Gen1 baseline' \
 	  '  make build-gen2-selfhost Run staged Gen2 self-host; require a stable stage-2/stage-3 C++ fixed point' \
-	  '  make archive-gen2-version VERSION=0.4.0-g2-016 Snapshot source+stdlib+binary, then promote candidate' \
+	  '  make archive-gen2-version VERSION=0.4.0-g2-017 Snapshot source+stdlib+binary, then promote candidate' \
 	  '  make bootstrap-candidates Build the active Gen2 candidate with the frozen Gen1 compiler' \
 	  '  make bundle-gen2     Assemble Gen2 source bundle only' \
 	  '  make build-gen1      Rebuild the archived Gen1 candidate (legacy only)' \
@@ -72,7 +72,7 @@ build-gen2-selfhost:
 	RAZ_BUILD_KIND=gen2-selfhost $(NODE) scripts/build-gen2.mjs --self-host
 
 archive-gen2-version:
-	@test -n "$(VERSION)" || (echo 'usage: make archive-gen2-version VERSION=0.4.0-g2-016' >&2; exit 2)
+	@test -n "$(VERSION)" || (echo 'usage: make archive-gen2-version VERSION=0.4.0-g2-017' >&2; exit 2)
 	$(NODE) scripts/archive-gen2-version.mjs $(VERSION)
 
 # Gen1 bootstrap remains available; prefer the explicit Gen2 self-host target once the

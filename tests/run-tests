@@ -1,0 +1,5 @@
+#!/bin/sh
+
+# This is file to build run-tests.raz
+# Target output binary: run-tests.out
+

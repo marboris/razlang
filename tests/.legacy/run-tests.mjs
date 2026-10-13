@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { legacyRuntimeHeader } from '../scripts/legacy-runtime.mjs';
+import { legacyRuntimeHeader } from '../../scripts/legacy-runtime.mjs';
 
 const HERE = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.dirname(HERE);

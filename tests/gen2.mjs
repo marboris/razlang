@@ -3,7 +3,7 @@ import fs from 'node:fs';
 import path from 'node:path';
 import { spawnSync } from 'node:child_process';
 import { fileURLToPath } from 'node:url';
-import { assertGen2Version, expectedGen2Version, resolveGen2Binary } from '../../scripts/gen2-version.mjs';
+import { assertGen2Version, expectedGen2Version, resolveGen2Binary } from '../scripts/gen2-version.mjs';
 
 const TEST_DIR = path.dirname(fileURLToPath(import.meta.url));
 const ROOT = path.resolve(TEST_DIR, '../..');

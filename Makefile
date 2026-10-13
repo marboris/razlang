@@ -50,9 +50,6 @@ test-gen2-fast:
 	$(NODE) scripts/test-gen2-driver-fast.mjs
 	$(NODE) scripts/test-gen2-bootstrap-contract.mjs
 
-test-gen2-deep:
-	$(NODE) test/gen2/run.mjs
-
 test-gen2: test-gen2-fast test-gen2-deep
 
 test-all: test

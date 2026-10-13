@@ -18,7 +18,7 @@ yarn-error.log*
 **/.cache/
 **/.tmp/
 
-# Native binaries and objects
+# Native binaries / objects
 *.o
 *.obj
 *.a
@@ -27,22 +27,13 @@ yarn-error.log*
 *.dll
 *.exe
 *.out
-#core
-#core.*
 
-tests/.tmp/
+# Legacy / active compiler build caches
+**/*/build/*
+!**/.gitkeep
+
+# Others
 tests/test-output.txt
 tests/last-run.txt
-
-# Generated C/C++ outputs from ad-hoc runs
 *.cpp~
-
 *.zip
-
-# Legacy and active compiler build caches (frozen compiler binaries remain tracked)
-legacy/*/build/*
-!legacy/*/build/.gitkeep
-compiler/razc/build/*
-!compiler/razc/build/.gitkeep
-
-compiler/releases/*/build/

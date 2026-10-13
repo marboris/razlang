@@ -5,6 +5,7 @@
 #include <cstdlib>
 #include <cstring>
 #include <filesystem>
+#include <fstream>
 #include <iostream>
 #include <set>
 #include <stdexcept>
@@ -140,8 +141,39 @@ fs::path absoluteFromCwd(const std::string& value) {
 }
 
 bool isProjectRoot(const fs::path& candidate) {
-    return fs::exists(candidate / "compiler" / "razc" / "src" / "driver" / "main.raz") &&
-           fs::exists(candidate / "legacy" / "gen1" / "gen.json");
+    return fs::exists(candidate / "compiler" / "razc" / "compiler.raz") &&
+           fs::exists(candidate / "library" / "raz" / "std" / "io" / "io.raz");
+}
+
+std::string trimEnvValue(std::string value) {
+    const auto whitespace = [](unsigned char ch) { return ch == ' ' || ch == '\t' || ch == '\r' || ch == '\n'; };
+    while (!value.empty() && whitespace(static_cast<unsigned char>(value.front()))) value.erase(value.begin());
+    while (!value.empty() && whitespace(static_cast<unsigned char>(value.back()))) value.pop_back();
+    return value;
+}
+
+void loadProjectEnv(const fs::path& root) {
+    std::ifstream input(root / "raz.env");
+    if (!input) return;
+    std::string line;
+    while (std::getline(input, line)) {
+        line = trimEnvValue(line);
+        if (line.empty() || line.front() == '#') continue;
+        const auto equal = line.find('=');
+        if (equal == std::string::npos) continue;
+        const std::string key = trimEnvValue(line.substr(0, equal));
+        std::string value = trimEnvValue(line.substr(equal + 1));
+        if (key.empty() || std::getenv(key.c_str()) != nullptr) continue;
+        if (value.size() >= 2 && ((value.front() == '"' && value.back() == '"') ||
+                                  (value.front() == '\'' && value.back() == '\''))) {
+            value = value.substr(1, value.size() - 2);
+        }
+#ifdef _WIN32
+        _putenv_s(key.c_str(), value.c_str());
+#else
+        ::setenv(key.c_str(), value.c_str(), 0);
+#endif
+    }
 }
 
 fs::path findProjectRoot(const char* argv0) {
@@ -176,9 +208,9 @@ std::string frontendPath(const fs::path& root, const Options& options) {
     const char* fromEnv = std::getenv("RAZ_FRONTEND");
     if (fromEnv && *fromEnv) return absoluteFromCwd(fromEnv).string();
 #ifdef _WIN32
-    return (root / "compiler" / "razc" / "build" / "razc-candidate.exe").string();
+    return (root / "compiler" / "razc" / "bin" / "razc.exe").string();
 #else
-    return (root / "compiler" / "razc" / "build" / "razc-candidate").string();
+    return (root / "compiler" / "razc" / "bin" / "razc").string();
 #endif
 }
 
@@ -604,7 +636,7 @@ int execute(const Options& options, const fs::path& root) {
     const std::string frontend = frontendPath(root, options);
     if (!options.dryRun && !fs::is_regular_file(frontend)) {
         throw std::runtime_error("Gen2 frontend is missing: " + frontend +
-            "\nBuild it with: make build-gen2 (the bootstrap compile is intentionally separate from driver tests)");
+            "\nBuild the active frontend from compiler/razc/compiler.raz before retrying");
     }
 
     const TemporaryDirectory temp = makeTemporaryDirectory(options.saveTemps);
@@ -651,10 +683,11 @@ int main(int argc, char** argv) {
             return 0;
         }
         if (options.version) {
-            std::cout << "razc driver 0.4.0 (Gen2 preview; GNU C++ toolchain)\n";
+            std::cout << "razc driver 0.4.0-g2-018 (GNU C++ toolchain)\n";
             return 0;
         }
         const fs::path root = findProjectRoot(argv[0]);
+        loadProjectEnv(root);
         return execute(options, root);
     } catch (const std::exception& error) {
         std::cerr << "razc: " << error.what() << "\n";

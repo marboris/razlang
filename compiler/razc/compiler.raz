@@ -1,5 +1,5 @@
 // Canonical Gen2 compiler entry point.
-// Keep implementation modular; the frozen Gen1 bootstrap builder creates a temporary flat bundle.
+// Keep implementation modular; the active Gen2 binary compiles this entry point directly.
 include "src/model/ast.raz";
 include "src/core/lexer.raz";
 include "src/core/parser.raz";

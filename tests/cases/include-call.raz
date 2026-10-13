@@ -1,0 +1,6 @@
+use std.io;
+use std.text;
+include("../fixtures/include-call-helper.raz");
+
+print(int_to_string(helper(40)));
+return helper 41;

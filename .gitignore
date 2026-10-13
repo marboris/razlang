@@ -1,23 +1,20 @@
-# Node / editor
-node_modules/
-npm-debug.log*
-yarn-debug.log*
-yarn-error.log*
-.pnpm-debug.log*
+# Editor / package-manager state
 .DS_Store
 .idea/
 .vscode/
 *.swp
 *.swo
 
-# Compiler/build artifacts
+# Build and compiler artifacts
 .build/
 .cache/
 .tmp/
 **/.cache/
 **/.tmp/
-
-# Native binaries / objects
+compiler/razc/build/*
+!compiler/razc/build/.gitkeep
+tests/.work/
+tests/run-tests.out
 *.o
 *.obj
 *.a
@@ -27,12 +24,6 @@ yarn-error.log*
 *.exe
 *.out
 
-# Legacy / active compiler build caches
-**/*/build/*
-!**/.gitkeep
-
-# Others
-tests/test-output.txt
-tests/last-run.txt
-*.cpp~
+# Generated archives and editor backups
 *.zip
+*.cpp~

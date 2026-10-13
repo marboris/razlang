@@ -78,6 +78,7 @@ struct Program {
 }
 
 struct ParserState {
+    source: string;
     tokens: List<Token>;
     pos: i64;
     exprs: List<Expr>;

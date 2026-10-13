@@ -1,0 +1,295 @@
+use std.containers;
+use std.text;
+
+// Small JSON parser implemented in Raz. Values are stored in a flat node table;
+// arrays and objects point to node indices so recursive values do not require
+// recursive native allocations. JSON kind: 0=null, 1=string, 2=number,
+// 3=boolean, 4=array, 5=object.
+struct JsonNode {
+    kind: i64;
+    text: string;
+    keys: List<string>;
+    children: List<i64>;
+}
+
+struct JsonDocument {
+    source: string;
+    pos: i64;
+    nodes: List<JsonNode>;
+    root: i64;
+    valid: bool;
+    error: string;
+}
+
+function jsonCharCode(value: string, index: i64) -> i64 {
+    if (index < 0 || index >= length(value)) return -1;
+    return value[index];
+}
+
+function jsonWhitespace(c: i64) -> bool {
+    return c == 32 || c == 9 || c == 10 || c == 13;
+}
+
+function jsonSkipWhitespace(doc: Ref<JsonDocument>) {
+    while (doc.pos < length(doc.source) && jsonWhitespace(jsonCharCode(doc.source, doc.pos))) {
+        doc.pos = doc.pos + 1;
+    }
+}
+
+function jsonFail(doc: Ref<JsonDocument>, message: string) {
+    if (doc.valid) {
+        doc.valid = false;
+        doc.error = message + " at byte " + int_to_string(doc.pos);
+    }
+}
+
+function jsonAddNode(doc: Ref<JsonDocument>, kind: i64, text: string) -> i64 {
+    let node: JsonNode = new JsonNode();
+    node.kind = kind;
+    node.text = text;
+    node.keys = [];
+    node.children = [];
+    let id: i64 = listLength(doc.nodes);
+    push(doc.nodes, node);
+    return id;
+}
+
+function jsonHexValue(c: i64) -> i64 {
+    if (c >= 48 && c <= 57) return c - 48;
+    if (c >= 65 && c <= 70) return c - 55;
+    if (c >= 97 && c <= 102) return c - 87;
+    return -1;
+}
+
+function jsonReadString(doc: Ref<JsonDocument>) -> string {
+    if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) != 34) {
+        jsonFail(doc, "expected string");
+        return "";
+    }
+    doc.pos = doc.pos + 1;
+    let out: string = "";
+    while (doc.pos < length(doc.source) && doc.valid) {
+        let c: i64 = jsonCharCode(doc.source, doc.pos);
+        doc.pos = doc.pos + 1;
+        if (c == 34) return out;
+        if (c < 32) {
+            jsonFail(doc, "control character in string");
+            return "";
+        }
+        if (c == 92) {
+            if (doc.pos >= length(doc.source)) {
+                jsonFail(doc, "unfinished string escape");
+                return "";
+            }
+            let escaped: i64 = jsonCharCode(doc.source, doc.pos);
+            doc.pos = doc.pos + 1;
+            if (escaped == 34) out = out + "\"";
+            else if (escaped == 92) out = out + "\\";
+            else if (escaped == 47) out = out + "/";
+            else if (escaped == 98) out = out + "\\b";
+            else if (escaped == 102) out = out + "\\f";
+            else if (escaped == 110) out = out + "\n";
+            else if (escaped == 114) out = out + "\r";
+            else if (escaped == 116) out = out + "\t";
+            else if (escaped == 117) {
+                // Preserve valid \uXXXX escapes verbatim until Raz has a Unicode
+                // code-point construction primitive; reject malformed hex.
+                let digits: i64 = 0;
+                while (digits < 4 && doc.pos < length(doc.source)) {
+                    if (jsonHexValue(jsonCharCode(doc.source, doc.pos)) < 0) {
+                        jsonFail(doc, "invalid unicode escape");
+                        return "";
+                    }
+                    digits = digits + 1;
+                    doc.pos = doc.pos + 1;
+                }
+                if (digits != 4) {
+                    jsonFail(doc, "unfinished unicode escape");
+                    return "";
+                }
+                out = out + "\\u" + slice(doc.source, doc.pos - 4, doc.pos);
+            } else {
+                jsonFail(doc, "invalid string escape");
+                return "";
+            }
+        } else {
+            out = out + slice(doc.source, doc.pos - 1, doc.pos);
+        }
+    }
+    jsonFail(doc, "unterminated string");
+    return "";
+}
+
+function jsonParseValue(doc: Ref<JsonDocument>, depth: i64) -> i64 {
+    if (depth > 128) {
+        jsonFail(doc, "maximum nesting depth exceeded");
+        return -1;
+    }
+    jsonSkipWhitespace(doc);
+    if (!doc.valid || doc.pos >= length(doc.source)) {
+        jsonFail(doc, "expected value");
+        return -1;
+    }
+    let c: i64 = jsonCharCode(doc.source, doc.pos);
+    if (c == 34) {
+        let value: string = jsonReadString(doc);
+        if (!doc.valid) return -1;
+        return jsonAddNode(doc, 1, value);
+    }
+    if (c == 123) {
+        doc.pos = doc.pos + 1;
+        let id: i64 = jsonAddNode(doc, 5, "");
+        jsonSkipWhitespace(doc);
+        if (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) == 125) {
+            doc.pos = doc.pos + 1;
+            return id;
+        }
+        while (doc.valid) {
+            jsonSkipWhitespace(doc);
+            let key: string = jsonReadString(doc);
+            if (!doc.valid) return -1;
+            jsonSkipWhitespace(doc);
+            if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) != 58) {
+                jsonFail(doc, "expected ':' after object key");
+                return -1;
+            }
+            doc.pos = doc.pos + 1;
+            let child: i64 = jsonParseValue(doc, depth + 1);
+            if (child < 0 || !doc.valid) return -1;
+            push(doc.nodes[id].keys, key);
+            push(doc.nodes[id].children, child);
+            jsonSkipWhitespace(doc);
+            if (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) == 125) {
+                doc.pos = doc.pos + 1;
+                return id;
+            }
+            if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) != 44) {
+                jsonFail(doc, "expected ',' or '}' in object");
+                return -1;
+            }
+            doc.pos = doc.pos + 1;
+        }
+        return -1;
+    }
+    if (c == 91) {
+        doc.pos = doc.pos + 1;
+        let id: i64 = jsonAddNode(doc, 4, "");
+        jsonSkipWhitespace(doc);
+        if (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) == 93) {
+            doc.pos = doc.pos + 1;
+            return id;
+        }
+        while (doc.valid) {
+            let child: i64 = jsonParseValue(doc, depth + 1);
+            if (child < 0 || !doc.valid) return -1;
+            push(doc.nodes[id].children, child);
+            jsonSkipWhitespace(doc);
+            if (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) == 93) {
+                doc.pos = doc.pos + 1;
+                return id;
+            }
+            if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) != 44) {
+                jsonFail(doc, "expected ',' or ']' in array");
+                return -1;
+            }
+            doc.pos = doc.pos + 1;
+        }
+        return -1;
+    }
+    if (c == 45 || (c >= 48 && c <= 57)) {
+        let start: i64 = doc.pos;
+        if (jsonCharCode(doc.source, doc.pos) == 45) doc.pos = doc.pos + 1;
+        if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) < 48 || jsonCharCode(doc.source, doc.pos) > 57) {
+            jsonFail(doc, "invalid number");
+            return -1;
+        }
+        if (jsonCharCode(doc.source, doc.pos) == 48) doc.pos = doc.pos + 1;
+        else while (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) >= 48 && jsonCharCode(doc.source, doc.pos) <= 57) doc.pos = doc.pos + 1;
+        if (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) == 46) {
+            doc.pos = doc.pos + 1;
+            if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) < 48 || jsonCharCode(doc.source, doc.pos) > 57) {
+                jsonFail(doc, "invalid fractional number");
+                return -1;
+            }
+            while (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) >= 48 && jsonCharCode(doc.source, doc.pos) <= 57) doc.pos = doc.pos + 1;
+        }
+        if (doc.pos < length(doc.source) && (jsonCharCode(doc.source, doc.pos) == 69 || jsonCharCode(doc.source, doc.pos) == 101)) {
+            doc.pos = doc.pos + 1;
+            if (doc.pos < length(doc.source) && (jsonCharCode(doc.source, doc.pos) == 43 || jsonCharCode(doc.source, doc.pos) == 45)) doc.pos = doc.pos + 1;
+            if (doc.pos >= length(doc.source) || jsonCharCode(doc.source, doc.pos) < 48 || jsonCharCode(doc.source, doc.pos) > 57) {
+                jsonFail(doc, "invalid number exponent");
+                return -1;
+            }
+            while (doc.pos < length(doc.source) && jsonCharCode(doc.source, doc.pos) >= 48 && jsonCharCode(doc.source, doc.pos) <= 57) doc.pos = doc.pos + 1;
+        }
+        return jsonAddNode(doc, 2, slice(doc.source, start, doc.pos));
+    }
+    if (c == 116 && doc.pos + 4 <= length(doc.source) && slice(doc.source, doc.pos, doc.pos + 4) == "true") {
+        doc.pos = doc.pos + 4;
+        return jsonAddNode(doc, 3, "true");
+    }
+    if (c == 102 && doc.pos + 5 <= length(doc.source) && slice(doc.source, doc.pos, doc.pos + 5) == "false") {
+        doc.pos = doc.pos + 5;
+        return jsonAddNode(doc, 3, "false");
+    }
+    if (c == 110 && doc.pos + 4 <= length(doc.source) && slice(doc.source, doc.pos, doc.pos + 4) == "null") {
+        doc.pos = doc.pos + 4;
+        return jsonAddNode(doc, 0, "null");
+    }
+    jsonFail(doc, "unexpected token");
+    return -1;
+}
+
+function jsonParse(source: string) -> JsonDocument {
+    let doc: JsonDocument = new JsonDocument();
+    doc.source = source;
+    doc.pos = 0;
+    doc.nodes = [];
+    doc.root = -1;
+    doc.valid = true;
+    doc.error = "";
+    doc.root = jsonParseValue(doc, 0);
+    jsonSkipWhitespace(doc);
+    if (doc.valid && doc.pos != length(doc.source)) jsonFail(doc, "trailing data");
+    return doc;
+}
+
+function jsonKind(doc: Ref<JsonDocument>, id: i64) -> i64 {
+    if (id < 0 || id >= listLength(doc.nodes)) return -1;
+    return doc.nodes[id].kind;
+}
+
+function jsonText(doc: Ref<JsonDocument>, id: i64) -> string {
+    if (id < 0 || id >= listLength(doc.nodes)) return "";
+    return doc.nodes[id].text;
+}
+
+function jsonArrayLength(doc: Ref<JsonDocument>, id: i64) -> i64 {
+    if (jsonKind(doc, id) != 4) return 0;
+    return listLength(doc.nodes[id].children);
+}
+
+function jsonArrayAt(doc: Ref<JsonDocument>, id: i64, index: i64) -> i64 {
+    if (jsonKind(doc, id) != 4 || index < 0 || index >= listLength(doc.nodes[id].children)) return -1;
+    return doc.nodes[id].children[index];
+}
+
+function jsonObjectGet(doc: Ref<JsonDocument>, id: i64, key: string) -> i64 {
+    if (jsonKind(doc, id) != 5) return -1;
+    let i: i64 = listLength(doc.nodes[id].keys) - 1;
+    while (i >= 0) {
+        if (doc.nodes[id].keys[i] == key) return doc.nodes[id].children[i];
+        i = i - 1;
+    }
+    return -1;
+}
+
+function jsonObjectKeyCount(doc: Ref<JsonDocument>, id: i64) -> i64 {
+    if (jsonKind(doc, id) != 5) return 0;
+    return listLength(doc.nodes[id].keys);
+}
+
+function jsonObjectKeyAt(doc: Ref<JsonDocument>, id: i64, index: i64) -> string {
+    if (jsonKind(doc, id) != 5 || index < 0 || index >= listLength(doc.nodes[id].keys)) return "";
+    return doc.nodes[id].keys[index];
+}

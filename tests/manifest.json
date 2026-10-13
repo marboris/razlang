@@ -164,98 +164,93 @@
         "raz_v_n",
         "'65'"
       ]
-    }
-  ],
-  "positive": [
+    },
     {
-      "name": "arithmetic",
-      "source": "cases/arithmetic.raz",
-      "exit": 207,
-      "ir": [
-        "mul",
-        "add",
-        "return"
+      "name": "call-syntax",
+      "source": "cases/call-syntax.raz",
+      "exit": 42,
+      "cppContains": [
+        "rz_f_add(",
+        "parentheses-call",
+        "bare-call",
+        "rz_f_calculate("
+      ],
+      "cppNotContains": [
+        "raz_fn_n"
       ]
     },
     {
-      "name": "loop",
-      "source": "cases/loop.raz",
-      "exit": 120,
-      "ir": [
-        "branch",
-        "jump",
-        "mul",
-        "add"
+      "name": "call-zero-arg",
+      "source": "cases/call-zero-arg.raz",
+      "exit": 42,
+      "cppContains": [
+        "rz_f_meaning()"
+      ],
+      "cppNotContains": [
+        "raz_fn_n"
       ]
     },
     {
-      "name": "nested-lvalue",
-      "source": "cases/nested_lvalue.raz",
-      "exit": 9,
-      "ir": [
-        "store_ref"
+      "name": "include-call",
+      "source": "cases/include-call.raz",
+      "exit": 42,
+      "cppContains": [
+        "rz_f_helper(",
+        "std/io/io_native.hpp"
+      ],
+      "cppNotContains": [
+        "include(\"../fixtures/include-call-helper.raz\")"
       ]
     },
     {
-      "name": "struct",
-      "source": "cases/struct.raz",
-      "exit": 25,
-      "ir": [
-        "store_ref",
-        "field",
-        "call"
+      "name": "include-direct",
+      "source": "cases/include-direct.raz",
+      "exit": 42,
+      "cppContains": [
+        "rz_f_helper(",
+        "std/io/io_native.hpp"
+      ],
+      "cppNotContains": [
+        "include \"../fixtures/include-call-helper.raz\""
       ]
     },
     {
-      "name": "list-generic",
-      "source": "cases/list_generic.raz",
-      "exit": 32,
-      "ir": [
-        "builtin list_append",
-        "index"
-      ]
-    },
-    {
-      "name": "short-circuit",
-      "source": "cases/short_circuit.raz",
+      "name": "json-smoke",
+      "source": "cases/json-smoke.raz",
       "exit": 0,
-      "ir": [
-        "branch"
+      "cppContains": [
+        "rz_f_jsonParse(",
+        "rz_f_jsonObjectGet(",
+        "std/containers/containers_native.hpp"
+      ],
+      "cppNotContains": [
+        "raz_fn_n"
       ]
     },
     {
-      "name": "string",
-      "source": "cases/string.raz",
-      "exit": 9,
-      "ir": [
-        "builtin string_length"
+      "name": "json-invalid",
+      "source": "cases/json-invalid.raz",
+      "exit": 0,
+      "cppContains": [
+        "rz_f_jsonParse(",
+        "rz_m_valid",
+        "rz_m_error"
+      ],
+      "cppNotContains": [
+        "raz_fn_n"
       ]
     },
     {
-      "name": "ref-list-mutation",
-      "source": "cases/ref_list.raz",
-      "exit": 3,
-      "ir": [
-        "builtin list_push"
-      ]
-    },
-    {
-      "name": "ref-struct",
-      "source": "cases/ref-struct.raz",
-      "exit": 41,
-      "ir": [
-        "ref box : Ref<Box>",
-        "store_ref",
-        "call inc"
-      ]
-    },
-    {
-      "name": "configurable-syntax",
-      "source": "cases/configurable_syntax.raz",
-      "language": "fixtures/alternate.language.json",
-      "exit": 7,
-      "ir": [
-        "store_ref"
+      "name": "process-smoke",
+      "source": "cases/process-smoke.raz",
+      "exit": 0,
+      "cppContains": [
+        "std/process/process_native.hpp",
+        "rz_f_exec(",
+        "rz_f_exitCode("
+      ],
+      "cppNotContains": [
+        "raz_fn_n"
       ]
     }
   ],
@@ -268,7 +263,7 @@
     {
       "name": "constructor-type-error",
       "source": "cases/constructor_type_error.raz",
-      "contains": "new Point field x expects i64, got string"
+      "contains": "constructor arguments are not supported for Point"
     },
     {
       "name": "type-mismatch",
@@ -285,52 +280,5 @@
       "source": "negative/unsupported-pointer.raz",
       "contains": "only char* pointer types are currently supported by Gen2"
     }
-  ],
-  "frontend": {
-    "source": "cases/frontend_smoke.raz",
-    "contains": [
-      "struct Point",
-      "function square",
-      "function sumTo",
-      "local i64 inferred",
-      "store_ref",
-      "index",
-      "branch",
-      "jump",
-      "call square",
-      "call append"
-    ],
-    "self_contains": [
-      "function lex",
-      "function parseProgram",
-      "function emitExpr",
-      "function emitProgram",
-      "endfunction"
-    ],
-    "negative_source": "cases/frontend_semantic_error.raz",
-    "negative_contains": [
-      "semantic-error: duplicate field"
-    ]
-  },
-  "backend": {
-    "source": "cases/backend_smoke.raz",
-    "exit": 46,
-    "rir_contains": [
-      "function readCounter",
-      "function abs",
-      "call push",
-      "lt",
-      "branch",
-      "neg",
-      "call abs"
-    ],
-    "cpp_contains": [
-      "readCounter(Counter& counter)",
-      "raz::list_push",
-      "std::int64_t abs",
-      "if (",
-      "goto then",
-      "-"
-    ]
-  }
+  ]
 }

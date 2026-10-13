@@ -1,0 +1,8 @@
+use std.io;
+use std.json;
+
+let document = jsonParse("{\"values\":[1,}");
+if (document.valid) return 1;
+if (document.error == "") return 2;
+print("json-invalid-ok");
+return 0;

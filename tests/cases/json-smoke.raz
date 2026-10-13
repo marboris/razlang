@@ -1,0 +1,22 @@
+use std.io;
+use std.json;
+
+let document = jsonParse("{\"ok\":true,\"name\":\"raz\",\"values\":[1,\"two\",null],\"nested\":{\"enabled\":false}}");
+if (!document.valid) return 1;
+if (jsonKind(document, document.root) != 5) return 2;
+if (jsonObjectKeyCount(document, document.root) != 4) return 3;
+let okId = jsonObjectGet(document, document.root, "ok");
+if (jsonKind(document, okId) != 3 || jsonText(document, okId) != "true") return 4;
+let nameId = jsonObjectGet(document, document.root, "name");
+if (jsonText(document, nameId) != "raz") return 5;
+let valuesId = jsonObjectGet(document, document.root, "values");
+if (jsonArrayLength(document, valuesId) != 3) return 6;
+let numberId = jsonArrayAt(document, valuesId, 0);
+if (jsonKind(document, numberId) != 2 || jsonText(document, numberId) != "1") return 7;
+if (jsonText(document, jsonArrayAt(document, valuesId, 1)) != "two") return 8;
+let nestedId = jsonObjectGet(document, document.root, "nested");
+if (jsonKind(document, nestedId) != 5) return 9;
+let enabledId = jsonObjectGet(document, nestedId, "enabled");
+if (jsonText(document, enabledId) != "false") return 10;
+print("json-ok");
+return 0;

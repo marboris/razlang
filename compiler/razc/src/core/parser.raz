@@ -97,6 +97,23 @@ function parseType(state: Ref<ParserState>) -> string {
     return out;
 }
 
+
+function hasSourceLineBreak(source: string, begin: i64, end: i64) -> bool {
+    let i: i64 = begin;
+    while (i < end && i < length(source)) {
+        let c: i64 = charCodeAt(source, i);
+        if (c == 10 || c == 13) return true;
+        i = i + 1;
+    }
+    return false;
+}
+
+function canStartBareCallArgument(kind: i64) -> bool {
+    // Parentheses-less calls accept primary expressions. Unary +, -, and ! are
+    // intentionally excluded here because they are ambiguous with infix operators.
+    return kind == 1 || kind == 2 || kind == 3 || kind == 4 || kind == 17 || kind == 18 || kind == 19 || kind == 20 || kind == 28 || kind == 49;
+}
+
 function parseExpression(state: Ref<ParserState>, minPrec: i64) -> i64 {
     let left: i64 = parseUnary(state);
     let p: i64 = precedence(currentKind(state));
@@ -250,7 +267,32 @@ function parsePostfix(state: Ref<ParserState>, id: i64) -> i64 {
             e.right = idx;
             out = addExpr(state, e);
         } else {
-            more = false;
+            // Also accept command-style calls: `print "hello"` and
+            // `sumValues first, second`. Newlines terminate the call; commas
+            // separate arguments. Parenthesized calls remain the unambiguous form.
+            let canBareCall: bool = false;
+            if (out >= 0 && out < listLength(state.exprs) && canStartBareCallArgument(currentKind(state))) {
+                let callee: Expr = state.exprs[out];
+                if (callee.kind == 5 && state.pos > 0) {
+                    let calleeToken: Token = state.tokens[state.pos - 1];
+                    let argToken: Token = state.tokens[state.pos];
+                    if (!hasSourceLineBreak(state.source, calleeToken.pos, argToken.pos)) canBareCall = true;
+                }
+            }
+            if (canBareCall) {
+                let args: List<i64> = [];
+                push(args, parseExpression(state, 0));
+                while (currentKind(state) == 26) {
+                    consume(state, 26);
+                    push(args, parseExpression(state, 0));
+                }
+                let e: Expr = emptyExpr(8);
+                e.left = out;
+                e.args = args;
+                out = addExpr(state, e);
+            } else {
+                more = false;
+            }
         }
     }
     return out;
@@ -459,6 +501,7 @@ function parseStruct(state: Ref<ParserState>) -> StructDef {
 
 function parseProgram(source: string) -> Program {
     let state: ParserState = new ParserState();
+    state.source = source;
     state.tokens = lex(source);
     state.pos = 0;
     state.exprs = [];

@@ -145,6 +145,12 @@ function expandIncludes(source: string, filePath: string, seen: Ref<List<string>
             if (tokenOk && beforeOk && afterOk) {
                 let q: i64 = scan + 7;
                 while (q < length(source) && isSpace(charCodeAt(source, q))) q = q + 1;
+                let parenthesized: bool = false;
+                if (q < length(source) && charCodeAt(source, q) == 40) {
+                    parenthesized = true;
+                    q = q + 1;
+                    while (q < length(source) && isSpace(charCodeAt(source, q))) q = q + 1;
+                }
                 if (q < length(source) && charCodeAt(source, q) == 34) {
                     let endQuote: i64 = q + 1;
                     let pathEscaped: bool = false;
@@ -154,9 +160,18 @@ function expandIncludes(source: string, filePath: string, seen: Ref<List<string>
                         endQuote = endQuote + 1;
                     }
                     if (endQuote < length(source)) {
-                        let semi: i64 = endQuote + 1;
-                        while (semi < length(source) && isSpace(charCodeAt(source, semi))) semi = semi + 1;
-                        if (semi < length(source) && charCodeAt(source, semi) == 59) {
+                        let directiveEnd: i64 = endQuote + 1;
+                        let syntaxValid: bool = true;
+                        if (parenthesized) {
+                            while (directiveEnd < length(source) && isSpace(charCodeAt(source, directiveEnd))) directiveEnd = directiveEnd + 1;
+                            if (directiveEnd >= length(source) || charCodeAt(source, directiveEnd) != 41) syntaxValid = false;
+                            else directiveEnd = directiveEnd + 1;
+                        }
+                        // A semicolon is preferred but optional, matching ordinary Raz statements.
+                        while (directiveEnd < length(source) && (charCodeAt(source, directiveEnd) == 32 || charCodeAt(source, directiveEnd) == 9)) directiveEnd = directiveEnd + 1;
+                        if (directiveEnd < length(source) && charCodeAt(source, directiveEnd) == 59) directiveEnd = directiveEnd + 1;
+                        else if (directiveEnd < length(source) && charCodeAt(source, directiveEnd) != 10 && charCodeAt(source, directiveEnd) != 13 && !(charCodeAt(source, directiveEnd) == 47 && directiveEnd + 1 < length(source) && charCodeAt(source, directiveEnd + 1) == 47) && charCodeAt(source, directiveEnd) != 125) syntaxValid = false;
+                        if (syntaxValid) {
                             let includePath: string = slice(source, q + 1, endQuote);
                             let resolved: string = normalizeIncludePath(joinPath(pathDir(canonicalFilePath), includePath));
                             let included: string = "";
@@ -176,7 +191,7 @@ function expandIncludes(source: string, filePath: string, seen: Ref<List<string>
                             }
                             out = out + slice(source, cursor, scan);
                             out = out + included;
-                            cursor = semi + 1;
+                            cursor = directiveEnd;
                             nextScan = cursor;
                         }
                     }

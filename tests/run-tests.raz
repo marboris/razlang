@@ -1,0 +1,200 @@
+// Native Gen2 test runner. Build with ./tests/run-tests, then execute
+// ./tests/run-tests.out. Test cases are defined by tests/manifest.json.
+use std.io;
+use std.text;
+use std.env;
+use std.process;
+use std.json;
+
+function textContains(value: string, needle: string) -> bool {
+    if (needle == "") return true;
+    if (length(needle) > length(value)) return false;
+    let textPos: i64 = 0;
+    while (textPos + length(needle) <= length(value)) {
+        if (slice(value, textPos, textPos + length(needle)) == needle) return true;
+        textPos = textPos + 1;
+    }
+    return false;
+}
+
+function configTrim(value: string) -> string {
+    let begin: i64 = 0;
+    let end: i64 = length(value);
+    while (begin < end && (value[begin] == 32 || value[begin] == 9 || value[begin] == 10 || value[begin] == 13)) begin = begin + 1;
+    while (end > begin && (value[end - 1] == 32 || value[end - 1] == 9 || value[end - 1] == 10 || value[end - 1] == 13)) end = end - 1;
+    return slice(value, begin, end);
+}
+
+function configValue(contents: string, key: string) -> string {
+    let prefix: string = key + "=";
+    let cursor: i64 = 0;
+    while (cursor < length(contents)) {
+        let end: i64 = cursor;
+        while (end < length(contents) && contents[end] != 10) end = end + 1;
+        let line: string = configTrim(slice(contents, cursor, end));
+        if (length(line) >= length(prefix) && slice(line, 0, length(prefix)) == prefix) {
+            let value: string = configTrim(slice(line, length(prefix), length(line)));
+            if (length(value) >= 2 && ((value[0] == 34 && value[length(value) - 1] == 34) || (value[0] == 39 && value[length(value) - 1] == 39))) {
+                value = slice(value, 1, length(value) - 1);
+            }
+            return value;
+        }
+        cursor = end + 1;
+    }
+    return "";
+}
+
+function testPath(name: string, extension: string) -> string {
+    return "tests/.work/" + name + extension;
+}
+
+function runPositiveCase(document: Ref<JsonDocument>, caseId: i64, compilerPath: string, cppCompiler: string, libraryRoot: string) -> bool {
+    let name: string = jsonText(document, jsonObjectGet(document, caseId, "name"));
+    let source: string = "tests/" + jsonText(document, jsonObjectGet(document, caseId, "source"));
+    let expectedExit: string = jsonText(document, jsonObjectGet(document, caseId, "exit"));
+    let cppPath: string = testPath(name, ".cpp");
+    let binaryPath: string = testPath(name, ".bin");
+    let ok: bool = true;
+
+    let command: string = compilerPath + " " + source + " --emit-cpp " + cppPath;
+    let output: string = exec command;
+    if (exitCode() != 0) {
+        print("FAIL " + name + ": razc failed");
+        print(output);
+        ok = false;
+    }
+
+    let cpp: string = "";
+    if (ok) {
+        cpp = readFile(cppPath);
+        if (cpp == "") {
+            print("FAIL " + name + ": generated C++ is empty or unreadable");
+            ok = false;
+        }
+    }
+
+    let mustContain: i64 = jsonObjectGet(document, caseId, "cppContains");
+    let patternIndex: i64 = 0;
+    while (ok && patternIndex < jsonArrayLength(document, mustContain)) {
+        let pattern: string = jsonText(document, jsonArrayAt(document, mustContain, patternIndex));
+        if (!textContains(cpp, pattern)) {
+            print("FAIL " + name + ": generated C++ is missing pattern: " + pattern);
+            ok = false;
+        }
+        patternIndex = patternIndex + 1;
+    }
+
+    let mustNotContain: i64 = jsonObjectGet(document, caseId, "cppNotContains");
+    patternIndex = 0;
+    while (ok && patternIndex < jsonArrayLength(document, mustNotContain)) {
+        let pattern: string = jsonText(document, jsonArrayAt(document, mustNotContain, patternIndex));
+        if (textContains(cpp, pattern)) {
+            print("FAIL " + name + ": generated C++ unexpectedly contains: " + pattern);
+            ok = false;
+        }
+        patternIndex = patternIndex + 1;
+    }
+
+    if (ok) {
+        command = cppCompiler + " -std=c++17 -O2 -I " + libraryRoot + " -I tests " + cppPath + " -o " + binaryPath;
+        output = exec command;
+        if (exitCode() != 0) {
+            print("FAIL " + name + ": C++ compilation failed");
+            print(output);
+            ok = false;
+        }
+    }
+
+    if (ok) {
+        output = exec("./" + binaryPath);
+        let actualExit: string = int_to_string(exitCode());
+        if (actualExit != expectedExit) {
+            print("FAIL " + name + ": expected exit " + expectedExit + ", got " + actualExit);
+            if (output != "") print(output);
+            ok = false;
+        }
+    }
+    if (ok) print("PASS " + name);
+    return ok;
+}
+
+function runNegativeCase(document: Ref<JsonDocument>, caseId: i64, compilerPath: string) -> bool {
+    let name: string = jsonText(document, jsonObjectGet(document, caseId, "name"));
+    let source: string = "tests/" + jsonText(document, jsonObjectGet(document, caseId, "source"));
+    let expectedText: string = jsonText(document, jsonObjectGet(document, caseId, "contains"));
+    let cppPath: string = testPath(name, ".negative.cpp");
+    let command: string = compilerPath + " " + source + " --emit-cpp " + cppPath;
+    let output: string = exec command;
+    let status: i64 = exitCode();
+    let ok: bool = true;
+    if (status == 0) {
+        print("FAIL " + name + ": invalid source was accepted");
+        ok = false;
+    } else if (!textContains(output, expectedText)) {
+        print("FAIL " + name + ": expected diagnostic not found: " + expectedText);
+        print(output);
+        ok = false;
+    }
+    if (ok) print("PASS " + name + " (expected failure)");
+    return ok;
+}
+
+function runTests() -> i64 {
+    let configText: string = readFile("raz.env");
+    let razc: string = getEnv("RAZC");
+    let cxx: string = getEnv("CXX");
+    let libraryPath: string = getEnv("RAZ_LIBRARY");
+    let manifestPath: string = getEnv("RAZ_TEST_MANIFEST");
+    if (razc == "") razc = configValue(configText, "RAZC");
+    if (cxx == "") cxx = configValue(configText, "CXX");
+    if (libraryPath == "") libraryPath = configValue(configText, "RAZ_LIBRARY");
+    if (manifestPath == "") manifestPath = configValue(configText, "RAZ_TEST_MANIFEST");
+    if (razc == "") razc = "./compiler/razc/bin/razc";
+    if (cxx == "") cxx = "g++";
+    if (libraryPath == "") libraryPath = "./library/raz";
+    if (manifestPath == "") manifestPath = "tests/manifest.json";
+
+    let expectedVersion: string = configTrim(readFile("VERSION"));
+    let actualVersion: string = exec(razc + " --version");
+    if (exitCode() != 0 || expectedVersion == "" || !textContains(actualVersion, expectedVersion)) {
+        print("test-runner: compiler version mismatch; expected " + expectedVersion + ", got " + configTrim(actualVersion));
+        return 2;
+    }
+
+    let manifestText: string = readFile(manifestPath);
+    if (manifestText == "") {
+        print("test-runner: cannot read " + manifestPath + "; run from project root");
+        return 2;
+    }
+    let manifest: JsonDocument = jsonParse(manifestText);
+    if (!manifest.valid) {
+        print("test-runner: invalid manifest: " + manifest.error);
+        return 2;
+    }
+    let casesId: i64 = jsonObjectGet(manifest, manifest.root, "cases");
+    let negativeId: i64 = jsonObjectGet(manifest, manifest.root, "negative");
+    if (jsonKind(manifest, casesId) != 4 || jsonKind(manifest, negativeId) != 4) {
+        print("test-runner: manifest requires cases and negative arrays");
+        return 2;
+    }
+    let passed: i64 = 0;
+    let failed: i64 = 0;
+    let caseIndex: i64 = 0;
+    while (caseIndex < jsonArrayLength(manifest, casesId)) {
+        if (runPositiveCase(manifest, jsonArrayAt(manifest, casesId, caseIndex), razc, cxx, libraryPath)) passed = passed + 1;
+        else failed = failed + 1;
+        caseIndex = caseIndex + 1;
+    }
+    caseIndex = 0;
+    while (caseIndex < jsonArrayLength(manifest, negativeId)) {
+        if (runNegativeCase(manifest, jsonArrayAt(manifest, negativeId, caseIndex), razc)) passed = passed + 1;
+        else failed = failed + 1;
+        caseIndex = caseIndex + 1;
+    }
+
+    print("Raz Gen2 tests: " + int_to_string(passed) + " passed, " + int_to_string(failed) + " failed");
+    if (failed != 0) return 1;
+    return 0;
+}
+
+return runTests();

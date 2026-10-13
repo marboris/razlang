@@ -1,0 +1,11 @@
+use std.io;
+use std.process;
+
+let output: string = exec("printf process-ok");
+if (exitCode() != 0) return 1;
+if (output != "process-ok") return 2;
+let second: string = exec "printf bare-exec";
+if (!succeeded()) return 3;
+if (second != "bare-exec") return 4;
+print("process-ok");
+return 0;

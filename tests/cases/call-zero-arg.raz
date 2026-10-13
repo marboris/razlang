@@ -1,0 +1,7 @@
+function meaning() -> i64 {
+    return 42;
+}
+
+let value = meaning;
+if (meaning() != value) return 1;
+return value;

@@ -1,0 +1,15 @@
+// Synchronous process execution for build tools and test programs.
+// Commands are interpreted by the platform shell; only pass trusted commands.
+use "std/process/process_native.hpp";
+
+function exec(command: string) -> string {
+    return std_process_exec!(command);
+}
+
+function exitCode() -> i64 {
+    return std_process_exit_code!();
+}
+
+function succeeded() -> bool {
+    return exitCode() == 0;
+}

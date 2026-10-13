@@ -1,5 +1,5 @@
 // Gen2 compiler entry point. User module resolution is implemented in Raz in
-// src/source/modules.raz. JavaScript build scripts assemble/bootstrap only.
+// src/source/modules.raz. The source is compiled directly by the active Gen2 binary.
 use std.io;
 use std.text;
 use std.containers;
@@ -8,8 +8,7 @@ use "cstddef";
 use "string";
 use "vector";
 
-// Gen1 bootstrap workaround: the frozen backend infers some local string loads as i64.
-// The compiler executable explicitly imports every header required by its own implementation.
+// Explicitly import every native header required by the compiler executable.
 let gInputPath: string = "";
 let gOutputPath: string = "";
 let gOption: string = "";
@@ -166,7 +165,7 @@ function runCompiler() -> i64 {
         return 0;
     }
     if (gInputPath == "--version" || gInputPath == "-V") {
-        print("razc Gen2 preview 0.4.0-g2-017");
+        print("razc Gen2 preview 0.4.0-g2-018");
         return 0;
     }
 

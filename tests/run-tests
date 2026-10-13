@@ -1,5 +1,27 @@
 #!/bin/sh
+# This script builds tests/run-tests.raz.
+# Target output binary: tests/run-tests.out
+set -eu
 
-# This is file to build run-tests.raz
-# Target output binary: run-tests.out
+ROOT=$(CDPATH= cd -- "$(dirname -- "$0")/.." && pwd)
+cd "$ROOT"
 
+# Keep caller overrides while loading project defaults.
+RAZC_OVERRIDE=${RAZC-}
+CXX_OVERRIDE=${CXX-}
+RAZ_LIBRARY_OVERRIDE=${RAZ_LIBRARY-}
+if [ -f "$ROOT/raz.env" ]; then
+    . "$ROOT/raz.env"
+fi
+RAZC=${RAZC_OVERRIDE:-${RAZC:-"$ROOT/compiler/razc/bin/razc"}}
+CXX=${CXX_OVERRIDE:-${CXX:-g++}}
+RAZ_LIBRARY=${RAZ_LIBRARY_OVERRIDE:-${RAZ_LIBRARY:-"$ROOT/library/raz"}}
+export RAZC CXX RAZ_LIBRARY
+
+mkdir -p tests/.work
+rm -f tests/run-tests.out
+"$RAZC" tests/run-tests.raz --emit-cpp tests/.work/run-tests.cpp
+"$CXX" -std=c++17 -O0 -I "$RAZ_LIBRARY" -I tests \
+    tests/.work/run-tests.cpp -o tests/.work/run-tests.out.tmp
+mv tests/.work/run-tests.out.tmp tests/run-tests.out
+printf 'Built tests/run-tests.out\n'

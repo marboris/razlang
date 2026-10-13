@@ -236,8 +236,21 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
     if (x.kind == 4) return "bool";
     if (x.kind == 5) {
         let t: string = bindingType(scope, x.text);
-        if (t == "") return semanticFail(state, "unknown name " + x.text);
-        return t;
+        if (t != "") return t;
+        // A bare zero-argument function name is a call in expression position.
+        // A same-named local/global binding always wins, so variables remain readable.
+        let fi: i64 = functionIndex(program, x.text);
+        if (fi >= 0 && listLength(program.functions[fi].params) == 0) {
+            let callee: Expr = emptyExpr(5);
+            callee.text = x.text;
+            let calleeId: i64 = listLength(program.exprs);
+            push(program.exprs, callee);
+            program.exprs[id].kind = 8;
+            program.exprs[id].left = calleeId;
+            program.exprs[id].args = [];
+            return program.functions[fi].returnType;
+        }
+        return semanticFail(state, "unknown name " + x.text);
     }
     if (x.kind == 7) {
         let a: string = checkExpr(program, state, scope, x.left);
@@ -320,6 +333,8 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
     }
     if (x.kind == 11) {
         if (!validateType(program, state, x.text, false)) return "";
+        if (structIndex(program, x.text) < 0) return semanticFail(state, "new requires a struct type, got " + x.text);
+        if (listLength(x.args) != 0) return semanticFail(state, "constructor arguments are not supported for " + x.text + "; create the value with new " + x.text + "() and assign fields explicitly");
         return x.text;
     }
     if (x.kind == 13) {

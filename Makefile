@@ -1,6 +1,6 @@
 # Native day-to-day build/test path. If Ninja is installed it is preferred;
 # GNU Make remains available through: make GENERATOR='Unix Makefiles'.
-BUILD_DIR ?= build/native
+BUILD_DIR ?= .build/native
 BUILD_TYPE ?= Debug
 GENERATOR ?= $(shell command -v ninja >/dev/null 2>&1 && echo Ninja || echo 'Unix Makefiles')
 CMAKE ?= cmake

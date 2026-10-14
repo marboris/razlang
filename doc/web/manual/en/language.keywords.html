@@ -1,0 +1,416 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#505d93" />
+    <meta
+      name="description"
+      content="Reserved words, literal forms, comments, and identifier rules visible in the active lexer."
+    />
+    <title>Keywords and Lexical Forms — Raz Manual</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
+    <link rel="stylesheet" href="../assets/manual.css" />
+    <script defer src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="Raz Manual home"
+          ><span class="brand-mark" aria-hidden="true">r</span
+          ><span class="brand-copy"
+            ><span class="brand-name">raz</span
+            ><span class="brand-subtitle">Language Manual</span></span
+          ></a
+        >
+        <button
+          class="mobile-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="manual-nav"
+        >
+          Contents
+        </button>
+        <nav class="header-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          class="search-form"
+          role="search"
+          action="search.html"
+          method="get"
+        >
+          <input
+            type="search"
+            name="q"
+            placeholder="Search the manual…"
+            aria-label="Search the manual"
+            autocomplete="off"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html" aria-current="page"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+      </aside>
+      <main id="main-content">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html">Raz Manual</a
+          ><span class="breadcrumb-sep">/</span><span>Language Reference</span>
+        </div>
+        <article class="content">
+          <p class="page-kicker">Language Reference</p>
+          <h1>Keywords and Lexical Forms</h1>
+          <p class="page-lead">
+            Reserved words, literal forms, comments, and identifier rules
+            visible in the active lexer.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span
+            ><span>Language Reference</span
+            ><span class="status reference">Implementation inventory</span>
+          </div>
+
+          <h2>Keywords</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Keyword</th>
+                  <th>Role</th>
+                  <th>Design reference</th>
+                  <th>Current status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>function</code></td>
+                  <td>Declares a named function and its signature.</td>
+                  <td>Raz syntax; lineage not formally recorded</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>struct</code></td>
+                  <td>Declares a type with named fields.</td>
+                  <td>C <code>struct</code> concept</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>let</code></td>
+                  <td>
+                    Declares a mutable binding; type may be inferred or
+                    explicit.
+                  </td>
+                  <td>
+                    Rust <code>let</code> as naming reference; Raz rules differ
+                  </td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>const</code></td>
+                  <td>Declares a binding that cannot be reassigned.</td>
+                  <td>C/C++ <code>const</code> concept</td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+                <tr>
+                  <td><code>return</code></td>
+                  <td>Returns a value or exits a return context.</td>
+                  <td>C-family syntax</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>if</code>, <code>else</code></td>
+                  <td>Conditional branch and alternative branch.</td>
+                  <td>C-family syntax</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>while</code></td>
+                  <td>Conditional loop.</td>
+                  <td>C-family syntax</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>true</code>, <code>false</code></td>
+                  <td>Boolean literals.</td>
+                  <td>C++ / Rust-style spelling</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>new</code></td>
+                  <td>Requests construction of a typed value.</td>
+                  <td>
+                    C++-influenced spelling; not assumed to mean heap allocation
+                  </td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+                <tr>
+                  <td><code>use</code></td>
+                  <td>Imports a Raz module or a quoted native C++ header.</td>
+                  <td>Rust <code>use</code> concept, adapted for Raz</td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td><code>include</code></td>
+                  <td>Expands another Raz source file during compilation.</td>
+                  <td>
+                    <a
+                      href="https://www.php.net/manual/en/function.include.php"
+                      rel="external"
+                      >PHP include</a
+                    >
+                    as conceptual reference only
+                  </td>
+                  <td><span class="status partial">Contract review</span></td>
+                </tr>
+                <tr>
+                  <td><code>unsafe</code></td>
+                  <td>
+                    Marks a region permitting restricted unsafe constructs.
+                  </td>
+                  <td>Rust <code>unsafe</code> concept, adapted</td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+                <tr>
+                  <td><code>nullptr</code></td>
+                  <td>Null pointer literal.</td>
+                  <td>C++ <code>nullptr</code></td>
+                  <td>
+                    <span class="status decision">Context rules open</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>define</code></td>
+                  <td>Declares a parameterized source macro.</td>
+                  <td>Raz-specific; not the C preprocessor</td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="doc-warning">
+            <strong>Inconsistent handling:</strong> the parser has an
+            <code>extern</code>-related token check, but the lexer does not
+            currently emit a token for the word <code>extern</code>. It is
+            therefore not listed as a supported keyword.
+          </div>
+          <h2>Identifiers and literals</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Form</th>
+                  <th>Current behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Identifier</td>
+                  <td>
+                    ASCII letters or underscore, followed by ASCII letters,
+                    digits, or underscore.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Number</td>
+                  <td>
+                    Digits, optionally followed by a dot and more digits;
+                    decimal form is inferred as <code>f64</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>String</td>
+                  <td>
+                    Double-quoted. Common escapes include <code>\n</code>,
+                    <code>\t</code>, and <code>\r</code>.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Character</td>
+                  <td>
+                    Single-quoted, represented internally by a numeric character
+                    code. Full Unicode/code-point behavior is not specified.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Line comment</td>
+                  <td><code>// comment</code> — skipped by the lexer.</td>
+                </tr>
+                <tr>
+                  <td>Block comment</td>
+                  <td><code>/* comment */</code> — skipped by the lexer.</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2>Lexical questions</h2>
+          <p>
+            Unknown characters currently fall through to token kind
+            <code>99</code>. Whether this becomes a mandatory lexer error, and
+            how escape sequences are validated, must be specified before this
+            behavior is treated as a public guarantee.
+          </p>
+
+          <nav class="page-navigation" aria-label="Page navigation">
+            <div>
+              <small>Previous</small
+              ><a href="language.reference.html">&larr; Language Reference</a>
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="language.operators.html"
+                >Operators and Punctuation &rarr;</a
+              >
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
+        ><span>English · Static HTML reference</span
+        ><span
+          ><a href="about.html">About this manual</a> ·
+          <a href="index.html">Back to top-level index</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

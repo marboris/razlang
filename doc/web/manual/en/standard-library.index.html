@@ -1,0 +1,356 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#505d93" />
+    <meta
+      name="description"
+      content="Current Raz standard modules and the native bridges used by each module."
+    />
+    <title>Standard Library Reference — Raz Manual</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
+    <link rel="stylesheet" href="../assets/manual.css" />
+    <script defer src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="Raz Manual home"
+          ><span class="brand-mark" aria-hidden="true">r</span
+          ><span class="brand-copy"
+            ><span class="brand-name">raz</span
+            ><span class="brand-subtitle">Language Manual</span></span
+          ></a
+        >
+        <button
+          class="mobile-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="manual-nav"
+        >
+          Contents
+        </button>
+        <nav class="header-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          class="search-form"
+          role="search"
+          action="search.html"
+          method="get"
+        >
+          <input
+            type="search"
+            name="q"
+            placeholder="Search the manual…"
+            aria-label="Search the manual"
+            autocomplete="off"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html" aria-current="page"
+                  >Standard Library</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+      </aside>
+      <main id="main-content">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html">Raz Manual</a
+          ><span class="breadcrumb-sep">/</span><span>Standard Library</span>
+        </div>
+        <article class="content">
+          <p class="page-kicker">Standard Library</p>
+          <h1>Standard Library Reference</h1>
+          <p class="page-lead">
+            Current Raz standard modules and the native bridges used by each
+            module.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span
+            ><span>Standard Library</span
+            ><span class="status reference">Implementation inventory</span>
+          </div>
+
+          <p>
+            Standard-library code complements the compiler. A Raz module owns
+            its public Raz API; native headers provide implementation bridges
+            where required and are not themselves Raz modules. Raz has no
+            implicit prelude: dependencies are imported explicitly using
+            <code>use</code>.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Module</th>
+                  <th>Public purpose</th>
+                  <th>Implementation</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>std.core</code></td>
+                  <td>
+                    Explicit access to core C++ representations such as string
+                    and vector.
+                  </td>
+                  <td><code>library/raz/std/core/core.raz</code></td>
+                  <td><span class="status implemented">Minimal</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.containers</code></td>
+                  <td>
+                    Generic collection helpers, including
+                    <code>listLength</code>, <code>push</code>, and
+                    <code>append</code>.
+                  </td>
+                  <td>Raz module plus <code>containers_native.hpp</code></td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.env</code></td>
+                  <td>
+                    <code>getEnv</code>, <code>hasEnv</code>,
+                    <code>osName</code>, <code>architecture</code>, and target
+                    metadata constants.
+                  </td>
+                  <td>Raz wrappers plus <code>env_native.hpp</code></td>
+                  <td><span class="status implemented">Current API</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.text</code></td>
+                  <td>
+                    <code>length</code>, <code>slice</code>, and
+                    <code>int_to_string</code>.
+                  </td>
+                  <td>Raz wrappers plus <code>text_native.hpp</code></td>
+                  <td><span class="status implemented">Current API</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.io</code></td>
+                  <td>
+                    <code>print</code>, file read/write, argument count, and
+                    argument lookup.
+                  </td>
+                  <td>Raz wrappers plus <code>io_native.hpp</code></td>
+                  <td><span class="status implemented">Current API</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.process</code></td>
+                  <td>
+                    Synchronous process execution, exit code, and success
+                    helpers.
+                  </td>
+                  <td>Raz wrappers plus <code>process_native.hpp</code></td>
+                  <td><span class="status implemented">Current API</span></td>
+                </tr>
+                <tr>
+                  <td><code>std.json</code></td>
+                  <td>
+                    JSON document/node model, parser, and query functions.
+                  </td>
+                  <td>
+                    Raz implementation; uses <code>std.containers</code> and
+                    <code>std.text</code>
+                  </td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2>Import a module</h2>
+          <pre><code>use std.io;
+
+print("Raz standard library");</code></pre>
+          <h2>Header ownership</h2>
+          <p>
+            Optional standard-library headers and user native headers should be
+            requested through explicit imports where practical, including when
+            the compiler itself needs those modules. The backend should not
+            silently inject a growing set of optional libraries into every
+            output. Any headers that are unavoidable for the minimum generated
+            program must be identified as compiler scaffolding, not presented as
+            user-imported modules.
+          </p>
+          <h2>Library rules to define</h2>
+          <ul>
+            <li>Public naming conventions and module versioning.</li>
+            <li>
+              Error behavior for invalid I/O, process, text, and JSON
+              operations.
+            </li>
+            <li>Portability guarantees for native implementations.</li>
+            <li>
+              Which functions are pure Raz, compiler built-ins, or native-bridge
+              wrappers.
+            </li>
+            <li>
+              Whether generic collection helpers remain native or move into Raz
+              when generic function support expands.
+            </li>
+          </ul>
+
+          <nav class="page-navigation" aria-label="Page navigation">
+            <div>
+              <small>Previous</small
+              ><a href="compiler.tokens.html">&larr; Lexer Token Reference</a>
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="runtime.memory.html">Runtime and Memory Model &rarr;</a>
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
+        ><span>English · Static HTML reference</span
+        ><span
+          ><a href="about.html">About this manual</a> ·
+          <a href="index.html">Back to top-level index</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

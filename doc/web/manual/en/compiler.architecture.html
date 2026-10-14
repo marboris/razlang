@@ -1,0 +1,408 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#505d93" />
+    <meta
+      name="description"
+      content="The current self-hosted frontend, validation pipeline, RIR boundary, and C++17 backend."
+    />
+    <title>Compiler Architecture — Raz Manual</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
+    <link rel="stylesheet" href="../assets/manual.css" />
+    <script defer src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="Raz Manual home"
+          ><span class="brand-mark" aria-hidden="true">r</span
+          ><span class="brand-copy"
+            ><span class="brand-name">raz</span
+            ><span class="brand-subtitle">Language Manual</span></span
+          ></a
+        >
+        <button
+          class="mobile-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="manual-nav"
+        >
+          Contents
+        </button>
+        <nav class="header-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          class="search-form"
+          role="search"
+          action="search.html"
+          method="get"
+        >
+          <input
+            type="search"
+            name="q"
+            placeholder="Search the manual…"
+            aria-label="Search the manual"
+            autocomplete="off"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html" aria-current="page"
+                  >Compiler Architecture</a
+                >
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+      </aside>
+      <main id="main-content">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html">Raz Manual</a
+          ><span class="breadcrumb-sep">/</span><span>Compiler</span>
+        </div>
+        <article class="content">
+          <p class="page-kicker">Compiler</p>
+          <h1>Compiler Architecture</h1>
+          <p class="page-lead">
+            The current self-hosted frontend, validation pipeline, RIR boundary,
+            and C++17 backend.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span><span>Compiler</span
+            ><span class="status reference">Implementation inventory</span>
+          </div>
+
+          <p>
+            The active Gen2 compiler is written in Raz and emits C++17. The
+            component boundaries below describe the current implementation and
+            may change as the frontend is completed.
+          </p>
+          <h2>Compilation pipeline</h2>
+          <pre><code>CLI
+  &rarr; module/include resolution
+  &rarr; macro expansion
+  &rarr; build-definition rewriting
+  &rarr; lexer and parser
+  &rarr; semantic validation
+  &rarr; RIR lowering and verification
+  &rarr; C++17 lowering and emission
+  &rarr; generated-C++ structural validation
+  &rarr; output file</code></pre>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Stage</th>
+                  <th>Source location</th>
+                  <th>Responsibility</th>
+                  <th>Status</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>CLI driver</td>
+                  <td><code>src/driver/main.raz</code></td>
+                  <td>
+                    Reads inputs/options, resolves dependencies, runs the
+                    pipeline, and writes generated C++.
+                  </td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td>Source inclusion</td>
+                  <td><code>src/source/includes.raz</code></td>
+                  <td>
+                    Expands source files, normalizes paths, and detects cycles.
+                  </td>
+                  <td><span class="status partial">Contract review</span></td>
+                </tr>
+                <tr>
+                  <td>Module resolver</td>
+                  <td><code>src/source/modules.raz</code></td>
+                  <td>
+                    Resolves dotted Raz module imports against configured roots.
+                  </td>
+                  <td><span class="status implemented">Implemented</span></td>
+                </tr>
+                <tr>
+                  <td>Macro expander</td>
+                  <td><code>src/source/macros.raz</code></td>
+                  <td>Extracts and expands parameterized source macros.</td>
+                  <td><span class="status partial">Partial</span></td>
+                </tr>
+                <tr>
+                  <td>Lexer</td>
+                  <td><code>src/core/lexer.raz</code></td>
+                  <td>
+                    Produces identifiers, literals, keywords, delimiters, and
+                    operators.
+                  </td>
+                  <td><span class="status partial">Error policy open</span></td>
+                </tr>
+                <tr>
+                  <td>Parser and AST</td>
+                  <td>
+                    <code>src/core/parser.raz</code>,
+                    <code>src/model/ast.raz</code>
+                  </td>
+                  <td>
+                    Parses the supported source subset into the compiler model.
+                  </td>
+                  <td><span class="status partial">Subset</span></td>
+                </tr>
+                <tr>
+                  <td>Semantic analysis</td>
+                  <td><code>src/validation/semantics.raz</code></td>
+                  <td>
+                    Resolves names, checks types and calls, and rejects mutation
+                    of immutable bindings.
+                  </td>
+                  <td>
+                    <span class="status partial">Partial type system</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>RIR</td>
+                  <td>
+                    <code>src/validation/lowering.raz</code>,
+                    <code>rir.raz</code>
+                  </td>
+                  <td>
+                    Lowers the frontend representation and verifies RIR
+                    invariants.
+                  </td>
+                  <td>
+                    <span class="status implemented">Current subset</span>
+                  </td>
+                </tr>
+                <tr>
+                  <td>C++17 backend</td>
+                  <td><code>src/targets/cpp17/</code></td>
+                  <td>Maps types and operations to emitted C++17.</td>
+                  <td><span class="status partial">Subset</span></td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2>Compiler responsibilities</h2>
+          <ul>
+            <li>
+              Recognize valid Raz source according to a single authoritative
+              grammar.
+            </li>
+            <li>
+              Report invalid constructs at the earliest appropriate phase.
+            </li>
+            <li>
+              Perform semantic checks required by the approved language rules.
+            </li>
+            <li>
+              Lower valid programs through a verifiable representation into
+              C++17.
+            </li>
+            <li>
+              Preserve source and diagnostic information when includes, modules,
+              or macros transform input.
+            </li>
+          </ul>
+          <h2>Planned architecture direction</h2>
+          <ul>
+            <li>
+              Keep the user-facing compiler driver separate from the core
+              language frontend and backend. Each source module should have a
+              clear responsibility and remain independently maintainable.
+            </li>
+            <li>
+              Review hard-coded standard header emission. Optional standard and
+              native dependencies should normally be explicit through
+              module/header imports; any unavoidable backend scaffolding must be
+              small and documented.
+            </li>
+            <li>
+              Define target, platform, and environment information explicitly.
+              Do not add hidden compiler behavior without a defined
+              source-language or build-system contract.
+            </li>
+          </ul>
+          <h2>Architecture items to resolve</h2>
+          <ul>
+            <li>
+              Centralize token IDs instead of duplicating numeric literals.
+            </li>
+            <li>
+              Maintain one authoritative keyword, grammar, and type table.
+            </li>
+            <li>
+              Clarify the division between Raz validation and checks delegated
+              to GNU C++.
+            </li>
+            <li>
+              Resolve the unreachable/inconsistent <code>extern</code> branch.
+            </li>
+          </ul>
+
+          <nav class="page-navigation" aria-label="Page navigation">
+            <div>
+              <small>Previous</small
+              ><a href="language.functions.html"
+                >&larr; Functions, Calls, and Function Values</a
+              >
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="compiler.self-hosting.html"
+                >Self-Hosting and Compiler Generations &rarr;</a
+              >
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
+        ><span>English · Static HTML reference</span
+        ><span
+          ><a href="about.html">About this manual</a> ·
+          <a href="index.html">Back to top-level index</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

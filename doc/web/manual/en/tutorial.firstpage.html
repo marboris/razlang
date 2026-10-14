@@ -1,0 +1,301 @@
+<!doctype html>
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1" />
+    <meta name="theme-color" content="#505d93" />
+    <meta
+      name="description"
+      content="Create a small source file, compile it to C++, and inspect the generated output."
+    />
+    <title>Your First Raz Program — Raz Manual</title>
+    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
+    <link rel="stylesheet" href="../assets/manual.css" />
+    <script defer src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a class="brand" href="index.html" aria-label="Raz Manual home"
+          ><span class="brand-mark" aria-hidden="true">r</span
+          ><span class="brand-copy"
+            ><span class="brand-name">raz</span
+            ><span class="brand-subtitle">Language Manual</span></span
+          ></a
+        >
+        <button
+          class="mobile-menu"
+          type="button"
+          aria-expanded="false"
+          aria-controls="manual-nav"
+        >
+          Contents
+        </button>
+        <nav class="header-nav" aria-label="Primary navigation">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          class="search-form"
+          role="search"
+          action="search.html"
+          method="get"
+        >
+          <input
+            type="search"
+            name="q"
+            placeholder="Search the manual…"
+            aria-label="Search the manual"
+            autocomplete="off"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html" aria-current="page"
+                  >Your First Raz Program</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+        
+      </aside>
+      <main id="main-content">
+        <div class="breadcrumbs" aria-label="Breadcrumb">
+          <a href="index.html">Raz Manual</a
+          ><span class="breadcrumb-sep">/</span><span>Getting Started</span>
+        </div>
+        <article class="content">
+          <p class="page-kicker">Getting Started</p>
+          <h1>Your First Raz Program</h1>
+          <p class="page-lead">
+            Create a small source file, compile it to C++, and inspect the
+            generated output.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span
+            ><span>Getting Started</span
+            ><span class="status reference">Tutorial draft</span>
+          </div>
+
+          <p>
+            This page assumes that the Raz Gen2 compiler and its configured GNU
+            C++ toolchain are available in the project checkout.
+          </p>
+          <h2>Create a source file</h2>
+          <p>
+            Create a file named <code>hello.raz</code> with the following
+            contents:
+          </p>
+          <p class="code-caption">Example 1 — <code>hello.raz</code></p>
+          <pre><code>function main() -&gt; i64 {
+    let answer: i64 = 40 + 2;
+    return answer;
+}</code></pre>
+          <p>
+            The function declares an explicitly typed local binding, evaluates
+            an arithmetic expression, and returns an integer value. The example
+            demonstrates source syntax; it does not prescribe how a platform
+            executable must be launched.
+          </p>
+          <h2>Emit C++</h2>
+          <p>
+            The compiler can write generated C++ to a specified path with
+            <code>--emit-cpp</code> or <code>-o</code>. From the project root,
+            the command shape is:
+          </p>
+          <pre><code>./compiler/razc/bin/razc hello.raz --emit-cpp hello.cpp</code></pre>
+          <p>
+            Check the toolchain page for the available command-line options and
+            the repository's build configuration. The generated
+            <code>hello.cpp</code> is the compiler output to inspect.
+          </p>
+          <h2>Inspect the output</h2>
+          <p>
+            Raz's backend targets C++17. The generated output may contain type
+            mappings and implementation details that are not part of the Raz
+            language contract. In particular, a C++ representation should not be
+            interpreted as a guarantee that Raz exposes all corresponding C++
+            behavior.
+          </p>
+          <div class="doc-note">
+            <strong>Project testing policy:</strong> the primary Raz test runner
+            is compile-only. It verifies successful or rejected compilation and
+            preserves generated C++ for manual review; native compilation and
+            execution are separate checks when needed.
+          </div>
+          <h2>Next steps</h2>
+          <ul>
+            <li>
+              Read the
+              <a href="language.reference.html">language reference</a> for
+              supported syntax.
+            </li>
+            <li>
+              Review
+              <a href="language.functions.html"
+                >function declarations and calls</a
+              >, including when parentheses are required.
+            </li>
+            <li>
+              See
+              <a href="compiler.architecture.html">compiler architecture</a> to
+              follow source processing stages.
+            </li>
+          </ul>
+
+          <nav class="page-navigation" aria-label="Page navigation">
+            <div>
+              <small>Previous</small><a href="index.html">&larr; Raz Manual</a>
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="language.reference.html">Language Reference &rarr;</a>
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
+        ><span>English · Static HTML reference</span
+        ><span
+          ><a href="about.html">About this manual</a> ·
+          <a href="index.html">Back to top-level index</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

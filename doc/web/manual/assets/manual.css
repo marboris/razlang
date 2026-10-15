@@ -732,7 +732,7 @@ hr {
     width: 100%;
     border: 0;
     min-height: 0;
-    margin-bottom: 24px;
+    margin-bottom: 24px; /* for space in mobiles */
   }
   .sidebar {
     display: block;
@@ -866,5 +866,62 @@ main {
   }
   .breadcrumb-band .breadcrumbs {
     overflow-wrap: anywhere;
+  }
+}
+
+@media (min-width: 701px) {
+
+  /* Let the entire page scroll normally */
+  html,
+  body {
+    height: auto;
+  }
+
+  body {
+    display: block;
+    overflow: visible;
+  }
+
+  /* The main header scrolls away naturally */
+  .site-header {
+    position: relative;
+  }
+
+  /* Keep breadcrumbs sticky at the top */
+  .breadcrumb-band {
+    position: sticky;
+    top: 0;
+    z-index: 1100;
+
+    background: #333;
+  }
+
+  /* Main layout follows the normal page flow */
+  .site-layout {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
+    align-items: start;
+    grid-template-rows: auto;
+  }
+
+  /* Keep the sidebar below the breadcrumb bar */
+  #manual-nav {
+    position: sticky;
+    top: 36px;
+    align-self: start;
+
+    height: calc(100vh - 36px);
+    min-height: 0;
+    overflow-y: auto;
+
+    overscroll-behavior: contain;
+  }
+
+  /* Main content scrolls with the page */
+  #main-content {
+    height: auto;
+    min-height: 0;
+    overflow: visible;
   }
 }

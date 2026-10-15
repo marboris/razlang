@@ -1,0 +1,373 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
+    <meta
+      content="The active compiler, command-line output controls, module search roots, and GNU C++ configuration."
+      name="description"
+    />
+    <title>Toolchain and Build Options — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
+        /></a>
+        <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
+          class="mobile-menu"
+          type="button"
+        >
+          Contents
+        </button>
+        <nav aria-label="Primary navigation" class="header-nav">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          action="search.html"
+          class="search-form"
+          method="get"
+          role="search"
+        >
+          <input
+            aria-label="Search the manual"
+            autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Toolchain &amp; Build</span>
+      </div>
+    </div>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a aria-current="page" href="toolchain.build.html"
+                  >Toolchain &amp; Build</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+      <main id="main-content">
+        <article class="content">
+          <p class="page-kicker">Toolchain &amp; Build</p>
+          <h2 class="title">Toolchain and Build Options</h2>
+          <p class="page-lead">
+            The active compiler, command-line output controls, module search
+            roots, and GNU C++ configuration.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span
+            ><span>Toolchain &amp; Build</span>
+          </div>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Item</th>
+                  <th>Current interface</th>
+                  <th>Behavior</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Active compiler</td>
+                  <td><code>compiler/razc/bin/razc</code></td>
+                  <td>Self-hosted Gen2 compiler emitting C++17.</td>
+                </tr>
+                <tr>
+                  <td>Compiler source</td>
+                  <td>
+                    <code>compiler/razc/compiler.raz</code> and
+                    <code>compiler/razc/src/</code>
+                  </td>
+                  <td>Modular Raz source compiled by the active compiler.</td>
+                </tr>
+                <tr>
+                  <td>C++ output</td>
+                  <td>
+                    <code>--emit-cpp &lt;path&gt;</code> or
+                    <code>-o &lt;path&gt;</code>
+                  </td>
+                  <td>Writes generated C++ to the requested destination.</td>
+                </tr>
+                <tr>
+                  <td>Module search</td>
+                  <td>
+                    <code>-L</code>, <code>--module-path</code>,
+                    <code>--std-path</code>
+                  </td>
+                  <td>Adds module lookup roots.</td>
+                </tr>
+                <tr>
+                  <td>Build definitions</td>
+                  <td><code>--define NAME=VALUE</code></td>
+                  <td>
+                    Exposes supported literal build definitions to Raz source;
+                    accepted literal grammar is restricted.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Target labels</td>
+                  <td>
+                    <code>--target-os</code>, <code>--target-arch</code>,
+                    <code>--target-compiler</code>
+                  </td>
+                  <td>
+                    Supplies target metadata; does not by itself create
+                    cross-compilation support.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Native compiler</td>
+                  <td>Root <code>options</code></td>
+                  <td>
+                    Configures <code>CXX=g++</code> and default C++ flags.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 class="title-h2">Authoritative build configuration</h2>
+          <p>The root <code>options</code> file currently contains:</p>
+          <pre><code>CXX=g++
+CXXFLAGS="-O2 -pipe -static -s -DNDEBUG -ffunction-sections -fdata-sections -Wl,--gc-sections"</code></pre>
+          <p>
+            These flags request optimization, static linking, symbol stripping,
+            release behavior, function/data sectioning, and linker garbage
+            collection. Actual support may vary by platform and GNU toolchain.
+          </p>
+          <div class="doc-note">
+            <strong>Project rule:</strong> ordinary native builds should load
+            <code>options</code> and pass its <code>CXXFLAGS</code> to the
+            configured GNU C++ compiler. A different compiler or flags require
+            an explicit, documented special case.
+          </div>
+          <h2 class="title-h2">Build and inspect a compiler candidate</h2>
+          <p>
+            Build a candidate separately from the active compiler. Inspect its
+            version and run the required tests before manually replacing the
+            active binary.
+          </p>
+          <pre><code>mkdir -p compiler/razc/build
+./compiler/razc/bin/razc compiler/razc/compiler.raz \
+  --emit-cpp compiler/razc/build/compiler.cpp
+
+. ./options
+set -f
+"$CXX" -std=c++17 $CXXFLAGS -I library/raz \
+  compiler/razc/build/compiler.cpp -o compiler/razc/build/razc-candidate
+set +f
+
+./compiler/razc/build/razc-candidate --version</code></pre>
+          <div class="doc-warning">
+            <strong>Release safety:</strong> do not replace
+            <code>compiler/razc/bin/razc</code> automatically as part of a
+            successful build. Candidate review, test results, and
+            version/checksum updates should be deliberate.
+          </div>
+          <h2 class="title-h2">Compiler driver and build orchestration</h2>
+          <p>
+            The longer-term driver should provide a clear interface between the
+            user and the core compiler: resolve modules and libraries, collect
+            native dependencies, apply target and optimization settings, and
+            expose generated C++ for inspection. The core compiler and the build
+            orchestration layer must remain separate responsibilities.
+          </p>
+          <p>
+            The current project build uses GNU C++ on Unix-like development
+            systems. Platform-specific paths and shell behavior should belong in
+            build tooling (for example, a Makefile or launcher), rather than
+            being hard-coded as assumptions in the language frontend. The
+            present target labels are metadata, not a promise of complete
+            cross-compilation support.
+          </p>
+          <h2 class="title-h2">Questions to settle</h2>
+          <ul>
+            <li>
+              Define development and production profiles without making
+              <code>options</code> non-authoritative.
+            </li>
+            <li>
+              Specify output naming and cleanup for compiler candidates and
+              generated C++.
+            </li>
+            <li>Update version metadata atomically during releases.</li>
+            <li>
+              Define the exact GNU C++ version baseline and supported host
+              platforms.
+            </li>
+          </ul>
+          <nav aria-label="Page navigation" class="page-navigation">
+            <div>
+              <small>Previous</small
+              ><a href="interop.platform.html">«   Interop and Platform</a>
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="testing.compatibility.html"
+                >Testing and Compatibility    »</a
+              >
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

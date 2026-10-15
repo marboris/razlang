@@ -1,0 +1,336 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
+    <meta
+      content="Reference documentation for the Raz language, its compiler, and its standard library."
+      name="description"
+    />
+    <title>Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
+        /></a>
+        <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
+          class="mobile-menu"
+          type="button"
+        >
+          Contents
+        </button>
+        <nav aria-label="Primary navigation" class="header-nav">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          action="search.html"
+          class="search-form"
+          method="get"
+          role="search"
+        >
+          <input
+            aria-label="Search the manual"
+            autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a>
+      </div>
+    </div>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a aria-current="page" href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+      <main id="main-content">
+        <article class="content">
+          <div class="hero">
+            <p class="page-kicker">
+              Raz Gen2 · Language and toolchain reference
+            </p>
+            <h2 class="title">Raz Manual</h2>
+            <p class="page-lead">
+              A practical reference for understanding Raz source syntax,
+              compiler behavior, native interoperability, and the standard
+              library.
+            </p>
+            <div class="quick-links">
+              <a href="tutorial.firstpage.html">Start with a first program</a
+              ><a href="language.reference.html">Language reference</a
+              ><a href="compiler.architecture.html">Compiler architecture</a>
+            </div>
+          </div>
+
+          <h2 class="title-h2">Documentation</h2>
+          <div class="section-grid">
+            <section class="section-card">
+              <h3><a href="tutorial.firstpage.html">Getting Started</a></h3>
+              <p>
+                Write a small Raz program and understand the source-to-C++
+                workflow.
+              </p>
+              <a href="tutorial.firstpage.html">First program    »</a>
+            </section>
+            <section class="section-card">
+              <h3><a href="language.reference.html">Language Reference</a></h3>
+              <p>
+                Keywords, lexical forms, operators, types, declarations, calls,
+                and source directives.
+              </p>
+              <a href="language.reference.html">Browse language topics    »</a>
+            </section>
+            <section class="section-card">
+              <h3><a href="compiler.architecture.html">Compiler</a></h3>
+              <p>Frontend stages, validation, RIR, and the C++17 backend.</p>
+              <a href="compiler.architecture.html">Compiler architecture    »</a>
+            </section>
+            <section class="section-card">
+              <h3>
+                <a href="standard-library.index.html">Standard Library</a>
+              </h3>
+              <p>Available modules and the current public API surface.</p>
+              <a href="standard-library.index.html">Browse modules    »</a>
+            </section>
+            <section class="section-card">
+              <h3><a href="runtime.memory.html">Runtime &amp; Memory</a></h3>
+              <p>
+                Type representation, references, containers, pointers, and
+                lifetime questions.
+              </p>
+              <a href="runtime.memory.html">Runtime model    »</a>
+            </section>
+            <section class="section-card">
+              <h3>
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </h3>
+              <p>
+                Native headers, C++ calls, target assumptions, and ABI
+                boundaries.
+              </p>
+              <a href="interop.platform.html">Interop reference    »</a>
+            </section>
+            <section class="section-card">
+              <h3><a href="toolchain.build.html">Toolchain &amp; Build</a></h3>
+              <p>
+                Compiler options, output files, and the authoritative build
+                configuration.
+              </p>
+              <a href="toolchain.build.html">Build reference    »</a>
+            </section>
+            <section class="section-card">
+              <h3>
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </h3>
+              <p>
+                Compile-only tests, generated output review, and regression
+                policy.
+              </p>
+              <a href="testing.compatibility.html">Testing reference    »</a>
+            </section>
+            <section class="section-card">
+              <h3>
+                <a href="project.development.html">Project Development</a>
+              </h3>
+              <p>
+                Self-hosting principles, build rules, test policy, and
+                documentation standards.
+              </p>
+              <a href="project.development.html">Development principles    »</a>
+            </section>
+          </div>
+          <h2 class="title-h2">How to read this manual</h2>
+          <p>
+            Feature pages distinguish the
+            <strong>current implementation</strong> from decisions that still
+            need approval. Design references record where a concept was inspired
+            by another language; they do not imply identical syntax or
+            semantics.
+          </p>
+          <p>
+            Use the search field above to find a keyword, operator, type,
+            compiler stage, or standard module. Token numbers are documented as
+            internal lexer identifiers rather than stable language-level names.
+          </p>
+          <nav aria-label="Page navigation" class="page-navigation">
+            <div></div>
+            <div class="next">
+              <small>Next</small
+              ><a href="tutorial.firstpage.html">Your First Raz Program    »</a>
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+    <footer class="site-footer">
+      <div class="footer-inner">
+        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
+        ><span>English · Static HTML reference</span
+        ><span
+          ><a href="about.html">About this manual</a> ·
+          <a href="index.html">Back to top-level index</a></span
+        >
+      </div>
+    </footer>
+  </body>
+</html>

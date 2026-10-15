@@ -1,0 +1,344 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
+    <meta
+      content="Current representations for values, collections, references, pointers, and function values."
+      name="description"
+    />
+    <title>Runtime and Memory Model — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
+        /></a>
+        <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
+          class="mobile-menu"
+          type="button"
+        >
+          Contents
+        </button>
+        <nav aria-label="Primary navigation" class="header-nav">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          action="search.html"
+          class="search-form"
+          method="get"
+          role="search"
+        >
+          <input
+            aria-label="Search the manual"
+            autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Runtime &amp; Memory</span>
+      </div>
+    </div>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a href="compiler.tokens.html">Lexer Token Reference</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a aria-current="page" href="runtime.memory.html"
+                  >Runtime &amp; Memory</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+      <main id="main-content">
+        <article class="content">
+          <p class="page-kicker">Runtime &amp; Memory</p>
+          <h2 class="title">Runtime and Memory Model</h2>
+          <p class="page-lead">
+            Current representations for values, collections, references,
+            pointers, and function values.
+          </p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span
+            ><span>Runtime &amp; Memory</span>
+          </div>
+          <p>
+            This page records what the current C++17 backend emits and separates
+            it from language-level guarantees that have not yet been defined.
+          </p>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Feature</th>
+                  <th>Current implementation</th>
+                  <th>Open contract</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>Primitive values</td>
+                  <td>
+                    <code>i64</code>, <code>f64</code>, <code>bool</code>,
+                    <code>char</code>, <code>string</code>;
+                    <code>void</code> for function returns.
+                  </td>
+                  <td>Conversions, overflow, and numeric edge cases.</td>
+                </tr>
+                <tr>
+                  <td><code>List&lt;T&gt;</code></td>
+                  <td>Emitted as <code>std::vector&lt;T&gt;</code>.</td>
+                  <td>
+                    Copying, mutation, invalid indexing, and any bounds
+                    guarantees.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>Ref&lt;T&gt;</code></td>
+                  <td>Emitted as a C++ reference <code>T&amp;</code>.</td>
+                  <td>Aliasing, lifetime, and return restrictions.</td>
+                </tr>
+                <tr>
+                  <td>Raw pointer</td>
+                  <td>
+                    Only <code>char*</code> is currently accepted, inside
+                    <code>unsafe</code>.
+                  </td>
+                  <td>Pointer operations and the full safety boundary.</td>
+                </tr>
+                <tr>
+                  <td><code>nullptr</code></td>
+                  <td>Recognized as a null-pointer literal.</td>
+                  <td>Valid assignment and comparison contexts.</td>
+                </tr>
+                <tr>
+                  <td><code>new T()</code></td>
+                  <td>Constructs a typed value through the backend.</td>
+                  <td>
+                    Do not assume heap-allocation semantics; constructor
+                    arguments are restricted.
+                  </td>
+                </tr>
+                <tr>
+                  <td><code>const</code></td>
+                  <td>Reassignment of the binding is rejected.</td>
+                  <td>Nested mutation and mutation through aliases.</td>
+                </tr>
+                <tr>
+                  <td>Function values</td>
+                  <td>
+                    <code>Fn(Args)-&gt;R</code> signatures map to generated
+                    backend aliases.
+                  </td>
+                  <td>Closures, captures, and lifetime.</td>
+                </tr>
+                <tr>
+                  <td>Object lifetime</td>
+                  <td>
+                    Primarily follows generated C++ value, reference, and
+                    container semantics.
+                  </td>
+                  <td>
+                    Raz-level lifetime and destruction guarantees are not
+                    comprehensive.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="doc-warning">
+            <strong>Core principle:</strong> C++ representation is not, by
+            itself, the Raz contract. The manual must describe observable Raz
+            behavior independently wherever portability and stable semantics are
+            intended.
+          </div>
+          <h2 class="title-h2">Design questions</h2>
+          <ul>
+            <li>
+              Define whether a Raz value is copied, moved, or referenced in each
+              context.
+            </li>
+            <li>
+              Set explicit rules for reference lifetime and returning
+              references.
+            </li>
+            <li>
+              Specify integer overflow, division edge cases, and floating-point
+              behavior.
+            </li>
+            <li>
+              Define what <code>unsafe</code> permits and which operations
+              remain forbidden.
+            </li>
+          </ul>
+          <nav aria-label="Page navigation" class="page-navigation">
+            <div>
+              <small>Previous</small
+              ><a href="standard-library.index.html"
+                >«   Standard Library Reference</a
+              >
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="interop.platform.html">Interop and Platform    »</a>
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

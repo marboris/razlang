@@ -1,0 +1,433 @@
+<!doctype html>
+
+<html lang="en">
+  <head>
+    <meta charset="utf-8" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
+    <meta
+      content="Current token IDs from the active Raz lexer."
+      name="description"
+    />
+    <title>Lexer Token Reference — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
+  </head>
+  <body>
+    <header class="site-header">
+      <div class="header-inner">
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
+        /></a>
+        <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
+          class="mobile-menu"
+          type="button"
+        >
+          Contents
+        </button>
+        <nav aria-label="Primary navigation" class="header-nav">
+          <a href="index.html">Home</a
+          ><a href="language.reference.html">Language Reference</a
+          ><a href="compiler.architecture.html">Compiler</a
+          ><a href="standard-library.index.html">Standard Library</a>
+        </nav>
+        <form
+          action="search.html"
+          class="search-form"
+          method="get"
+          role="search"
+        >
+          <input
+            aria-label="Search the manual"
+            autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
+          /><button type="submit">Search</button>
+        </form>
+      </div>
+    </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Compiler</span>
+      </div>
+    </div>
+    <div class="site-layout">
+      <aside class="sidebar" id="manual-nav">
+        <div class="sidebar-title">Manual contents</div>
+        <nav aria-label="Manual contents">
+          <div class="nav-group">
+            <div class="nav-group-title">
+              <a href="index.html">Raz Manual Home</a>
+            </div>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Getting Started</div>
+            <ul class="nav-links">
+              <li data-nav-title="your first raz program getting started">
+                <a href="tutorial.firstpage.html">Your First Raz Program</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Language Reference</div>
+            <ul class="nav-links">
+              <li data-nav-title="language reference language reference">
+                <a href="language.reference.html">Language Reference</a>
+              </li>
+              <li
+                data-nav-title="keywords &amp; lexical forms language reference"
+              >
+                <a href="language.keywords.html"
+                  >Keywords &amp; Lexical Forms</a
+                >
+              </li>
+              <li
+                data-nav-title="operators &amp; punctuation language reference"
+              >
+                <a href="language.operators.html"
+                  >Operators &amp; Punctuation</a
+                >
+              </li>
+              <li data-nav-title="types language reference">
+                <a href="language.types.html">Types</a>
+              </li>
+              <li data-nav-title="functions &amp; calls language reference">
+                <a href="language.functions.html">Functions &amp; Calls</a>
+              </li>
+              <li data-nav-title="include language reference">
+                <a href="language.include.html">include</a>
+              </li>
+              <li data-nav-title="use language reference">
+                <a href="language.use.html">use</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Compiler</div>
+            <ul class="nav-links">
+              <li data-nav-title="compiler architecture compiler">
+                <a href="compiler.architecture.html">Compiler Architecture</a>
+              </li>
+              <li data-nav-title="self-hosting &amp; generations compiler">
+                <a href="compiler.self-hosting.html"
+                  >Self-Hosting &amp; Generations</a
+                >
+              </li>
+              <li data-nav-title="lexer token reference compiler">
+                <a aria-current="page" href="compiler.tokens.html"
+                  >Lexer Token Reference</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Standard Library</div>
+            <ul class="nav-links">
+              <li data-nav-title="standard library standard library">
+                <a href="standard-library.index.html">Standard Library</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Runtime &amp; Memory</div>
+            <ul class="nav-links">
+              <li data-nav-title="runtime &amp; memory runtime &amp; memory">
+                <a href="runtime.memory.html">Runtime &amp; Memory</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Interop &amp; Platform</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="interop &amp; platform interop &amp; platform"
+              >
+                <a href="interop.platform.html">Interop &amp; Platform</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Toolchain &amp; Build</div>
+            <ul class="nav-links">
+              <li data-nav-title="toolchain &amp; build toolchain &amp; build">
+                <a href="toolchain.build.html">Toolchain &amp; Build</a>
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Testing &amp; Compatibility</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="testing &amp; compatibility testing &amp; compatibility"
+              >
+                <a href="testing.compatibility.html"
+                  >Testing &amp; Compatibility</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">Project Development</div>
+            <ul class="nav-links">
+              <li
+                data-nav-title="project development principles project development"
+              >
+                <a href="project.development.html"
+                  >Project Development Principles</a
+                >
+              </li>
+            </ul>
+          </div>
+          <div class="nav-group">
+            <div class="nav-group-title">About</div>
+            <ul class="nav-links">
+              <li data-nav-title="about this manual about">
+                <a href="about.html">About This Manual</a>
+              </li>
+            </ul>
+          </div>
+        </nav>
+      </aside>
+      <main id="main-content">
+        <article class="content">
+          <p class="page-kicker">Compiler</p>
+          <h2 class="title">Lexer Token Reference</h2>
+          <p class="page-lead">Current token IDs from the active Raz lexer.</p>
+          <div class="page-meta">
+            <span>Raz Gen2 Manual</span><span>·</span><span>Compiler</span>
+          </div>
+          <p>
+            This table exists to make the current lexer inspectable. Token IDs
+            are private compiler implementation details until explicitly
+            stabilized; source-language specifications should refer to spellings
+            and semantic roles.
+          </p>
+          <h2 class="title-h2">Special and literal tokens</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Kind</th>
+                  <th>ID</th>
+                  <th>Details</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td>End of file</td>
+                  <td><code>0</code></td>
+                  <td>Terminates the token stream.</td>
+                </tr>
+                <tr>
+                  <td>Identifier</td>
+                  <td><code>1</code></td>
+                  <td>
+                    Also the fallback kind for unrecognized words that are not
+                    keywords.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Numeric literal</td>
+                  <td><code>2</code></td>
+                  <td>Integer or decimal spelling.</td>
+                </tr>
+                <tr>
+                  <td>String literal</td>
+                  <td><code>3</code></td>
+                  <td>
+                    Double-quoted; selected escapes decoded during lexing.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Character literal</td>
+                  <td><code>4</code></td>
+                  <td>
+                    Single-quoted; currently stored as a numeric character code
+                    represented as text.
+                  </td>
+                </tr>
+                <tr>
+                  <td>Unknown single character</td>
+                  <td><code>99</code></td>
+                  <td>
+                    Fallback from operator recognition; diagnostic policy needs
+                    specification.
+                  </td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 class="title-h2">Keyword tokens</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Spelling</th>
+                  <th>ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>function</code></td>
+                  <td>10</td>
+                </tr>
+                <tr>
+                  <td><code>struct</code></td>
+                  <td>11</td>
+                </tr>
+                <tr>
+                  <td><code>let</code></td>
+                  <td>12</td>
+                </tr>
+                <tr>
+                  <td><code>return</code></td>
+                  <td>13</td>
+                </tr>
+                <tr>
+                  <td><code>if</code></td>
+                  <td>14</td>
+                </tr>
+                <tr>
+                  <td><code>else</code></td>
+                  <td>15</td>
+                </tr>
+                <tr>
+                  <td><code>while</code></td>
+                  <td>16</td>
+                </tr>
+                <tr>
+                  <td><code>true</code></td>
+                  <td>17</td>
+                </tr>
+                <tr>
+                  <td><code>false</code></td>
+                  <td>18</td>
+                </tr>
+                <tr>
+                  <td><code>new</code></td>
+                  <td>19</td>
+                </tr>
+                <tr>
+                  <td><code>use</code></td>
+                  <td>46</td>
+                </tr>
+                <tr>
+                  <td><code>include</code></td>
+                  <td>47</td>
+                </tr>
+                <tr>
+                  <td><code>unsafe</code></td>
+                  <td>48</td>
+                </tr>
+                <tr>
+                  <td><code>nullptr</code></td>
+                  <td>49</td>
+                </tr>
+                <tr>
+                  <td><code>const</code></td>
+                  <td>51</td>
+                </tr>
+                <tr>
+                  <td><code>define</code></td>
+                  <td>52</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <h2 class="title-h2">Operator and punctuation tokens</h2>
+          <div class="table-wrap">
+            <table>
+              <thead>
+                <tr>
+                  <th>Spelling</th>
+                  <th>ID</th>
+                </tr>
+              </thead>
+              <tbody>
+                <tr>
+                  <td><code>(</code> / <code>)</code></td>
+                  <td>20 / 21</td>
+                </tr>
+                <tr>
+                  <td><code>{</code> / <code>}</code></td>
+                  <td>22 / 23</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>;</code>, <code>:</code>, <code>,</code>,
+                    <code>.</code>
+                  </td>
+                  <td>24, 25, 26, 27</td>
+                </tr>
+                <tr>
+                  <td><code>[</code> / <code>]</code></td>
+                  <td>28 / 29</td>
+                </tr>
+                <tr>
+                  <td><code>=</code></td>
+                  <td>30</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>+</code>, <code>-</code>, <code>*</code>,
+                    <code>/</code>, <code>%</code>, <code>!</code>
+                  </td>
+                  <td>31–36</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>==</code>, <code>!=</code>, <code>&lt;</code>,
+                    <code>&lt;=</code>, <code>&gt;</code>, <code>&gt;=</code>
+                  </td>
+                  <td>37–42</td>
+                </tr>
+                <tr>
+                  <td>
+                    <code>&amp;&amp;</code>, <code>||</code>, <code>-&gt;</code>
+                  </td>
+                  <td>43, 44, 45</td>
+                </tr>
+              </tbody>
+            </table>
+          </div>
+          <div class="doc-warning">
+            <strong>Known inconsistency:</strong> token ID <code>50</code> is
+            not assigned by the lexer, while a parser branch refers to it in an
+            <code>extern</code>-related check. Do not allocate this ID to a new
+            feature until that branch is resolved.
+          </div>
+          <nav aria-label="Page navigation" class="page-navigation">
+            <div>
+              <small>Previous</small
+              ><a href="compiler.self-hosting.html"
+                >«   Self-Hosting and Compiler Generations</a
+              >
+            </div>
+            <div class="next">
+              <small>Next</small
+              ><a href="standard-library.index.html"
+                >Standard Library Reference    »</a
+              >
+            </div>
+          </nav>
+        </article>
+      </main>
+    </div>
+  </body>
+</html>

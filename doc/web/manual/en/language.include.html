@@ -221,16 +221,6 @@
             organization and reuse without defining a standard-library function
             or performing runtime file loading.
           </p>
-          <p>
-            <strong>Design reference:</strong>
-            <a
-              href="https://www.php.net/manual/en/function.include.php"
-              rel="external"
-              >PHP <code>include</code></a
-            >, as a naming and conceptual reference only. Raz does not adopt
-            PHP's runtime file evaluation, variable-scope, warning, or
-            return-value semantics.
-          </p>
           <h2 class="title-h2">Syntax</h2>
           <pre><code>include "path/to/file.raz";
 include("path/to/file.raz");</code></pre>
@@ -319,12 +309,6 @@ function main() -&gt; i64 {
               </tbody>
             </table>
           </div>
-          <h2 class="title-h2">Not equivalent to PHP `include`</h2>
-          <p>
-            Raz inclusion is a compile-time source-expansion step. It does not
-            execute a file at runtime or import PHP variables. PHP is a design
-            reference, not the behavioral specification for Raz.
-          </p>
           <h2 class="title-h2">Decisions to finalize</h2>
           <ul>
             <li>

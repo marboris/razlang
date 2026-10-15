@@ -1,7 +1,5 @@
 # کامپایلر Raz — Gen2
 
-نسخهٔ فعال: `0.4.0-g2-020`
-
 Raz یک زبان اسکریپتی است که فعلاً به C++17 تبدیل می‌شود. فایل ورودی می‌تواند کد سطح فایل داشته باشد و به تعریف `main` احتیاج ندارد. کامپایلر فعال در `compiler/razc/bin/razc` است؛ سورس اصلی نیز به ماژول‌های کوچک‌تر در `compiler/razc/src/` تقسیم شده است.
 
 ## ساختار
@@ -77,7 +75,7 @@ let result = add(20, 22);
 
 ```raz
 print "hello";
-let result = calculate 40; // TODO()
+let result = calculate 40;
 let total = add(20, 22);
 ```
 

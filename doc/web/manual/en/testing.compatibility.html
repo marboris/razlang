@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Testing and Compatibility — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -194,7 +205,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Testing &amp; Compatibility</p>
-          <h1>Testing and Compatibility</h1>
+          <h2 class="title">Testing and Compatibility</h2>
           <p class="page-lead">
             Compile-only test rules, generated C++ review, test organization,
             and failure handling.
@@ -203,7 +214,7 @@
             <span>Raz Gen2 Manual</span><span>·</span
             ><span>Testing &amp; Compatibility</span>
           </div>
-          <h2>Test directory</h2>
+          <h2 class="title-h2">Test directory</h2>
           <pre><code>tests/
 ├── run-tests.raz
 ├── run-tests
@@ -212,7 +223,7 @@
 ├── fixtures/
 ├── negative/
 └── native_api.hpp</code></pre>
-          <h2>Test inventory</h2>
+          <h2 class="title-h2">Test inventory</h2>
           <div class="table-wrap">
             <table>
               <thead>
@@ -270,7 +281,7 @@
               </tbody>
             </table>
           </div>
-          <h2>Acceptance criteria</h2>
+          <h2 class="title-h2">Acceptance criteria</h2>
           <ul>
             <li>
               A positive case passes when Raz compilation succeeds and produces
@@ -298,7 +309,7 @@
             generated executable behaves correctly. Those are separate checks,
             requested explicitly when appropriate.
           </div>
-          <h2>Compatibility work to define</h2>
+          <h2 class="title-h2">Compatibility work to define</h2>
           <p>
             A versioned compiler baseline and a process for comparing generated
             output should be formalized before the project promises broad output
@@ -308,12 +319,12 @@
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="toolchain.build.html">← Toolchain and Build Options</a>
+              ><a href="toolchain.build.html">«   Toolchain and Build Options</a>
             </div>
             <div class="next">
               <small>Next</small
               ><a href="project.development.html"
-                >Project Development Principles →</a
+                >Project Development Principles    »</a
               >
             </div>
           </nav>

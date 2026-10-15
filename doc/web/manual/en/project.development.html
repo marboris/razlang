@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Project Development Principles — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -194,7 +205,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Project Development</p>
-          <h1>Project Development Principles</h1>
+          <h2 class="title">Project Development Principles</h2>
           <p class="page-lead">
             Rules for compiler development, language design, native
             interoperability, builds, tests, and documentation.
@@ -203,7 +214,7 @@
             <span>Raz Gen2 Manual</span><span>·</span
             ><span>Project Development</span>
           </div>
-          <h2>Development rules</h2>
+          <h2 class="title-h2">Development rules</h2>
           <ol>
             <li>
               <strong>Keep source clear.</strong> Avoid comments that merely
@@ -242,14 +253,14 @@
               after their replacement is established.
             </li>
           </ol>
-          <h2>Build policy</h2>
+          <h2 class="title-h2">Build policy</h2>
           <p>
             Ordinary native builds use GNU C++ and the flags in the
             repository-root <code>options</code> file. Static linking and
             production stripping are the current defaults; special compiler or
             flag overrides must be explicit.
           </p>
-          <h2>Testing policy</h2>
+          <h2 class="title-h2">Testing policy</h2>
           <ul>
             <li>
               Compile all Raz test sources and preserve their generated C++ next
@@ -270,7 +281,7 @@
               only for cases that require it.
             </li>
           </ul>
-          <h2>Memory safety direction</h2>
+          <h2 class="title-h2">Memory safety direction</h2>
           <p>
             Memory safety is a design goal. Raw pointers are not intended to be
             required for ordinary Raz code, but the current implementation
@@ -278,7 +289,7 @@
             <code>unsafe</code> for low-level and compiler-development needs.
             This is a current limitation, not a complete safety guarantee.
           </p>
-          <h2>Documentation policy</h2>
+          <h2 class="title-h2">Documentation policy</h2>
           <p>
             The active reference manual is authored in HTML with a shared
             stylesheet, navigation, and search. Each language feature should
@@ -290,7 +301,7 @@
             <div>
               <small>Previous</small
               ><a href="testing.compatibility.html"
-                >← Testing and Compatibility</a
+                >«   Testing and Compatibility</a
               >
             </div>
             <div></div>

@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Functions, Calls, and Function Values — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Language Reference</p>
-          <h1>Functions, Calls, and Function Values</h1>
+          <h2 class="title">Functions, Calls, and Function Values</h2>
           <p class="page-lead">
             Function declarations, explicit multi-argument calls, the
             single-argument bare-call form, and first-class function values.
@@ -205,7 +216,7 @@
             <span>Raz Gen2 Manual</span><span>·</span
             ><span>Language Reference</span>
           </div>
-          <h2>Function declaration</h2>
+          <h2 class="title-h2">Function declaration</h2>
           <pre><code>function add(left: i64, right: i64) -&gt; i64 {
     return left + right;
 }
@@ -216,7 +227,7 @@ let answer = add(20, 22);</code></pre>
             type, and a body. Standard calls use parentheses and commas for
             arguments.
           </p>
-          <h2>Call syntax</h2>
+          <h2 class="title-h2">Call syntax</h2>
           <p>
             The current parser accepts a compact bare-call form when a single
             argument is supplied:
@@ -235,7 +246,7 @@ print "bare-call";</code></pre>
             <code>let value = add 20, 22;</code>. The bare form should not be
             generalized into an ambiguous multi-argument grammar.
           </div>
-          <h2>Function values are not automatic calls</h2>
+          <h2 class="title-h2">Function values are not automatic calls</h2>
           <p>
             A function name used as a value refers to that function; it does not
             invoke it automatically. This supports callback-style use while
@@ -253,7 +264,7 @@ let direct = meaning();</code></pre>
             <code>value()</code> and <code>meaning()</code> explicitly call a
             function; <code>meaning</code> without parentheses does not.
           </p>
-          <h2>Current limitations</h2>
+          <h2 class="title-h2">Current limitations</h2>
           <ul>
             <li>
               The function-value type form is represented as
@@ -271,11 +282,11 @@ let direct = meaning();</code></pre>
           </ul>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
-              <small>Previous</small><a href="language.use.html">← use</a>
+              <small>Previous</small><a href="language.use.html">«   use</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="compiler.architecture.html">Compiler Architecture →</a>
+              ><a href="compiler.architecture.html">Compiler Architecture    »</a>
             </div>
           </nav>
         </article>

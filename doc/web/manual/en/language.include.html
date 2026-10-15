@@ -10,6 +10,17 @@
       name="description"
     />
     <title>include — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -194,7 +205,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Language Reference</p>
-          <h1>include</h1>
+          <h2 class="title">include</h2>
           <p class="page-lead">
             A compile-time source directive for incorporating another Raz source
             file.
@@ -203,7 +214,7 @@
             <span>Raz Gen2 Manual</span><span>·</span
             ><span>Language Reference</span>
           </div>
-          <h2>Purpose</h2>
+          <h2 class="title-h2">Purpose</h2>
           <p>
             The <code>include</code> directive incorporates another Raz source
             file into the input being compiled. It supports file-level
@@ -220,7 +231,7 @@
             PHP's runtime file evaluation, variable-scope, warning, or
             return-value semantics.
           </p>
-          <h2>Syntax</h2>
+          <h2 class="title-h2">Syntax</h2>
           <pre><code>include "path/to/file.raz";
 include("path/to/file.raz");</code></pre>
           <p>
@@ -228,7 +239,7 @@ include("path/to/file.raz");</code></pre>
             terminating semicolon is optional where the directive scanner
             accepts the following source boundary.
           </p>
-          <h2>Example</h2>
+          <h2 class="title-h2">Example</h2>
           <p class="code-caption">math.raz</p>
           <pre><code>function square(value: i64) -&gt; i64 {
     return value * value;
@@ -243,7 +254,7 @@ function main() -&gt; i64 {
             The declaration from <code>math.raz</code> becomes part of the
             compilation input before parsing and semantic validation.
           </p>
-          <h2>Current behavior</h2>
+          <h2 class="title-h2">Current behavior</h2>
           <div class="table-wrap">
             <table>
               <thead>
@@ -308,13 +319,13 @@ function main() -&gt; i64 {
               </tbody>
             </table>
           </div>
-          <h2>Not equivalent to PHP `include`</h2>
+          <h2 class="title-h2">Not equivalent to PHP `include`</h2>
           <p>
             Raz inclusion is a compile-time source-expansion step. It does not
             execute a file at runtime or import PHP variables. PHP is a design
             reference, not the behavioral specification for Raz.
           </p>
-          <h2>Decisions to finalize</h2>
+          <h2 class="title-h2">Decisions to finalize</h2>
           <ul>
             <li>
               Whether duplicate suppression is a permanent language rule or an
@@ -335,10 +346,10 @@ function main() -&gt; i64 {
           </ul>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
-              <small>Previous</small><a href="language.types.html">← Types</a>
+              <small>Previous</small><a href="language.types.html">«   Types</a>
             </div>
             <div class="next">
-              <small>Next</small><a href="language.use.html">use →</a>
+              <small>Next</small><a href="language.use.html">use    »</a>
             </div>
           </nav>
         </article>

@@ -10,6 +10,17 @@
       name="description"
     />
     <title>use — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -194,7 +205,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Language Reference</p>
-          <h1>use</h1>
+          <h2 class="title">use</h2>
           <p class="page-lead">
             Imports a Raz module or requests a native C++ header for the
             generated output.
@@ -203,7 +214,7 @@
             <span>Raz Gen2 Manual</span><span>·</span
             ><span>Language Reference</span>
           </div>
-          <h2>Raz module import</h2>
+          <h2 class="title-h2">Raz module import</h2>
           <pre><code>use std.io;
 use std.text;</code></pre>
           <p>
@@ -212,14 +223,14 @@ use std.text;</code></pre>
             compilation pipeline. The compiler has no implicit prelude; modules
             must be imported explicitly.
           </p>
-          <h2>Native header import</h2>
+          <h2 class="title-h2">Native header import</h2>
           <pre><code>use "native_api.hpp";</code></pre>
           <p>
             A quoted path selects a native C++ header dependency. It is
             preserved as a header include in generated C++; it is not
             interpreted as a Raz module.
           </p>
-          <h2>Current distinction</h2>
+          <h2 class="title-h2">Current distinction</h2>
           <div class="table-wrap">
             <table>
               <thead>
@@ -246,14 +257,14 @@ use std.text;</code></pre>
               </tbody>
             </table>
           </div>
-          <h2>Design notes</h2>
+          <h2 class="title-h2">Design notes</h2>
           <p>
             The name is inspired by Rust module imports, but Raz supports a
             separate quoted-header form and uses its own module-resolution
             rules. Compatibility with Rust namespaces, visibility, aliases, or
             import semantics is not implied.
           </p>
-          <h2>Decisions to finalize</h2>
+          <h2 class="title-h2">Decisions to finalize</h2>
           <ul>
             <li>
               Define module path casing and platform-dependent resolution
@@ -274,12 +285,12 @@ use std.text;</code></pre>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="language.include.html">← include</a>
+              ><a href="language.include.html">«   include</a>
             </div>
             <div class="next">
               <small>Next</small
               ><a href="language.functions.html"
-                >Functions, Calls, and Function Values →</a
+                >Functions, Calls, and Function Values    »</a
               >
             </div>
           </nav>

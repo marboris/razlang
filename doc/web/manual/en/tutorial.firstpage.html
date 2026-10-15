@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Your First Raz Program — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Getting Started</p>
-          <h1>Your First Raz Program</h1>
+          <h2 class="title">Your First Raz Program</h2>
           <p class="page-lead">
             Create a small source file, compile it to C++, and inspect the
             generated output.
@@ -209,7 +220,7 @@
             This page assumes that the Raz Gen2 compiler and its configured GNU
             C++ toolchain are available in the project checkout.
           </p>
-          <h2>Create a source file</h2>
+          <h2 class="title-h2">Create a source file</h2>
           <p>
             Create a file named <code>hello.raz</code> with the following
             contents:
@@ -225,7 +236,7 @@
             demonstrates source syntax; it does not prescribe how a platform
             executable must be launched.
           </p>
-          <h2>Emit C++</h2>
+          <h2 class="title-h2">Emit C++</h2>
           <p>
             The compiler can write generated C++ to a specified path with
             <code>--emit-cpp</code> or <code>-o</code>. From the project root,
@@ -237,7 +248,7 @@
             the repository's build configuration. The generated
             <code>hello.cpp</code> is the compiler output to inspect.
           </p>
-          <h2>Inspect the output</h2>
+          <h2 class="title-h2">Inspect the output</h2>
           <p>
             Raz's backend targets C++17. The generated output may contain type
             mappings and implementation details that are not part of the Raz
@@ -251,7 +262,7 @@
             preserves generated C++ for manual review; native compilation and
             execution are separate checks when needed.
           </div>
-          <h2>Next steps</h2>
+          <h2 class="title-h2">Next steps</h2>
           <ul>
             <li>
               Read the
@@ -272,11 +283,11 @@
           </ul>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
-              <small>Previous</small><a href="index.html">← Raz Manual</a>
+              <small>Previous</small><a href="index.html">«   Raz Manual</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="language.reference.html">Language Reference →</a>
+              ><a href="language.reference.html">Language Reference    »</a>
             </div>
           </nav>
         </article>

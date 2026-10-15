@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
             <p class="page-kicker">
               Raz Gen2 · Language and toolchain reference
             </p>
-            <h1>Raz Manual</h1>
+            <h2 class="title">Raz Manual</h2>
             <p class="page-lead">
               A practical reference for understanding Raz source syntax,
               compiler behavior, native interoperability, and the standard
@@ -209,7 +220,7 @@
             </div>
           </div>
 
-          <h2>Documentation</h2>
+          <h2 class="title-h2">Documentation</h2>
           <div class="section-grid">
             <section class="section-card">
               <h3><a href="tutorial.firstpage.html">Getting Started</a></h3>
@@ -217,7 +228,7 @@
                 Write a small Raz program and understand the source-to-C++
                 workflow.
               </p>
-              <a href="tutorial.firstpage.html">First program →</a>
+              <a href="tutorial.firstpage.html">First program    »</a>
             </section>
             <section class="section-card">
               <h3><a href="language.reference.html">Language Reference</a></h3>
@@ -225,19 +236,19 @@
                 Keywords, lexical forms, operators, types, declarations, calls,
                 and source directives.
               </p>
-              <a href="language.reference.html">Browse language topics →</a>
+              <a href="language.reference.html">Browse language topics    »</a>
             </section>
             <section class="section-card">
               <h3><a href="compiler.architecture.html">Compiler</a></h3>
               <p>Frontend stages, validation, RIR, and the C++17 backend.</p>
-              <a href="compiler.architecture.html">Compiler architecture →</a>
+              <a href="compiler.architecture.html">Compiler architecture    »</a>
             </section>
             <section class="section-card">
               <h3>
                 <a href="standard-library.index.html">Standard Library</a>
               </h3>
               <p>Available modules and the current public API surface.</p>
-              <a href="standard-library.index.html">Browse modules →</a>
+              <a href="standard-library.index.html">Browse modules    »</a>
             </section>
             <section class="section-card">
               <h3><a href="runtime.memory.html">Runtime &amp; Memory</a></h3>
@@ -245,7 +256,7 @@
                 Type representation, references, containers, pointers, and
                 lifetime questions.
               </p>
-              <a href="runtime.memory.html">Runtime model →</a>
+              <a href="runtime.memory.html">Runtime model    »</a>
             </section>
             <section class="section-card">
               <h3>
@@ -255,7 +266,7 @@
                 Native headers, C++ calls, target assumptions, and ABI
                 boundaries.
               </p>
-              <a href="interop.platform.html">Interop reference →</a>
+              <a href="interop.platform.html">Interop reference    »</a>
             </section>
             <section class="section-card">
               <h3><a href="toolchain.build.html">Toolchain &amp; Build</a></h3>
@@ -263,7 +274,7 @@
                 Compiler options, output files, and the authoritative build
                 configuration.
               </p>
-              <a href="toolchain.build.html">Build reference →</a>
+              <a href="toolchain.build.html">Build reference    »</a>
             </section>
             <section class="section-card">
               <h3>
@@ -275,7 +286,7 @@
                 Compile-only tests, generated output review, and regression
                 policy.
               </p>
-              <a href="testing.compatibility.html">Testing reference →</a>
+              <a href="testing.compatibility.html">Testing reference    »</a>
             </section>
             <section class="section-card">
               <h3>
@@ -285,10 +296,10 @@
                 Self-hosting principles, build rules, test policy, and
                 documentation standards.
               </p>
-              <a href="project.development.html">Development principles →</a>
+              <a href="project.development.html">Development principles    »</a>
             </section>
           </div>
-          <h2>How to read this manual</h2>
+          <h2 class="title-h2">How to read this manual</h2>
           <p>
             Feature pages distinguish the
             <strong>current implementation</strong> from decisions that still
@@ -305,7 +316,7 @@
             <div></div>
             <div class="next">
               <small>Next</small
-              ><a href="tutorial.firstpage.html">Your First Raz Program →</a>
+              ><a href="tutorial.firstpage.html">Your First Raz Program    »</a>
             </div>
           </nav>
         </article>

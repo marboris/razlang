@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Standard Library Reference — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Standard Library</p>
-          <h1>Standard Library Reference</h1>
+          <h2 class="title">Standard Library Reference</h2>
           <p class="page-lead">
             Current Raz standard modules and the native bridges used by each
             module.
@@ -285,11 +296,11 @@
               </tbody>
             </table>
           </div>
-          <h2>Import a module</h2>
+          <h2 class="title-h2">Import a module</h2>
           <pre><code>use std.io;
 
 print("Raz standard library");</code></pre>
-          <h2>Header ownership</h2>
+          <h2 class="title-h2">Header ownership</h2>
           <p>
             Optional standard-library headers and user native headers should be
             requested through explicit imports where practical, including when
@@ -299,7 +310,7 @@ print("Raz standard library");</code></pre>
             program must be identified as compiler scaffolding, not presented as
             user-imported modules.
           </p>
-          <h2>Library rules to define</h2>
+          <h2 class="title-h2">Library rules to define</h2>
           <ul>
             <li>Public naming conventions and module versioning.</li>
             <li>
@@ -319,11 +330,11 @@ print("Raz standard library");</code></pre>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="compiler.tokens.html">← Lexer Token Reference</a>
+              ><a href="compiler.tokens.html">«   Lexer Token Reference</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="runtime.memory.html">Runtime and Memory Model →</a>
+              ><a href="runtime.memory.html">Runtime and Memory Model    »</a>
             </div>
           </nav>
         </article>

@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Interop and Platform — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Interop &amp; Platform</p>
-          <h1>Interop and Platform</h1>
+          <h2 class="title">Interop and Platform</h2>
           <p class="page-lead">
             Native C++ headers, explicit native calls, backend mappings, and
             target assumptions.
@@ -270,7 +281,7 @@
               </tbody>
             </table>
           </div>
-          <h2>Native call example</h2>
+          <h2 class="title-h2">Native call example</h2>
           <pre><code>use "native_api.hpp";
 
 let result = native_function!(42);</code></pre>
@@ -279,7 +290,7 @@ let result = native_function!(42);</code></pre>
             convention depend on the declarations exposed by the included native
             header and the current Raz validation behavior.
           </p>
-          <h2>Platform contract to define</h2>
+          <h2 class="title-h2">Platform contract to define</h2>
           <ul>
             <li>
               Supported GNU C++ versions and whether other C++17 compilers are
@@ -301,11 +312,11 @@ let result = native_function!(42);</code></pre>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="runtime.memory.html">← Runtime and Memory Model</a>
+              ><a href="runtime.memory.html">«   Runtime and Memory Model</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="toolchain.build.html">Toolchain and Build Options →</a>
+              ><a href="toolchain.build.html">Toolchain and Build Options    »</a>
             </div>
           </nav>
         </article>

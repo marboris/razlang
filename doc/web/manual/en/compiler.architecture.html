@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Compiler Architecture — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Compiler</p>
-          <h1>Compiler Architecture</h1>
+          <h2 class="title">Compiler Architecture</h2>
           <p class="page-lead">
             The current self-hosted frontend, validation pipeline, RIR boundary,
             and C++17 backend.
@@ -209,7 +220,7 @@
             component boundaries below describe the current implementation and
             may change as the frontend is completed.
           </p>
-          <h2>Compilation pipeline</h2>
+          <h2 class="title-h2">Compilation pipeline</h2>
           <pre><code>CLI
   → module/include resolution
   → macro expansion
@@ -302,7 +313,7 @@
               </tbody>
             </table>
           </div>
-          <h2>Compiler responsibilities</h2>
+          <h2 class="title-h2">Compiler responsibilities</h2>
           <ul>
             <li>
               Recognize valid Raz source according to a single authoritative
@@ -323,7 +334,7 @@
               or macros transform input.
             </li>
           </ul>
-          <h2>Planned architecture direction</h2>
+          <h2 class="title-h2">Planned architecture direction</h2>
           <ul>
             <li>
               Keep the user-facing compiler driver separate from the core
@@ -342,7 +353,7 @@
               source-language or build-system contract.
             </li>
           </ul>
-          <h2>Architecture items to resolve</h2>
+          <h2 class="title-h2">Architecture items to resolve</h2>
           <ul>
             <li>
               Centralize token IDs instead of duplicating numeric literals.
@@ -362,13 +373,13 @@
             <div>
               <small>Previous</small
               ><a href="language.functions.html"
-                >← Functions, Calls, and Function Values</a
+                >«   Functions, Calls, and Function Values</a
               >
             </div>
             <div class="next">
               <small>Next</small
               ><a href="compiler.self-hosting.html"
-                >Self-Hosting and Compiler Generations →</a
+                >Self-Hosting and Compiler Generations    »</a
               >
             </div>
           </nav>

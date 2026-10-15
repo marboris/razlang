@@ -10,6 +10,17 @@
       name="description"
     />
     <title>Toolchain and Build Options — Raz Manual</title>
+    <link rel="preconnect" href="https://fonts.googleapis.com" />
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin />
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto:wght@400;500;700&display=swap"
+      rel="stylesheet"
+    />
+
+    <link
+      href="https://fonts.googleapis.com/css2?family=Roboto+Condensed:wght@300;400;500;600;700&display=swap"
+      rel="stylesheet"
+    />
     <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
     <link href="../assets/manual.css" rel="stylesheet" />
     <script defer="" src="../assets/manual.js"></script>
@@ -18,7 +29,7 @@
     <header class="site-header">
       <div class="header-inner">
         <a aria-label="Raz Manual home" class="brand" href="index.html"
-          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+          ><img alt="Raz" class="brand-logo" src="../assets/razc_1_-nobg-preview.svg"
         /></a>
         <button
           aria-controls="manual-nav"
@@ -196,7 +207,7 @@
       <main id="main-content">
         <article class="content">
           <p class="page-kicker">Toolchain &amp; Build</p>
-          <h1>Toolchain and Build Options</h1>
+          <h2 class="title">Toolchain and Build Options</h2>
           <p class="page-lead">
             The active compiler, command-line output controls, module search
             roots, and GNU C++ configuration.
@@ -273,7 +284,7 @@
               </tbody>
             </table>
           </div>
-          <h2>Authoritative build configuration</h2>
+          <h2 class="title-h2">Authoritative build configuration</h2>
           <p>The root <code>options</code> file currently contains:</p>
           <pre><code>CXX=g++
 CXXFLAGS="-O2 -pipe -static -s -DNDEBUG -ffunction-sections -fdata-sections -Wl,--gc-sections"</code></pre>
@@ -288,7 +299,7 @@ CXXFLAGS="-O2 -pipe -static -s -DNDEBUG -ffunction-sections -fdata-sections -Wl,
             configured GNU C++ compiler. A different compiler or flags require
             an explicit, documented special case.
           </div>
-          <h2>Build and inspect a compiler candidate</h2>
+          <h2 class="title-h2">Build and inspect a compiler candidate</h2>
           <p>
             Build a candidate separately from the active compiler. Inspect its
             version and run the required tests before manually replacing the
@@ -311,7 +322,7 @@ set +f
             successful build. Candidate review, test results, and
             version/checksum updates should be deliberate.
           </div>
-          <h2>Compiler driver and build orchestration</h2>
+          <h2 class="title-h2">Compiler driver and build orchestration</h2>
           <p>
             The longer-term driver should provide a clear interface between the
             user and the core compiler: resolve modules and libraries, collect
@@ -327,7 +338,7 @@ set +f
             present target labels are metadata, not a promise of complete
             cross-compilation support.
           </p>
-          <h2>Questions to settle</h2>
+          <h2 class="title-h2">Questions to settle</h2>
           <ul>
             <li>
               Define development and production profiles without making
@@ -346,12 +357,12 @@ set +f
           <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="interop.platform.html">← Interop and Platform</a>
+              ><a href="interop.platform.html">«   Interop and Platform</a>
             </div>
             <div class="next">
               <small>Next</small
               ><a href="testing.compatibility.html"
-                >Testing and Compatibility →</a
+                >Testing and Compatibility    »</a
               >
             </div>
           </nav>

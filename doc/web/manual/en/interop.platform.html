@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Native C++ headers, explicit native calls, backend mappings, and target assumptions."
+      name="description"
     />
     <title>Interop and Platform — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Interop &amp; Platform</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -142,7 +145,7 @@
               <li
                 data-nav-title="interop &amp; platform interop &amp; platform"
               >
-                <a href="interop.platform.html" aria-current="page"
+                <a aria-current="page" href="interop.platform.html"
                   >Interop &amp; Platform</a
                 >
               </li>
@@ -189,14 +192,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span
-          ><span>Interop &amp; Platform</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Interop &amp; Platform</p>
           <h1>Interop and Platform</h1>
@@ -206,17 +203,14 @@
           </p>
           <div class="page-meta">
             <span>Raz Gen2 Manual</span><span>·</span
-            ><span>Interop &amp; Platform</span
-            ><span class="status reference">Implementation inventory</span>
+            ><span>Interop &amp; Platform</span>
           </div>
-
           <div class="table-wrap">
             <table>
               <thead>
                 <tr>
                   <th>Feature</th>
                   <th>Current behavior</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -226,16 +220,12 @@
                     <code>use "header.hpp";</code> adds a header dependency to
                     generated C++.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td>Native call</td>
                   <td>
                     <code>native_name!(args)</code> emits an explicit native
                     call without a Raz <code>extern</code> declaration.
-                  </td>
-                  <td>
-                    <span class="status partial">Type contract open</span>
                   </td>
                 </tr>
                 <tr>
@@ -244,12 +234,10 @@
                     <code>use dotted.module;</code> resolves Raz source against
                     configured roots.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td>Backend target</td>
                   <td>Compiler emits C++17.</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td>Type mappings</td>
@@ -260,7 +248,6 @@
                     <code>std::string</code>, and <code>List&lt;T&gt;</code> to
                     <code>std::vector&lt;T&gt;</code>.
                   </td>
-                  <td><span class="status partial">Supported subset</span></td>
                 </tr>
                 <tr>
                   <td>C ABI</td>
@@ -268,7 +255,6 @@
                     Native headers are included in generated C++; no separate C
                     ABI contract is recorded.
                   </td>
-                  <td><span class="status decision">Needs decision</span></td>
                 </tr>
                 <tr>
                   <td>Target metadata</td>
@@ -276,14 +262,10 @@
                     Driver accepts OS, architecture, and compiler labels used
                     for target constants.
                   </td>
-                  <td>
-                    <span class="status partial">Not full cross-compile</span>
-                  </td>
                 </tr>
                 <tr>
                   <td><code>extern</code></td>
                   <td>Parser and lexer token handling are inconsistent.</td>
-                  <td><span class="status inconsistent">Resolve</span></td>
                 </tr>
               </tbody>
             </table>
@@ -316,31 +298,18 @@ let result = native_function!(42);</code></pre>
               cross-compilation targets.
             </li>
           </ul>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="runtime.memory.html">&larr; Runtime and Memory Model</a>
+              ><a href="runtime.memory.html">← Runtime and Memory Model</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="toolchain.build.html"
-                >Toolchain and Build Options &rarr;</a
-              >
+              ><a href="toolchain.build.html">Toolchain and Build Options →</a>
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Current representations for values, collections, references, pointers, and function values."
+      name="description"
     />
     <title>Runtime and Memory Model — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Runtime &amp; Memory</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -132,7 +135,7 @@
             <div class="nav-group-title">Runtime &amp; Memory</div>
             <ul class="nav-links">
               <li data-nav-title="runtime &amp; memory runtime &amp; memory">
-                <a href="runtime.memory.html" aria-current="page"
+                <a aria-current="page" href="runtime.memory.html"
                   >Runtime &amp; Memory</a
                 >
               </li>
@@ -189,14 +192,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span
-          ><span>Runtime &amp; Memory</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Runtime &amp; Memory</p>
           <h1>Runtime and Memory Model</h1>
@@ -206,10 +203,8 @@
           </p>
           <div class="page-meta">
             <span>Raz Gen2 Manual</span><span>·</span
-            ><span>Runtime &amp; Memory</span
-            ><span class="status partial">Design inventory</span>
+            ><span>Runtime &amp; Memory</span>
           </div>
-
           <p>
             This page records what the current C++17 backend emits and separates
             it from language-level guarantees that have not yet been defined.
@@ -319,31 +314,20 @@
               remain forbidden.
             </li>
           </ul>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
               ><a href="standard-library.index.html"
-                >&larr; Standard Library Reference</a
+                >← Standard Library Reference</a
               >
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="interop.platform.html">Interop and Platform &rarr;</a>
+              ><a href="interop.platform.html">Interop and Platform →</a>
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

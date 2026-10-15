@@ -1,65 +1,67 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Reference documentation for the Raz language, its compiler, and its standard library."
+      name="description"
     />
     <title>Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
         <nav aria-label="Manual contents">
           <div class="nav-group">
             <div class="nav-group-title">
-              <a href="index.html" aria-current="page">Raz Manual Home</a>
+              <a aria-current="page" href="index.html">Raz Manual Home</a>
             </div>
           </div>
           <div class="nav-group">
@@ -187,12 +189,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a>
-        </div>
         <article class="content">
           <div class="hero">
             <p class="page-kicker">
@@ -210,12 +208,7 @@
               ><a href="compiler.architecture.html">Compiler architecture</a>
             </div>
           </div>
-          <div class="doc-note">
-            <strong>Specification status:</strong> This manual currently
-            documents the active implementation and identifies unresolved
-            language decisions. A behavior marked as implemented is not
-            automatically a permanent language guarantee.
-          </div>
+
           <h2>Documentation</h2>
           <div class="section-grid">
             <section class="section-card">
@@ -224,7 +217,7 @@
                 Write a small Raz program and understand the source-to-C++
                 workflow.
               </p>
-              <a href="tutorial.firstpage.html">First program &rarr;</a>
+              <a href="tutorial.firstpage.html">First program →</a>
             </section>
             <section class="section-card">
               <h3><a href="language.reference.html">Language Reference</a></h3>
@@ -232,23 +225,19 @@
                 Keywords, lexical forms, operators, types, declarations, calls,
                 and source directives.
               </p>
-              <a href="language.reference.html"
-                >Browse language topics &rarr;</a
-              >
+              <a href="language.reference.html">Browse language topics →</a>
             </section>
             <section class="section-card">
               <h3><a href="compiler.architecture.html">Compiler</a></h3>
               <p>Frontend stages, validation, RIR, and the C++17 backend.</p>
-              <a href="compiler.architecture.html"
-                >Compiler architecture &rarr;</a
-              >
+              <a href="compiler.architecture.html">Compiler architecture →</a>
             </section>
             <section class="section-card">
               <h3>
                 <a href="standard-library.index.html">Standard Library</a>
               </h3>
               <p>Available modules and the current public API surface.</p>
-              <a href="standard-library.index.html">Browse modules &rarr;</a>
+              <a href="standard-library.index.html">Browse modules →</a>
             </section>
             <section class="section-card">
               <h3><a href="runtime.memory.html">Runtime &amp; Memory</a></h3>
@@ -256,7 +245,7 @@
                 Type representation, references, containers, pointers, and
                 lifetime questions.
               </p>
-              <a href="runtime.memory.html">Runtime model &rarr;</a>
+              <a href="runtime.memory.html">Runtime model →</a>
             </section>
             <section class="section-card">
               <h3>
@@ -266,7 +255,7 @@
                 Native headers, C++ calls, target assumptions, and ABI
                 boundaries.
               </p>
-              <a href="interop.platform.html">Interop reference &rarr;</a>
+              <a href="interop.platform.html">Interop reference →</a>
             </section>
             <section class="section-card">
               <h3><a href="toolchain.build.html">Toolchain &amp; Build</a></h3>
@@ -274,7 +263,7 @@
                 Compiler options, output files, and the authoritative build
                 configuration.
               </p>
-              <a href="toolchain.build.html">Build reference &rarr;</a>
+              <a href="toolchain.build.html">Build reference →</a>
             </section>
             <section class="section-card">
               <h3>
@@ -286,7 +275,7 @@
                 Compile-only tests, generated output review, and regression
                 policy.
               </p>
-              <a href="testing.compatibility.html">Testing reference &rarr;</a>
+              <a href="testing.compatibility.html">Testing reference →</a>
             </section>
             <section class="section-card">
               <h3>
@@ -296,9 +285,7 @@
                 Self-hosting principles, build rules, test policy, and
                 documentation standards.
               </p>
-              <a href="project.development.html"
-                >Development principles &rarr;</a
-              >
+              <a href="project.development.html">Development principles →</a>
             </section>
           </div>
           <h2>How to read this manual</h2>
@@ -314,14 +301,11 @@
             compiler stage, or standard module. Token numbers are documented as
             internal lexer identifiers rather than stable language-level names.
           </p>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div></div>
             <div class="next">
               <small>Next</small
-              ><a href="tutorial.firstpage.html"
-                >Your First Raz Program &rarr;</a
-              >
+              ><a href="tutorial.firstpage.html">Your First Raz Program →</a>
             </div>
           </nav>
         </article>

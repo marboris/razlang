@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Reserved words, literal forms, comments, and identifier rules visible in the active lexer."
+      name="description"
     />
     <title>Keywords and Lexical Forms — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Language Reference</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -79,7 +82,7 @@
               <li
                 data-nav-title="keywords &amp; lexical forms language reference"
               >
-                <a href="language.keywords.html" aria-current="page"
+                <a aria-current="page" href="language.keywords.html"
                   >Keywords &amp; Lexical Forms</a
                 >
               </li>
@@ -187,13 +190,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span><span>Language Reference</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Language Reference</p>
           <h1>Keywords and Lexical Forms</h1>
@@ -203,10 +201,8 @@
           </p>
           <div class="page-meta">
             <span>Raz Gen2 Manual</span><span>·</span
-            ><span>Language Reference</span
-            ><span class="status reference">Implementation inventory</span>
+            ><span>Language Reference</span>
           </div>
-
           <h2>Keywords</h2>
           <div class="table-wrap">
             <table>
@@ -215,7 +211,6 @@
                   <th>Keyword</th>
                   <th>Role</th>
                   <th>Design reference</th>
-                  <th>Current status</th>
                 </tr>
               </thead>
               <tbody>
@@ -223,13 +218,11 @@
                   <td><code>function</code></td>
                   <td>Declares a named function and its signature.</td>
                   <td>Raz syntax; lineage not formally recorded</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>struct</code></td>
                   <td>Declares a type with named fields.</td>
                   <td>C <code>struct</code> concept</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>let</code></td>
@@ -240,37 +233,31 @@
                   <td>
                     Rust <code>let</code> as naming reference; Raz rules differ
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>const</code></td>
                   <td>Declares a binding that cannot be reassigned.</td>
                   <td>C/C++ <code>const</code> concept</td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>return</code></td>
                   <td>Returns a value or exits a return context.</td>
                   <td>C-family syntax</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>if</code>, <code>else</code></td>
                   <td>Conditional branch and alternative branch.</td>
                   <td>C-family syntax</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>while</code></td>
                   <td>Conditional loop.</td>
                   <td>C-family syntax</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>true</code>, <code>false</code></td>
                   <td>Boolean literals.</td>
                   <td>C++ / Rust-style spelling</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>new</code></td>
@@ -278,13 +265,11 @@
                   <td>
                     C++-influenced spelling; not assumed to mean heap allocation
                   </td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>use</code></td>
                   <td>Imports a Raz module or a quoted native C++ header.</td>
                   <td>Rust <code>use</code> concept, adapted for Raz</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>include</code></td>
@@ -297,7 +282,6 @@
                     >
                     as conceptual reference only
                   </td>
-                  <td><span class="status partial">Contract review</span></td>
                 </tr>
                 <tr>
                   <td><code>unsafe</code></td>
@@ -305,21 +289,16 @@
                     Marks a region permitting restricted unsafe constructs.
                   </td>
                   <td>Rust <code>unsafe</code> concept, adapted</td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>nullptr</code></td>
                   <td>Null pointer literal.</td>
                   <td>C++ <code>nullptr</code></td>
-                  <td>
-                    <span class="status decision">Context rules open</span>
-                  </td>
                 </tr>
                 <tr>
                   <td><code>define</code></td>
                   <td>Declares a parameterized source macro.</td>
                   <td>Raz-specific; not the C preprocessor</td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
               </tbody>
             </table>
@@ -386,31 +365,18 @@
             how escape sequences are validated, must be specified before this
             behavior is treated as a public guarantee.
           </p>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="language.reference.html">&larr; Language Reference</a>
+              ><a href="language.reference.html">← Language Reference</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="language.operators.html"
-                >Operators and Punctuation &rarr;</a
-              >
+              ><a href="language.operators.html">Operators and Punctuation →</a>
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

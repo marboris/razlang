@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="The current self-hosted frontend, validation pipeline, RIR boundary, and C++17 backend."
+      name="description"
     />
     <title>Compiler Architecture — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Compiler</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -108,7 +111,7 @@
             <div class="nav-group-title">Compiler</div>
             <ul class="nav-links">
               <li data-nav-title="compiler architecture compiler">
-                <a href="compiler.architecture.html" aria-current="page"
+                <a aria-current="page" href="compiler.architecture.html"
                   >Compiler Architecture</a
                 >
               </li>
@@ -189,13 +192,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span><span>Compiler</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Compiler</p>
           <h1>Compiler Architecture</h1>
@@ -204,10 +202,8 @@
             and C++17 backend.
           </p>
           <div class="page-meta">
-            <span>Raz Gen2 Manual</span><span>·</span><span>Compiler</span
-            ><span class="status reference">Implementation inventory</span>
+            <span>Raz Gen2 Manual</span><span>·</span><span>Compiler</span>
           </div>
-
           <p>
             The active Gen2 compiler is written in Raz and emits C++17. The
             component boundaries below describe the current implementation and
@@ -215,15 +211,15 @@
           </p>
           <h2>Compilation pipeline</h2>
           <pre><code>CLI
-  &rarr; module/include resolution
-  &rarr; macro expansion
-  &rarr; build-definition rewriting
-  &rarr; lexer and parser
-  &rarr; semantic validation
-  &rarr; RIR lowering and verification
-  &rarr; C++17 lowering and emission
-  &rarr; generated-C++ structural validation
-  &rarr; output file</code></pre>
+  → module/include resolution
+  → macro expansion
+  → build-definition rewriting
+  → lexer and parser
+  → semantic validation
+  → RIR lowering and verification
+  → C++17 lowering and emission
+  → generated-C++ structural validation
+  → output file</code></pre>
           <div class="table-wrap">
             <table>
               <thead>
@@ -231,7 +227,6 @@
                   <th>Stage</th>
                   <th>Source location</th>
                   <th>Responsibility</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -242,7 +237,6 @@
                     Reads inputs/options, resolves dependencies, runs the
                     pipeline, and writes generated C++.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td>Source inclusion</td>
@@ -250,7 +244,6 @@
                   <td>
                     Expands source files, normalizes paths, and detects cycles.
                   </td>
-                  <td><span class="status partial">Contract review</span></td>
                 </tr>
                 <tr>
                   <td>Module resolver</td>
@@ -258,13 +251,11 @@
                   <td>
                     Resolves dotted Raz module imports against configured roots.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td>Macro expander</td>
                   <td><code>src/source/macros.raz</code></td>
                   <td>Extracts and expands parameterized source macros.</td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td>Lexer</td>
@@ -273,7 +264,6 @@
                     Produces identifiers, literals, keywords, delimiters, and
                     operators.
                   </td>
-                  <td><span class="status partial">Error policy open</span></td>
                 </tr>
                 <tr>
                   <td>Parser and AST</td>
@@ -284,7 +274,6 @@
                   <td>
                     Parses the supported source subset into the compiler model.
                   </td>
-                  <td><span class="status partial">Subset</span></td>
                 </tr>
                 <tr>
                   <td>Semantic analysis</td>
@@ -292,9 +281,6 @@
                   <td>
                     Resolves names, checks types and calls, and rejects mutation
                     of immutable bindings.
-                  </td>
-                  <td>
-                    <span class="status partial">Partial type system</span>
                   </td>
                 </tr>
                 <tr>
@@ -307,15 +293,11 @@
                     Lowers the frontend representation and verifies RIR
                     invariants.
                   </td>
-                  <td>
-                    <span class="status implemented">Current subset</span>
-                  </td>
                 </tr>
                 <tr>
                   <td>C++17 backend</td>
                   <td><code>src/targets/cpp17/</code></td>
                   <td>Maps types and operations to emitted C++17.</td>
-                  <td><span class="status partial">Subset</span></td>
                 </tr>
               </tbody>
             </table>
@@ -376,33 +358,22 @@
               Resolve the unreachable/inconsistent <code>extern</code> branch.
             </li>
           </ul>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
               ><a href="language.functions.html"
-                >&larr; Functions, Calls, and Function Values</a
+                >← Functions, Calls, and Function Values</a
               >
             </div>
             <div class="next">
               <small>Next</small
               ><a href="compiler.self-hosting.html"
-                >Self-Hosting and Compiler Generations &rarr;</a
+                >Self-Hosting and Compiler Generations →</a
               >
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Built-in type forms, generic types, pointer forms, and their current backend representations."
+      name="description"
     />
     <title>Types — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Language Reference</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -91,7 +94,7 @@
                 >
               </li>
               <li data-nav-title="types language reference">
-                <a href="language.types.html" aria-current="page">Types</a>
+                <a aria-current="page" href="language.types.html">Types</a>
               </li>
               <li data-nav-title="functions &amp; calls language reference">
                 <a href="language.functions.html">Functions &amp; Calls</a>
@@ -187,13 +190,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span><span>Language Reference</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Language Reference</p>
           <h1>Types</h1>
@@ -203,10 +201,8 @@
           </p>
           <div class="page-meta">
             <span>Raz Gen2 Manual</span><span>·</span
-            ><span>Language Reference</span
-            ><span class="status reference">Implementation inventory</span>
+            ><span>Language Reference</span>
           </div>
-
           <div class="doc-note">
             <strong>Design rule:</strong> the C++ representation is an
             implementation choice. It does not automatically define the public
@@ -218,7 +214,6 @@
                 <tr>
                   <th>Raz type</th>
                   <th>Current meaning / representation</th>
-                  <th>Status</th>
                 </tr>
               </thead>
               <tbody>
@@ -229,41 +224,34 @@
                     predefined 64-bit integer alias verified by a generated
                     static assertion.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>f64</code></td>
                   <td>
                     64-bit floating-point; emitted as C++ <code>double</code>.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>bool</code></td>
                   <td>Boolean; emitted as C++ <code>bool</code>.</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>char</code></td>
                   <td>Character value; emitted as C++ <code>char</code>.</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>string</code></td>
                   <td>String; emitted as <code>std::string</code>.</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>void</code></td>
                   <td>
                     Permitted function return type, not a value or field type.
                   </td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>Point</code></td>
                   <td>A user-defined <code>struct</code> type.</td>
-                  <td><span class="status implemented">Implemented</span></td>
                 </tr>
                 <tr>
                   <td><code>List&lt;T&gt;</code></td>
@@ -272,7 +260,6 @@
                     <code>std::vector&lt;T&gt;</code>. Element operations remain
                     limited to supported helpers.
                   </td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>Ref&lt;T&gt;</code></td>
@@ -280,7 +267,6 @@
                     Reference-like type emitted as <code>T&amp;</code>. Lifetime
                     and aliasing rules are not fully defined.
                   </td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>char*</code></td>
@@ -288,7 +274,6 @@
                     Raw character pointer, currently permitted only inside an
                     <code>unsafe</code> context.
                   </td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>Fn(A, B)-&gt;R</code></td>
@@ -296,16 +281,12 @@
                     Function-value type with parameter and return signature.
                     Capture and closure semantics are not specified.
                   </td>
-                  <td><span class="status partial">Partial</span></td>
                 </tr>
                 <tr>
                   <td><code>nullptr</code></td>
                   <td>
                     Null pointer literal. Valid assignment and comparison
                     contexts need a formal rule.
-                  </td>
-                  <td>
-                    <span class="status partial">Context rules open</span>
                   </td>
                 </tr>
               </tbody>
@@ -332,31 +313,17 @@ struct Point {
             <li>The full safety boundary for pointers and native calls.</li>
             <li>Function values, closures, and capture lifetime.</li>
           </ul>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="language.operators.html"
-                >&larr; Operators and Punctuation</a
-              >
+              ><a href="language.operators.html">← Operators and Punctuation</a>
             </div>
             <div class="next">
-              <small>Next</small
-              ><a href="language.include.html">include &rarr;</a>
+              <small>Next</small><a href="language.include.html">include →</a>
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

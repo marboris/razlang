@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="A compact index of the constructs recognized by the current Raz Gen2 implementation."
+      name="description"
     />
     <title>Language Reference — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>Language Reference</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -74,7 +77,7 @@
             <div class="nav-group-title">Language Reference</div>
             <ul class="nav-links">
               <li data-nav-title="language reference language reference">
-                <a href="language.reference.html" aria-current="page"
+                <a aria-current="page" href="language.reference.html"
                   >Language Reference</a
                 >
               </li>
@@ -189,13 +192,8 @@
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span><span>Language Reference</span>
-        </div>
         <article class="content">
           <p class="page-kicker">Language Reference</p>
           <h1>Language Reference</h1>
@@ -205,10 +203,8 @@
           </p>
           <div class="page-meta">
             <span>Raz Gen2 Manual</span><span>·</span
-            ><span>Language Reference</span
-            ><span class="status reference">Implementation inventory</span>
+            ><span>Language Reference</span>
           </div>
-
           <div class="doc-note">
             <strong>Scope:</strong> this reference is an inventory of observable
             implementation behavior. The normative grammar and several type and
@@ -221,7 +217,7 @@
                 <tr>
                   <th>Construct</th>
                   <th>Example</th>
-                  <th>Purpose / status</th>
+                  <th>Purpose</th>
                 </tr>
               </thead>
               <tbody>
@@ -230,25 +226,18 @@
                   <td>
                     <code>function add(a: i64, b: i64) -&gt; i64 { ... }</code>
                   </td>
-                  <td>
-                    Named function with parameter and return types.
-                    <span class="status implemented">Implemented</span>
-                  </td>
+                  <td>Named function with parameter and return types.</td>
                 </tr>
                 <tr>
                   <td>Structure</td>
                   <td><code>struct Point { x: i64; y: i64; }</code></td>
-                  <td>
-                    User-defined record with named fields.
-                    <span class="status implemented">Implemented</span>
-                  </td>
+                  <td>User-defined record with named fields.</td>
                 </tr>
                 <tr>
                   <td>Binding</td>
                   <td><code>let count: i64 = 0;</code></td>
                   <td>
                     Mutable local or file-level binding. Type may be inferred.
-                    <span class="status implemented">Implemented</span>
                   </td>
                 </tr>
                 <tr>
@@ -257,7 +246,6 @@
                   <td>
                     Binding reassignment is rejected. Nested and aliased
                     mutation rules remain open.
-                    <span class="status partial">Partial</span>
                   </td>
                 </tr>
                 <tr>
@@ -266,48 +254,34 @@
                   <td>
                     Conditional execution. Parentheses are currently optional in
                     parser handling.
-                    <span class="status implemented">Implemented</span>
                   </td>
                 </tr>
                 <tr>
                   <td>Loop</td>
                   <td><code>while (ready) { ... }</code></td>
-                  <td>
-                    Conditional iteration.
-                    <span class="status implemented">Implemented</span>
-                  </td>
+                  <td>Conditional iteration.</td>
                 </tr>
                 <tr>
                   <td>Return</td>
                   <td><code>return result;</code></td>
-                  <td>
-                    Returns from a function or top-level execution.
-                    <span class="status implemented">Implemented</span>
-                  </td>
+                  <td>Returns from a function or top-level execution.</td>
                 </tr>
                 <tr>
                   <td>Source inclusion</td>
                   <td><code>include "math.raz";</code></td>
-                  <td>
-                    Compile-time source expansion.
-                    <span class="status partial">Contract review</span>
-                  </td>
+                  <td>Compile-time source expansion.</td>
                 </tr>
                 <tr>
                   <td>Module / native import</td>
                   <td><code>use std.io;</code></td>
                   <td>
                     Imports a Raz module; a quoted path selects a native header.
-                    <span class="status implemented">Implemented</span>
                   </td>
                 </tr>
                 <tr>
                   <td>Macro</td>
                   <td><code>define twice(x) { x + x }</code></td>
-                  <td>
-                    Token-aware source macro expansion.
-                    <span class="status partial">Partial</span>
-                  </td>
+                  <td>Token-aware source macro expansion.</td>
                 </tr>
               </tbody>
             </table>
@@ -346,33 +320,18 @@
               documenting it as supported syntax.
             </li>
           </ul>
-
-          <nav class="page-navigation" aria-label="Page navigation">
+          <nav aria-label="Page navigation" class="page-navigation">
             <div>
               <small>Previous</small
-              ><a href="tutorial.firstpage.html"
-                >&larr; Your First Raz Program</a
-              >
+              ><a href="tutorial.firstpage.html">← Your First Raz Program</a>
             </div>
             <div class="next">
               <small>Next</small
-              ><a href="language.keywords.html"
-                >Keywords and Lexical Forms &rarr;</a
-              >
+              ><a href="language.keywords.html">Keywords and Lexical Forms →</a>
             </div>
           </nav>
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

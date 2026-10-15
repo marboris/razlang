@@ -1,58 +1,61 @@
 <!doctype html>
+
 <html lang="en">
   <head>
     <meta charset="utf-8" />
-    <meta name="viewport" content="width=device-width, initial-scale=1" />
-    <meta name="theme-color" content="#505d93" />
+    <meta content="width=device-width, initial-scale=1" name="viewport" />
+    <meta content="#741b3a" name="theme-color" />
     <meta
-      name="description"
       content="Documentation conventions, status labels, design references, and specification ownership."
+      name="description"
     />
     <title>About This Manual — Raz Manual</title>
-    <link rel="icon" type="image/svg+xml" href="../assets/raz.svg" />
-    <link rel="stylesheet" href="../assets/manual.css" />
-    <script defer src="../assets/manual.js"></script>
+    <link href="../assets/raz.svg" rel="icon" type="image/svg+xml" />
+    <link href="../assets/manual.css" rel="stylesheet" />
+    <script defer="" src="../assets/manual.js"></script>
   </head>
   <body>
     <header class="site-header">
       <div class="header-inner">
-        <a class="brand" href="index.html" aria-label="Raz Manual home"
-          ><span class="brand-mark" aria-hidden="true">r</span
-          ><span class="brand-copy"
-            ><span class="brand-name">raz</span
-            ><span class="brand-subtitle">Language Manual</span></span
-          ></a
-        >
+        <a aria-label="Raz Manual home" class="brand" href="index.html"
+          ><img alt="Raz" class="brand-logo" src="../assets/raz.svg"
+        /></a>
         <button
+          aria-controls="manual-nav"
+          aria-expanded="false"
           class="mobile-menu"
           type="button"
-          aria-expanded="false"
-          aria-controls="manual-nav"
         >
           Contents
         </button>
-        <nav class="header-nav" aria-label="Primary navigation">
+        <nav aria-label="Primary navigation" class="header-nav">
           <a href="index.html">Home</a
           ><a href="language.reference.html">Language Reference</a
           ><a href="compiler.architecture.html">Compiler</a
           ><a href="standard-library.index.html">Standard Library</a>
         </nav>
         <form
-          class="search-form"
-          role="search"
           action="search.html"
+          class="search-form"
           method="get"
+          role="search"
         >
           <input
-            type="search"
-            name="q"
-            placeholder="Search the manual…"
             aria-label="Search the manual"
             autocomplete="off"
+            name="q"
+            placeholder="Search the manual…"
+            type="search"
           /><button type="submit">Search</button>
         </form>
       </div>
     </header>
+    <div class="breadcrumb-band">
+      <div aria-label="Breadcrumb" class="breadcrumbs">
+        <a href="index.html">Raz Manual</a><span class="breadcrumb-sep">/</span
+        ><span>About</span>
+      </div>
+    </div>
     <div class="site-layout">
       <aside class="sidebar" id="manual-nav">
         <div class="sidebar-title">Manual contents</div>
@@ -182,30 +185,23 @@
             <div class="nav-group-title">About</div>
             <ul class="nav-links">
               <li data-nav-title="about this manual about">
-                <a href="about.html" aria-current="page">About This Manual</a>
+                <a aria-current="page" href="about.html">About This Manual</a>
               </li>
             </ul>
           </div>
         </nav>
-        
       </aside>
       <main id="main-content">
-        <div class="breadcrumbs" aria-label="Breadcrumb">
-          <a href="index.html">Raz Manual</a
-          ><span class="breadcrumb-sep">/</span><span>About</span>
-        </div>
         <article class="content">
           <p class="page-kicker">About</p>
           <h1>About This Manual</h1>
           <p class="page-lead">
-            Documentation conventions, status labels, design references, and
-            specification ownership.
+            About the Raz language and compiler manual, its organization, and
+            its technical references.
           </p>
           <div class="page-meta">
-            <span>Raz Gen2 Manual</span><span>·</span><span>About</span
-            ><span class="status reference">Manual conventions</span>
+            <span>Raz Gen2 Manual</span><span>·</span><span>About</span>
           </div>
-
           <h2>Purpose</h2>
           <p>
             The Raz Manual records the language surface, expected compiler
@@ -213,52 +209,7 @@
             behavior. The intent is to make feature decisions explicit before
             expanding the implementation.
           </p>
-          <h2>Status labels</h2>
-          <div class="table-wrap">
-            <table>
-              <thead>
-                <tr>
-                  <th>Status</th>
-                  <th>Meaning</th>
-                </tr>
-              </thead>
-              <tbody>
-                <tr>
-                  <td><span class="status implemented">Implemented</span></td>
-                  <td>
-                    Behavior is visible in the current source or test workflow.
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="status partial">Partial</span></td>
-                  <td>
-                    Some behavior exists, but the language or implementation
-                    contract has limitations.
-                  </td>
-                </tr>
-                <tr>
-                  <td><span class="status decision">Needs decision</span></td>
-                  <td>A design choice or public rule has not been settled.</td>
-                </tr>
-                <tr>
-                  <td><span class="status inconsistent">Inconsistent</span></td>
-                  <td>
-                    The sources disagree or an implementation path appears
-                    unreachable.
-                  </td>
-                </tr>
-                <tr>
-                  <td>
-                    <span class="status reference">Design reference</span>
-                  </td>
-                  <td>
-                    An idea or name is inspired by another language; behavior is
-                    not presumed equivalent.
-                  </td>
-                </tr>
-              </tbody>
-            </table>
-          </div>
+
           <h2>Documentation rules</h2>
           <ul>
             <li>
@@ -282,19 +233,8 @@
               remain distinguishable.
             </li>
           </ul>
-          
         </article>
       </main>
     </div>
-    <footer class="site-footer">
-      <div class="footer-inner">
-        <span><span class="footer-brand">raz</span> · Raz Compiler Manual</span
-        ><span>English · Static HTML reference</span
-        ><span
-          ><a href="about.html">About this manual</a> ·
-          <a href="index.html">Back to top-level index</a></span
-        >
-      </div>
-    </footer>
   </body>
 </html>

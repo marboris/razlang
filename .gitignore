@@ -11,11 +11,6 @@
 .tmp/
 **/.cache/
 **/.tmp/
-compiler/razc/build/*
-!compiler/razc/build/.gitkeep
-tests/run-tests.out
-tests/run-tests.out.tmp
-tests/run-tests.cpp
 *.o
 *.obj
 *.a

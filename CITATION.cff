@@ -1,0 +1,20 @@
+cff-version: 1.2.0
+message: >-
+  If you use Raz in your research or software, please cite this project.
+title: "Raz"
+type: software
+abstract: >-
+  Raz is a statically typed, self-hosting programming language
+  that compiles to C++.
+repository-code: "https://github.com/marboris/razlang"
+keywords:
+  - Raz
+  - Programming language
+  - Compiler
+  - Self-hosting
+  - Source-to-source compiler
+  - C++
+license: "BSD-3-Clause"
+authors:
+  - family-names: "Shafaei"
+    given-names: "Mehrab"

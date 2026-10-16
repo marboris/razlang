@@ -108,6 +108,9 @@ a {
   color: var(--link);
   text-decoration: none;
 }
+.site-layout #main-content a {
+  color: #272626;
+}
 a:visited {
   color: var(--link-visited);
 }

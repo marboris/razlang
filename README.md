@@ -8,12 +8,12 @@
 
 <p align="center">A language built to build itself.</p>
 
-## Why Raz?
+## How Raz Differs
 
-- **Readable and High-Level:** Expressive syntax designed for clear, maintainable code.
-- **Native Performance:** Compiles through C++ into native executables.
-- **C++ Ecosystem:** Aims to support integration with existing C++ libraries.
-- **Open and Free:** Free, open-source, and open to community contributions.
+- **High-Level Design:** Readable syntax and abstractions designed to simplify development and code maintenance.
+- **Memory Management:** Aims to automate memory management and provide safer pointer abstractions.
+- **No OOP Required:** Uses an approach that does not rely on object-oriented programming, encouraging structured and modular code.
+- **Native Compilation:** Compiles to C++, combining Raz's language design with the native compilation ecosystem.
 
 Raz is under active development, and its capabilities continue to evolve.
 

@@ -1,7 +1,13 @@
+# Project Roles and Development Guidelines
 
-1. کامنت های اضافه و راهنما هایی که کد رو توضیح میدهند درصورتی که معلوم و واضح هست ممنوع
-2. داکیومنت نویسی هایی که تایید نشدند و مورد استفاده قرار نمیگیرند ممنوع
-3. استفاده از OOP و class و متد های وابسته به ان در توسعه کامپایلر و در زبان Raz مورد استفاده قرار نمیگیرد
-4. تا جای ممکن متد های داخلی و کتابخانه ها به صورت نیتیو و داخلی نوشته میشوند که خود C++ هم استاندارد ان ها را میداند. در غیر این صورت overhead اضافی ایجاد میکند
-5. کامپایلر وظیفه تبدیل و کامپایلر سورس را دارد و کتابخانه های نهایی استاندارد مکمل پروژه نهایی هستن. سورس های Raz به صورت کتابخانه هم در زمان کامپایل توسط کامپایلر نسخه اخر بیلد گرفته میشوند و کتابخانه های نیتیو C++ یا هدر های C,C++ دست نخورده باقی میمانند.
-6. فایل .depressed یا مسیر های legacy برای ورژن های قدیمی بودند و حالا دیگر استفاده نمیشوند و جایگزین شدن
+1. **No Redundant Comments:** Avoid unnecessary comments or explanatory annotations when the code is already clear, self-explanatory, or obvious from its implementation.
+
+2. **No Unapproved Documentation:** Do not create documentation that has not been explicitly approved or is not actively used by the project.
+
+3. **No OOP in Raz or Compiler Development:** Object-oriented programming (OOP), classes, and class-dependent methods are not used in the development of the Raz compiler or the Raz language itself.
+
+4. **Native Implementation and Minimal Overhead:** Whenever possible, implement internal methods and standard library functionality natively, using approaches recognized and supported by the C++ standard. Avoid unnecessary abstractions and external dependencies that introduce additional runtime overhead.
+
+5. **Compiler and Standard Library Responsibilities:** The compiler is responsible for transforming and compiling source code. The final standard libraries complement the project and are an integral part of the final deliverable. Raz source files used as libraries are also built during compilation by the latest compiler version. Native C++ libraries and C/C++ header files must remain untouched.
+
+6. **Deprecated Files and Legacy Paths:** Files with the `.depressed` extension and legacy paths were intended for older versions. They are obsolete, no longer used, and have been replaced by their newer equivalents.

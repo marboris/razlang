@@ -1,0 +1,30 @@
+
+// Types
+// All correct
+
+i64 count = 42;
+f64 ratio = 3.5;
+
+i64 count = 42;
+count = 50;
+
+const i64 test = 040;
+
+struct Point {
+    i64 x;
+    i64 y;
+};
+
+// ---
+
+let value = 42; // correct
+value = "hello"; // error
+value = true; // error
+
+let value = 42; // correct
+value = 45; // correct
+value = 40; // correct
+
+/*
+ما در تایپ و نوع دهی بیشتر به زبان های C و Go نزدیک میشویم با ساده سازی بیشتر
+*/

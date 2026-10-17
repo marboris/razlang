@@ -17,6 +17,31 @@
 
 Raz is under active development, and its capabilities continue to evolve.
 
+## Development & Build
+
+Clone the repository and build the Raz compiler using the included bootstrap compiler. Raz emits C++17, which you then compile into a native executable with GNU C++.
+
+```sh
+git clone https://github.com/marboris/razlang.git
+cd razlang
+
+# Build a candidate compiler from the Raz compiler source
+./compiler/razc/bin/razc compiler/razc/compiler.raz \
+  --emit-cpp compiler/razc/build/compiler.cpp
+. ./options
+$CXX -std=c++17 $CXXFLAGS -I library/raz \
+  compiler/razc/build/compiler.cpp -o compiler/razc/build/razc-candidate
+
+# Translate a Raz program to C++, then compile it with GNU C++
+./compiler/razc/build/razc-candidate compiler/razc/examples/hello.raz \
+  --emit-cpp compiler/razc/build/hello.cpp
+g++ -std=c++17 -I library/raz \
+  compiler/razc/build/hello.cpp -o compiler/razc/build/hello
+./compiler/razc/build/hello
+```
+
+See [`BUILD.md`](doc/BUILD.md) for platform-specific instructions for Linux x86_64 and Windows.
+
 ## Documentation
 
 Documentation and usage examples will be maintained alongside the project as development progresses.

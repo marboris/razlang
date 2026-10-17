@@ -49,7 +49,39 @@ function outputPath(sourcePath: string) -> string {
     return slice(sourcePath, 0, length(sourcePath) - 4) + ".cpp";
 }
 
-function compileCase(name: string, relativeSource: string, compilerPath: string, expectedFailure: bool) -> bool {
+function runRuntimeCase(name: string, cppPath: string, expectedExitCode: string) -> bool {
+    let configText: string = readFile("options");
+    let nativeCompiler: string = getEnv("CXX");
+    let nativeFlags: string = getEnv("CXXFLAGS");
+    if (nativeCompiler == "") nativeCompiler = configValue(configText, "CXX");
+    if (nativeCompiler == "") nativeCompiler = "g++";
+    if (nativeFlags == "") nativeFlags = configValue(configText, "CXXFLAGS");
+
+    let executablePath: string = slice(cppPath, 0, length(cppPath) - 4) + ".runtime";
+    let discard: string = exec("rm -f " + quoteArg(executablePath));
+    let buildCommand: string = quoteArg(nativeCompiler) + " -std=c++17 " + nativeFlags + " -I " + quoteArg("library/raz") + " -I " + quoteArg("tests") + " " + quoteArg(cppPath) + " -o " + quoteArg(executablePath);
+    let buildOutput: string = exec buildCommand;
+    let buildStatus: i64 = exitCode();
+    if (buildStatus != 0) {
+        print("FAIL " + name + ": GNU C++ compilation failed");
+        if (buildOutput != "") print(buildOutput);
+        let cleanup: string = exec("rm -f " + quoteArg(executablePath));
+        return false;
+    }
+
+    let runOutput: string = exec(quoteArg("./" + executablePath));
+    let runStatus: i64 = exitCode();
+    let cleanup: string = exec("rm -f " + quoteArg(executablePath));
+    if (int_to_string(runStatus) != expectedExitCode) {
+        print("FAIL " + name + ": expected exit code " + expectedExitCode + ", got " + int_to_string(runStatus));
+        if (runOutput != "") print(runOutput);
+        return false;
+    }
+    print("PASS runtime " + name + " (exit code " + expectedExitCode + ")");
+    return true;
+}
+
+function compileCase(name: string, relativeSource: string, compilerPath: string, expectedFailure: bool, expectedExitCode: string) -> bool {
     let sourcePath: string = "tests/" + relativeSource;
     let cppPath: string = outputPath(sourcePath);
     let discard: string = exec("rm -f " + quoteArg(cppPath));
@@ -75,6 +107,7 @@ function compileCase(name: string, relativeSource: string, compilerPath: string,
         return false;
     }
     print("CPP " + sourcePath + " -> " + cppPath);
+    if (expectedExitCode != "") return runRuntimeCase(name, cppPath, expectedExitCode);
     return true;
 }
 
@@ -118,7 +151,10 @@ function runTests() -> i64 {
         let entry: i64 = jsonArrayAt(manifest, casesId, caseIndex);
         let name: string = jsonText(manifest, jsonObjectGet(manifest, entry, "name"));
         let source: string = jsonText(manifest, jsonObjectGet(manifest, entry, "source"));
-        if (compileCase(name, source, razc, false)) passed = passed + 1;
+        let runtimeNode: i64 = jsonObjectGet(manifest, entry, "runtime_exit_code");
+        let expectedExitCode: string = "";
+        if (jsonKind(manifest, runtimeNode) == 2) expectedExitCode = jsonText(manifest, runtimeNode);
+        if (compileCase(name, source, razc, false, expectedExitCode)) passed = passed + 1;
         else failed = failed + 1;
         caseIndex = caseIndex + 1;
     }
@@ -127,12 +163,12 @@ function runTests() -> i64 {
         let entry: i64 = jsonArrayAt(manifest, negativeId, caseIndex);
         let name: string = jsonText(manifest, jsonObjectGet(manifest, entry, "name"));
         let source: string = jsonText(manifest, jsonObjectGet(manifest, entry, "source"));
-        if (compileCase(name, source, razc, true)) passed = passed + 1;
+        if (compileCase(name, source, razc, true, "")) passed = passed + 1;
         else failed = failed + 1;
         caseIndex = caseIndex + 1;
     }
 
-    print("Raz Gen2 compile tests: " + int_to_string(passed) + " passed, " + int_to_string(failed) + " failed");
+    print("Raz Gen2 tests: " + int_to_string(passed) + " passed, " + int_to_string(failed) + " failed");
     if (failed != 0) return 1;
     return 0;
 }

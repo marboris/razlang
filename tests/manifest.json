@@ -102,7 +102,8 @@
     },
     {
       "name": "function-value-global-order",
-      "source": "cases/function-value-global-order.raz"
+      "source": "cases/function-value-global-order.raz",
+      "runtime_exit_code": 42
     }
   ],
   "negative": [
@@ -149,6 +150,30 @@
     {
       "name": "function-value-return-signature-mismatch",
       "source": "negative/function-value-return-signature-mismatch.raz"
+    },
+    {
+      "name": "missing-generic-close",
+      "source": "negative/missing-generic-close.raz"
+    },
+    {
+      "name": "missing-call-close",
+      "source": "negative/missing-call-close.raz"
+    },
+    {
+      "name": "missing-group-close",
+      "source": "negative/missing-group-close.raz"
+    },
+    {
+      "name": "missing-function-close",
+      "source": "negative/missing-function-close.raz"
+    },
+    {
+      "name": "missing-struct-close",
+      "source": "negative/missing-struct-close.raz"
+    },
+    {
+      "name": "missing-array-close",
+      "source": "negative/missing-array-close.raz"
     }
   ]
 }

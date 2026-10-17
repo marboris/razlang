@@ -394,16 +394,8 @@ function emitProgram(program: Ref<Program>) -> string {
 
     emitLine(state, "function main() -> i64");
     emitLine(state, "entry:");
-    // Phase 1: initialize mutable module globals in entry after process argc/argv
-    // is set. Const globals already use static C++ const initializers.
-    i = 0;
-    while (i < listLength(program.topStmts)) {
-        let sid: i64 = program.topStmts[i];
-        if (program.stmts[sid].kind == 1 && !program.stmts[sid].isConst) emitTopStmt(state, program, sid);
-        i = i + 1;
-    }
-    // Phase 2: run any source module startup hooks. The compiler core only
-    // defines the naming/signature contract; modules own their implementation.
+    // Run source module startup hooks before this module's top-level execution.
+    // Storage has already been declared above; module hooks own their startup work.
     i = 0;
     while (i < listLength(program.functions)) {
         let f: FunctionDef = program.functions[i];
@@ -412,11 +404,15 @@ function emitProgram(program: Ref<Program>) -> string {
         }
         i = i + 1;
     }
-    // Phase 3: execute ordinary top-level statements in source order.
+    // Execute top-level declarations and statements in source order. Global
+    // storage is declared above, so initializers can be emitted at their source
+    // position without moving them ahead of earlier assignments or calls.
     i = 0;
     while (i < listLength(program.topStmts)) {
         let sid: i64 = program.topStmts[i];
-        if (program.stmts[sid].kind != 1) emitTopStmt(state, program, sid);
+        let ts: Stmt = program.stmts[sid];
+        // Const globals are initialized by their generated C++ initializers.
+        if (ts.kind != 1 || !ts.isConst) emitTopStmt(state, program, sid);
         i = i + 1;
     }
     emitLine(state, "    %t" + int_to_string(state.temp) + " = const i64 0");

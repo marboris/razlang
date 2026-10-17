@@ -17,7 +17,12 @@ function consume(state: Ref<ParserState>, kind: i64) {
 function take(state: Ref<ParserState>, kind: i64) -> Token {
     let t: Token = state.tokens[state.pos];
     state.pos = state.pos + 1;
-    if (t.kind != kind) return t;
+    if (t.kind != kind) {
+        state.parseError = true;
+        if (kind == 1) state.parseErrorText = "expected identifier or type name";
+        else if (kind == 3) state.parseErrorText = "expected string literal";
+        else state.parseErrorText = "unexpected token";
+    }
     return t;
 }
 
@@ -108,7 +113,11 @@ function parseType(state: Ref<ParserState>) -> string {
             let arg: string = parseType(state);
             out = out + "," + arg;
         }
-        maybe(state, 41);
+        if (!maybe(state, 41)) {
+            state.parseError = true;
+            state.parseErrorText = "generic type requires '>'";
+            return out;
+        }
         out = out + ">";
     }
     while (currentKind(state) == 33) {
@@ -161,7 +170,10 @@ function parseCallArgs(state: Ref<ParserState>) -> List<i64> {
             push(args, parseExpression(state, 0));
         }
     }
-    maybe(state, 21);
+    if (!maybe(state, 21)) {
+        state.parseError = true;
+        state.parseErrorText = "function call requires ')' after arguments";
+    }
     return args;
 }
 
@@ -224,13 +236,19 @@ function parsePrimary(state: Ref<ParserState>) -> i64 {
                 push(e.args, parseExpression(state, 0));
             }
         }
-        maybe(state, 29);
+        if (!maybe(state, 29)) {
+            state.parseError = true;
+            state.parseErrorText = "array literal requires ']'";
+        }
         return addExpr(state, e);
     }
     if (tokenKind == 20) {
         consume(state, 20);
         let id: i64 = parseExpression(state, 0);
-        maybe(state, 21);
+        if (!maybe(state, 21)) {
+            state.parseError = true;
+            state.parseErrorText = "parenthesized expression requires ')'";
+        }
         return id;
     }
     return -1;
@@ -282,7 +300,10 @@ function parsePostfix(state: Ref<ParserState>, id: i64) -> i64 {
         } else if (currentKind(state) == 28) {
             consume(state, 28);
             let idx: i64 = parseExpression(state, 0);
-            maybe(state, 29);
+            if (!maybe(state, 29)) {
+                state.parseError = true;
+                state.parseErrorText = "index expression requires ']'";
+            }
             let e: Expr = emptyExpr(10);
             e.left = out;
             e.right = idx;
@@ -335,14 +356,21 @@ function parseUnary(state: Ref<ParserState>) -> i64 {
 
 function parseBlock(state: Ref<ParserState>) -> List<i64> {
     let body: List<i64> = [];
-    maybe(state, 22);
+    if (!maybe(state, 22)) {
+        state.parseError = true;
+        state.parseErrorText = "block requires '{'";
+        return body;
+    }
     state.blockDepth = state.blockDepth + 1;
     while (!state.parseError && currentKind(state) != 23 && currentKind(state) != 0) {
         let stmtId: i64 = parseStatement(state);
         if (stmtId >= 0) push(body, stmtId);
     }
     state.blockDepth = state.blockDepth - 1;
-    maybe(state, 23);
+    if (!maybe(state, 23)) {
+        state.parseError = true;
+        state.parseErrorText = "block requires '}'";
+    }
     return body;
 }
 
@@ -475,20 +503,32 @@ function parseFunction(state: Ref<ParserState>) -> FunctionDef {
     f.name = name.text;
     f.params = [];
     f.returnType = "void";
-    maybe(state, 20);
+    if (!maybe(state, 20)) {
+        state.parseError = true;
+        state.parseErrorText = "function definition requires '(' after its name";
+        return f;
+    }
     if (currentKind(state) != 21) {
         let more: bool = true;
         while (more) {
             let p: Param = new Param();
             let pname: Token = take(state, 1);
             p.name = pname.text;
-            maybe(state, 25);
+            if (!maybe(state, 25)) {
+                state.parseError = true;
+                state.parseErrorText = "function parameter requires ':' before its type";
+                return f;
+            }
             p.type = parseType(state);
             push(f.params, p);
             if (!maybe(state, 26)) more = false;
         }
     }
-    maybe(state, 21);
+    if (!maybe(state, 21)) {
+        state.parseError = true;
+        state.parseErrorText = "function parameter list requires ')'";
+        return f;
+    }
     if (currentKind(state) == 45) {
         consume(state, 45);
         f.returnType = parseType(state);
@@ -503,17 +543,28 @@ function parseStruct(state: Ref<ParserState>) -> StructDef {
     let name: Token = take(state, 1);
     s.name = name.text;
     s.fields = [];
-    maybe(state, 22);
-    while (currentKind(state) != 23 && currentKind(state) != 0) {
+    if (!maybe(state, 22)) {
+        state.parseError = true;
+        state.parseErrorText = "struct definition requires '{'";
+        return s;
+    }
+    while (!state.parseError && currentKind(state) != 23 && currentKind(state) != 0) {
         let f: Field = new Field();
         let fname: Token = take(state, 1);
         f.name = fname.text;
-        maybe(state, 25);
+        if (!maybe(state, 25)) {
+            state.parseError = true;
+            state.parseErrorText = "struct field requires ':' before its type";
+            return s;
+        }
         f.type = parseType(state);
         push(s.fields, f);
         maybe(state, 24);
     }
-    maybe(state, 23);
+    if (!maybe(state, 23)) {
+        state.parseError = true;
+        state.parseErrorText = "struct definition requires '}'";
+    }
     return s;
 }
 

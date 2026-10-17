@@ -9,6 +9,16 @@ Work directly on the Raz compiler codebase. Follow this workflow for every devel
 5. **Validate thoroughly.** Run relevant tests, build and bootstrap the compiler when feasible, and verify generated C++ or runtime behavior where applicable. Report actual results and limitations honestly.
 6. **Deliver cleanly.** Package the updated project without temporary build artifacts, preserve the active compiler binary unless explicitly required, and provide a short English commit message.
 
+example:
+```
+fix(semantics): respect non-callable local bindings
+
+- Reject calls when a local binding shadows a function with a non-callable value
+- Prevent fallback to global functions and builtins for resolved local names
+- Add a negative regression test for non-callable shadowing
+- Verify candidate and stage-two compiler against all 60 tests
+```
+
 **Core rule:** Investigate → Explain → Get approval → Implement → Test → Deliver.
 
 Maintain continuity with previous fixes and avoid regressions. Never confuse a proposed change with an approved change, and never claim tests passed unless they were actually executed.

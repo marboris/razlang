@@ -194,6 +194,26 @@
     {
       "name": "unterminated-block-comment",
       "source": "negative/unterminated-block-comment.raz"
+    },
+    {
+      "name": "list-length-no-args",
+      "source": "negative/list-length-no-args.raz"
+    },
+    {
+      "name": "list-length-non-list",
+      "source": "negative/list-length-non-list.raz"
+    },
+    {
+      "name": "push-extra-arg",
+      "source": "negative/push-extra-arg.raz"
+    },
+    {
+      "name": "append-missing-value",
+      "source": "negative/append-missing-value.raz"
+    },
+    {
+      "name": "append-value-type-mismatch",
+      "source": "negative/append-value-type-mismatch.raz"
     }
   ]
 }

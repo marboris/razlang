@@ -312,9 +312,14 @@ function assignableType(expected: string, actual: string) -> bool {
 }
 
 function builtinReturnType(name: string, args: List<i64>, program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<List<Binding>>) -> string {
-    if (name == "listLength") return "i64";
+    if (name == "listLength") {
+        if (listLength(args) != 1) return semanticFail(state, "listLength requires exactly one List<T> argument");
+        let listType: string = checkExpr(program, state, scope, args[0]);
+        if (innerGeneric(listType, "List<") == "") return semanticFail(state, "listLength argument must be List<T>");
+        return "i64";
+    }
     if (name == "push") {
-        if (listLength(args) < 2) return semanticFail(state, "push requires a list and value");
+        if (listLength(args) != 2) return semanticFail(state, "push requires exactly a list and value");
         if (!isLValue(program, args[0])) return semanticFail(state, "push first argument must be an lvalue");
         if (isConstPlace(program, scope, args[0])) return semanticFail(state, "cannot mutate a const value");
         let listType: string = checkExpr(program, state, scope, args[0]);
@@ -325,10 +330,12 @@ function builtinReturnType(name: string, args: List<i64>, program: Ref<Program>,
         return "void";
     }
     if (name == "append") {
-        if (listLength(args) == 0) return "";
+        if (listLength(args) != 2) return semanticFail(state, "append requires exactly a list and value");
         let first: string = checkExpr(program, state, scope, args[0]);
         let element: string = innerGeneric(first, "List<");
-        if (element == "") return semanticFail(state, "append requires a List value");
+        if (element == "") return semanticFail(state, "append first argument must be List<T>");
+        let valueType: string = checkExpr(program, state, scope, args[1]);
+        if (!assignableType(element, valueType)) return semanticFail(state, "append value type mismatch");
         return first;
     }
     return "";

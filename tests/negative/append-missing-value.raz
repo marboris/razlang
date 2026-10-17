@@ -1,0 +1,4 @@
+use std.containers;
+let values: List<i64> = [1];
+let next: List<i64> = append(values);
+return 0;

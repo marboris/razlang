@@ -84,9 +84,19 @@ function lex(source: string) -> List<Token> {
             i = i + 2;
             while (i < n && charCodeAt(source, i) != 10) i = i + 1;
         } else if (c == 47 && i + 1 < n && charCodeAt(source, i + 1) == 42) {
+            let start: i64 = i;
+            let closed: bool = false;
             i = i + 2;
-            while (i + 1 < n && !(charCodeAt(source, i) == 42 && charCodeAt(source, i + 1) == 47)) i = i + 1;
-            if (i + 1 < n) i = i + 2;
+            while (i + 1 < n && !closed) {
+                if (charCodeAt(source, i) == 42 && charCodeAt(source, i + 1) == 47) {
+                    i = i + 2;
+                    closed = true;
+                } else i = i + 1;
+            }
+            if (!closed) {
+                push(out, tokenValue(99, "unterminated block comment", start));
+                i = n;
+            }
         } else if (isDigit(c)) {
             let start: i64 = i;
             i = i + 1;
@@ -104,10 +114,14 @@ function lex(source: string) -> List<Token> {
             push(out, tokenValue(keywordKind(word), word, start));
         } else if (c == 34) {
             let start: i64 = i;
+            let closed: bool = false;
             i = i + 1;
             let value: string = "";
-            while (i < n && charCodeAt(source, i) != 34) {
-                if (charCodeAt(source, i) == 92 && i + 1 < n) {
+            while (i < n && !closed) {
+                if (charCodeAt(source, i) == 34) {
+                    i = i + 1;
+                    closed = true;
+                } else if (charCodeAt(source, i) == 92 && i + 1 < n) {
                     i = i + 1;
                     if (charCodeAt(source, i) == 110) value = value + "\n";
                     else if (charCodeAt(source, i) == 116) value = value + "\t";
@@ -119,25 +133,38 @@ function lex(source: string) -> List<Token> {
                     i = i + 1;
                 }
             }
-            if (i < n) i = i + 1;
-            push(out, tokenValue(3, value, start));
+            if (closed) push(out, tokenValue(3, value, start));
+            else push(out, tokenValue(99, "unterminated string literal", start));
         } else if (c == 39) {
             let start: i64 = i;
             i = i + 1;
             let code: i64 = 0;
-            if (i < n && charCodeAt(source, i) == 92 && i + 1 < n) {
-                i = i + 1;
-                if (charCodeAt(source, i) == 110) code = 10;
-                else if (charCodeAt(source, i) == 116) code = 9;
-                else if (charCodeAt(source, i) == 114) code = 13;
-                else code = charCodeAt(source, i);
-                i = i + 1;
-            } else if (i < n) {
-                code = charCodeAt(source, i);
-                i = i + 1;
+            let hasValue: bool = false;
+            let closed: bool = false;
+            if (i < n && charCodeAt(source, i) != 39) {
+                if (charCodeAt(source, i) == 92 && i + 1 < n) {
+                    i = i + 1;
+                    if (charCodeAt(source, i) == 110) code = 10;
+                    else if (charCodeAt(source, i) == 116) code = 9;
+                    else if (charCodeAt(source, i) == 114) code = 13;
+                    else code = charCodeAt(source, i);
+                    i = i + 1;
+                    hasValue = true;
+                } else if (charCodeAt(source, i) != 92) {
+                    code = charCodeAt(source, i);
+                    i = i + 1;
+                    hasValue = true;
+                }
             }
-            if (i < n && charCodeAt(source, i) == 39) i = i + 1;
-            push(out, tokenValue(4, int_to_string(code), start));
+            if (i < n && charCodeAt(source, i) == 39) {
+                i = i + 1;
+                closed = true;
+            }
+            if (hasValue && closed) push(out, tokenValue(4, int_to_string(code), start));
+            else {
+                push(out, tokenValue(99, "malformed character literal", start));
+                i = n;
+            }
         } else {
             let two: string = "";
             if (i + 1 < n) two = slice(source, i, i + 2);

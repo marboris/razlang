@@ -367,7 +367,7 @@ function parseBlock(state: Ref<ParserState>) -> List<i64> {
         if (stmtId >= 0) push(body, stmtId);
     }
     state.blockDepth = state.blockDepth - 1;
-    if (!maybe(state, 23)) {
+    if (!state.parseError && !maybe(state, 23)) {
         state.parseError = true;
         state.parseErrorText = "block requires '}'";
     }
@@ -479,7 +479,11 @@ function parseStatement(state: Ref<ParserState>) -> i64 {
 
     let first: i64 = parseExpression(state, 0);
     if (first < 0) {
-        state.pos = state.pos + 1;
+        if (!state.parseError) {
+            state.parseError = true;
+            state.parseErrorText = "unexpected token: " + currentTokenText(state);
+        }
+        state.pos = listLength(state.tokens) - 1;
         return -1;
     }
     if (currentKind(state) == 30) {

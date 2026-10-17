@@ -363,10 +363,10 @@
           </div>
           <h2 class="title-h2">Lexical questions</h2>
           <p>
-            Unknown characters currently fall through to token kind
-            <code>99</code>. Whether this becomes a mandatory lexer error, and
-            how escape sequences are validated, must be specified before this
-            behavior is treated as a public guarantee.
+            Unknown characters and malformed string or character literals are
+            rejected. Escape decoding recognizes <code>\n</code>,
+            <code>\t</code>, and <code>\r</code>; other escaped characters
+            are retained without the backslash.
           </p>
           <nav aria-label="Page navigation" class="page-navigation">
             <div>

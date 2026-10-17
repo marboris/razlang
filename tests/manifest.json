@@ -214,6 +214,18 @@
     {
       "name": "append-value-type-mismatch",
       "source": "negative/append-value-type-mismatch.raz"
+    },
+    {
+      "name": "compare-void-values",
+      "source": "negative/compare-void-values.raz"
+    },
+    {
+      "name": "compare-struct-equality",
+      "source": "negative/compare-struct-equality.raz"
+    },
+    {
+      "name": "compare-struct-ordering",
+      "source": "negative/compare-struct-ordering.raz"
     }
   ]
 }

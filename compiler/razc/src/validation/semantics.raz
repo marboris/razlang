@@ -380,6 +380,8 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
             return "bool";
         }
         if (x.op == "==" || x.op == "!=" || x.op == "<" || x.op == "<=" || x.op == ">" || x.op == ">=") {
+            if (a == "void" || b == "void") return semanticFail(state, "cannot compare void values");
+            if (structIndex(program, a) >= 0 || structIndex(program, b) >= 0) return semanticFail(state, "struct values cannot be compared");
             if (!((a == b) || (numericType(a) && numericType(b)))) return semanticFail(state, "cannot compare " + a + " and " + b);
             return "bool";
         }

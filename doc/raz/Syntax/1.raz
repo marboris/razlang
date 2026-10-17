@@ -1,7 +1,7 @@
 
 // تعریف نوع پارامتر
 
-i64 add(i64 a, i64 a = 5){ // correct
+i64 add(i64 a, i64 c = 5){ // correct
     print("hi");
 }
 function add(a) { // correct

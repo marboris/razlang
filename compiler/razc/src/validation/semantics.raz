@@ -405,8 +405,10 @@ function checkExpr(program: Ref<Program>, state: Ref<SemanticState>, scope: Ref<
         let calleeExpr: Expr = program.exprs[x.left];
         let name: string = calleeExpr.text;
         let boundType: string = "";
-        if (calleeExpr.kind == 5) boundType = bindingType(scope, name);
-        else {
+        if (calleeExpr.kind == 5) {
+            boundType = bindingType(scope, name);
+            if (boundType != "" && !isFunctionType(boundType)) return semanticFail(state, "expression is not callable: " + boundType);
+        } else {
             boundType = checkExpr(program, state, scope, x.left);
             if (!state.ok) return "";
             if (!isFunctionType(boundType)) return semanticFail(state, "expression is not callable: " + boundType);

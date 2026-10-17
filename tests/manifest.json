@@ -238,6 +238,10 @@
     {
       "name": "function-value-struct-field-argument-type",
       "source": "negative/function-value-struct-field-argument-type.raz"
+    },
+    {
+      "name": "non-callable-shadow",
+      "source": "negative/non-callable-shadow.raz"
     }
   ]
 }

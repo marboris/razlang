@@ -1,0 +1,9 @@
+function callback() -> i64 {
+    return 1;
+}
+
+function invoke(callback: i64) -> i64 {
+    return callback();
+}
+
+return invoke(42);

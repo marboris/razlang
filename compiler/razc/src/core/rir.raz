@@ -195,7 +195,9 @@ function emitExpr(state: Ref<EmitState>, program: Ref<Program>, id: i64) -> stri
         return x.text + "(" + args + ")";
     }
     if (x.kind == 8) {
-        let callee: string = program.exprs[x.left].text;
+        let calleeExpr: Expr = program.exprs[x.left];
+        let callee: string = calleeExpr.text;
+        if (isFunctionType(x.valueText) && calleeExpr.kind != 5) callee = emitExpr(state, program, x.left);
         let args: string = "";
         let i: i64 = 0;
         while (i < listLength(x.args)) {

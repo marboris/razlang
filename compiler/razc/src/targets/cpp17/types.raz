@@ -483,8 +483,12 @@ function inferInstructionType(module: Ref<BackendModule>, f: Ref<FunctionMeta>, 
         return "List<" + valueType(module, f, state, ins.operands[0]) + ">";
     }
     if (op == "call-value-result") {
-        let calleeType: string = findVarType(f, state, ins.name);
-        if (calleeType == "i64") calleeType = globalType(module, ins.name);
+        let calleeType: string = "";
+        if (cpp17_starts(ins.name, "%t")) calleeType = tempType(state, valueName(ins.name));
+        else {
+            calleeType = findVarType(f, state, ins.name);
+            if (calleeType == "i64") calleeType = globalType(module, ins.name);
+        }
         if (isFunctionType(calleeType)) return functionTypeReturn(calleeType);
         return "i64";
     }

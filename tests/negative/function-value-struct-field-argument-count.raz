@@ -1,0 +1,11 @@
+struct Handler {
+    run: Fn(i64) -> i64;
+}
+
+function plusOne(value: i64) -> i64 {
+    return value + 1;
+}
+
+let handler: Handler = new Handler();
+handler.run = plusOne;
+return handler.run(1, 2);

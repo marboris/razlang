@@ -256,7 +256,9 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
         } else if (ins.opcode == "native-call") {
             cpp17_emitLine(state, "    " + cppInlineCall(module, state, ins.operands[0]) + ";");
         } else if (ins.opcode == "call-statement" || ins.opcode == "call-value-statement") {
-            cpp17_emitLine(state, "    " + cppCalleeName(module, f, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
+            let callee: string = cppCalleeName(module, f, ins.name);
+            if (ins.opcode == "call-value-statement") callee = cppValue(state, ins.name);
+            cpp17_emitLine(state, "    " + callee + "(" + cppRirArgs(state, ins.operands) + ");");
         } else if (ins.opcode == "field_set") {
             let target: string = ins.operands[0];
             let dot: i64 = cpp17_findText(target, ".", 0);
@@ -288,7 +290,9 @@ function emitFunction(module: Ref<BackendModule>, f: Ref<FunctionMeta>, state: R
             } else if (ins.opcode == "index") {
                 cpp17_emitLine(state, "    " + lhs + " = " + cppValue(state, ins.operands[0]) + "[" + cppValue(state, ins.operands[1]) + "];" );
             } else if (ins.opcode == "call-result" || ins.opcode == "call-value-result") {
-                cpp17_emitLine(state, "    " + lhs + " = " + cppCalleeName(module, f, ins.name) + "(" + cppRirArgs(state, ins.operands) + ");");
+                let callee: string = cppCalleeName(module, f, ins.name);
+                if (ins.opcode == "call-value-result") callee = cppValue(state, ins.name);
+                cpp17_emitLine(state, "    " + lhs + " = " + callee + "(" + cppRirArgs(state, ins.operands) + ");");
             } else if (ins.opcode == "list") {
                 cpp17_emitLine(state, "    " + lhs + " = " + cppTypeForModule(module, tempType(state, lhs)) + "{" + cppRirArgs(state, ins.operands) + "};");
             } else if (ins.opcode == "neg") {

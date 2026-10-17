@@ -104,6 +104,10 @@
       "name": "function-value-global-order",
       "source": "cases/function-value-global-order.raz",
       "runtime_exit_code": 42
+    },
+    {
+      "name": "function-value-struct-field-direct-call",
+      "source": "cases/function-value-struct-field-direct-call.raz"
     }
   ],
   "negative": [
@@ -226,6 +230,14 @@
     {
       "name": "compare-struct-ordering",
       "source": "negative/compare-struct-ordering.raz"
+    },
+    {
+      "name": "function-value-struct-field-argument-count",
+      "source": "negative/function-value-struct-field-argument-count.raz"
+    },
+    {
+      "name": "function-value-struct-field-argument-type",
+      "source": "negative/function-value-struct-field-argument-type.raz"
     }
   ]
 }

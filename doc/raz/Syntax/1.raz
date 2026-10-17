@@ -1,0 +1,37 @@
+
+// تعریف نوع پارامتر
+
+i64 add(i64 a, i64 a = 5){ // correct
+    print("hi");
+}
+function add(a) { // correct
+    print("hi");
+}
+
+i64 x = 5; // correct
+let z = 5; // correct
+
+// ----
+
+// no types
+// باید درباره نوع تایپ دهی این موارد در بکاند بحث شود
+// برای مثال میتوان این تایپ متد ها رو در C++ به تایپ های auto یا any تبدیل کرد.
+function hi(i64 a) { // correct
+    return a;
+}
+
+// restrict types
+i64 hi(i64 a) { // correct
+    return a;
+}
+
+function hi(a) { // correct
+    return a;
+}
+
+i64 hi(a) { // It’s not logical, but it’s acceptable.
+    return a;
+}
+
+// ----
+

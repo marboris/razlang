@@ -1,0 +1,43 @@
+
+const x 5; // error
+const x = 5; // correct
+constexpr x = 5; // correct
+
+// `(` and `)` is required in patterns:
+if (condition)
+while (condition)
+
+// this is a function method
+print "hello"; // error
+print ("hello"); // correct
+
+// this is not a function method
+// core syntax
+include "test"; // correct
+include ("test"); // correct
+/*
+فراخوانی بدون پرانتز فقط در بعضی حالت های خاص
+در غیر این صورت اجباری
+*/
+// ---
+
+use std.containers; // correct
+use "cstdint"; // correct
+use ("cstdint"); // error
+
+let gOption: string = ""; // error
+string gOption = "";  // correct
+let gOption = "";  // correct
+
+// ---
+
+let x 5; // error
+
+if (true { // error
+    return 1;
+}
+
+let result = add 20; // error
+let result = add 20, 22; // error
+// ---
+

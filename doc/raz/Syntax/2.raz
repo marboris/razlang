@@ -1,0 +1,12 @@
+let x 5; // error
+let x = 5; // correct
+
+if (true) { // correct
+    return 1;
+}
+
+let result = add 20; // error
+let result = add (20);// correct
+let result = add(20);// correct
+
+// `;` is required
